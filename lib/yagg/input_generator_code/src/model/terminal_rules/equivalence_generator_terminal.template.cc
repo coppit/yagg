@@ -24,13 +24,24 @@ const bool [[[$terminal]]]::Check_For_String()
 
   m_string_count++;
 
-  if (m_string_count <= counts.size() + 1)
-  {
-    counts[m_string_count]++;
-    return true;
-  }
-  else
+  if (m_string_count > counts.size() + 1)
     return false;
+
+  counts[m_string_count]++;
+
+[[[
+my ($prefix,$suffix) = $strings[0] =~ /^['"](.*(?<!\\))#(.*)["']$/;
+$OUT .= "  stringstream temp_stream;\n\n";
+$OUT .= "  temp_stream";
+$OUT .= " << \"$prefix\"" if $prefix ne '';
+$OUT .= " << m_string_count";
+$OUT .= " << \"$suffix\"" if $suffix ne '';
+$OUT .= ";\n";
+
+$OUT .= "  return_value = temp_stream.str();";
+]]]
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -39,48 +50,39 @@ const list<string> [[[$terminal]]]::Get_String() const
 {
   list<string> strings;
 
-  stringstream temp_stream;
 [[[
-  if (defined $nonpointer_return_type)
-  {
-    $OUT .= "  $return_type value = Get_Value();\n";
-    $OUT .= "  temp_stream << *value;\n";
-  }
-  else
-  {
-    $OUT .= "  temp_stream << Get_Value();\n";
-  }
-]]]
+if ($return_type ne 'string' && defined $nonpointer_return_type &&
+    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
+{
+  $OUT .= <<EOF;
+  stringstream temp_stream;
+  temp_stream << return_value;
+
   strings.push_back(temp_stream.str());
+EOF
+}
+else
+{
+  $OUT .= <<EOF;
+  strings.push_back(return_value);
+EOF
+}
+]]]
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-[[[$return_type]]] [[[$terminal]]]::Get_Value() const
+const [[[$return_type]]] [[[$terminal]]]::Get_Value() const
 {
-  stringstream temp_stream;
 [[[
-my ($prefix,$suffix) = $strings[0] =~ /^['"](.*(?<!\\))#(.*)["']$/;
-$OUT .= "  temp_stream";
-$OUT .= " << \"$prefix\"" if $prefix ne '';
-$OUT .= " << m_string_count";
-$OUT .= " << \"$suffix\"" if $suffix ne '';
-$OUT .= ";\n";
-
 if (defined $nonpointer_return_type)
 {
-  $OUT .= <<EOF;
-  static $nonpointer_return_type return_value;
-  return_value = temp_stream.str();
-
-  return &return_value;
-EOF
+  $OUT .= "  return &return_value;";
 }
 else
 {
-  $OUT .= "  return $return_type(temp_stream.str());";
+  $OUT .= "  return $return_type();";
 }
-
 ]]]
 }

@@ -1,9 +1,9 @@
-Version 
-- Rule lists in nonterminals are now not deleted and recreated for a 10%
-  speedup.
-  which speeds things up a little bit. Other small optimizations.
+Version 1.3000: Sat Mar 19 2005
 - Removed unnecessary copy constructors, operator= functions, Clone functions
-- $1 values are now only copied when needed, for a 30% speedup
+- Optimization for 2X speedup
+  - $1 values are now only copied when needed
+  - Rule lists in nonterminals are now not deleted and recreated
+- Added -M option to allow the user to provide additional make arguments
 
 Version 1.2100: Sun Feb 6 2005
 - 2-3X faster. Figured out how to do equivalence classes without computing the

@@ -138,7 +138,7 @@ EOF
     {
       $OUT .=<<EOF;
 
-  $return_type Get_Value() const
+  const $return_type Get_Value() const
   {
     return dollar_dollar;
   }
@@ -210,7 +210,7 @@ EOF
 
 // ---------------------------------------------------------------------------
 
-$return_type ${nonterminal}::Get_Value() const
+const $return_type ${nonterminal}::Get_Value() const
 EOF
     $OUT .= "{\n";
 

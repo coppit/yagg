@@ -1,5 +1,11 @@
 #include "model/terminal_rules/[[[$terminal]]].h"
-#include <sstream>
+[[[
+if ($return_type ne 'string' && defined $nonpointer_return_type &&
+    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
+{
+  $OUT .= "#include <sstream>";
+}
+]]]
 #include <cassert>
 #include <list>
 
@@ -14,7 +20,26 @@ const bool [[[$terminal]]]::Check_For_String()
 
   m_string_count++;
 
-  return (m_string_count <= [[[$size]]]);
+  if (m_string_count > [[[$size]]])
+    return false;
+
+  switch (m_string_count)
+  {
+[[[
+for (my $i = 1; $i-1 < $size; $i++)
+{
+  $OUT .=<<"EOF";
+    case $i :
+    {
+      return_value = $strings[$i-1];
+      break;
+    }
+EOF
+}
+]]]
+  }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -25,76 +50,41 @@ const list<string> [[[$terminal]]]::Get_String() const
 
   list<string> strings;
 
-  stringstream temp_stream;
 [[[
-  if (defined $nonpointer_return_type)
-  {
-    $OUT .= "  $return_type value = Get_Value();\n";
-    $OUT .= "  temp_stream << *value;\n";
-  }
-  else
-  {
-    $OUT .= "  temp_stream << Get_Value();\n";
-  }
-]]]
+if ($return_type ne 'string' && defined $nonpointer_return_type &&
+    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
+{
+  $OUT .= <<EOF;
+  stringstream temp_stream;
+  temp_stream << return_value;
+
   strings.push_back(temp_stream.str());
+EOF
+}
+else
+{
+  $OUT .= <<EOF;
+  strings.push_back(return_value);
+EOF
+}
+]]]
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-[[[$return_type]]] [[[$terminal]]]::Get_Value() const
+const [[[$return_type]]] [[[$terminal]]]::Get_Value() const
 {
   assert(m_string_count <= [[[$size]]]);
+
 [[[
-  if (defined $nonpointer_return_type)
-  {
-    $OUT .=<<"EOF";
-
-  static $nonpointer_return_type return_value;
-EOF
-  }
-]]]
-  switch (m_string_count)
-  {
-[[[
-for (my $i = 1; $i-1 < $size; $i++)
-{
-  if (defined $nonpointer_return_type)
-  {
-    $OUT .=<<"EOF";
-    case $i :
-    {
-      return_value = $strings[$i-1];
-      return &return_value;
-      break;
-    }
-EOF
-  }
-  else
-  {
-    $OUT .=<<"EOF";
-    case $i :
-    {
-      return $return_type($strings[$i-1]);
-      break;
-    }
-EOF
-  }
-}
-
-$OUT .=<<EOF;
-  }
-
-EOF
-
 if (defined $nonpointer_return_type)
 {
   $OUT .= "  return &return_value;";
 }
 else
 {
-  $OUT .= "  return $return_type();";
+  $OUT .= "  return return_value;";
 }
 ]]]
 }

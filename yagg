@@ -186,7 +186,7 @@ sub usage
 usage: $0 [--help|--version] [-X] [-dfm]
   [-o <output directory>] [-u <input user code directory>]
   [-C "<compiler flags>"] [-L "<linker flags>"]
-  [-r <length>]
+  [-M "<make arguments>"] [-r <length>]
   <nonterminal .yg file> [terminal .lg file]
 
 -C Set compiler flags (default is "-Wall -pedantic -O3")
@@ -194,6 +194,7 @@ usage: $0 [--help|--version] [-X] [-dfm]
 -f Overwrite existing files in the output directory
 -L Set linker flags (default is "")
 -m Run "make" in the output directory after code generation
+-M Provide extra arguments to "make"
 -o Specify the output directory (default is "output")
 -r Automatically run the generator for the given length (implies -m)
 -u Specify the input user code directory
@@ -215,7 +216,7 @@ sub Get_Options_And_Arguments
   print usage() and exit(0) if grep { /^--help$/ } @ARGV;
   print "$VERSION\n" and exit(0) if grep { /^--version$/ } @ARGV;
 
-  my @valid_options = qw( C d f L m o r u X );
+  my @valid_options = qw( C d f L m M o r u X );
 
   # Initialize all options to zero.
   map { $opts{$_} = 0; } @valid_options;
@@ -224,10 +225,11 @@ sub Get_Options_And_Arguments
   $opts{'o'} = 'output';
   $opts{'C'} = '-Wall -pedantic -O3';
   $opts{'L'} = '';
+  $opts{'M'} = '';
   $opts{'r'} = undef;
   $opts{'u'} = undef;
 
-  getopt('CLuor', \%opts);
+  getopt('CLMuor', \%opts);
 
   # Make sure no unknown flags were given
   foreach my $option (keys %opts)
@@ -946,7 +948,7 @@ sub Update_Makefile
 {
   my $tempdir = shift;
 
-  Update_Makefile_Programs($tempdir) if $opts{'o'}{'scheme'} eq 'file';
+  Update_Makefile_Programs($tempdir);
   Update_Makefile_Flags($tempdir);
 }
 
@@ -990,14 +992,24 @@ sub Update_Makefile_Programs
     my $middle = $2;
     my $value = $3;
 
-    if (exists $symbol_lookup{$symbol} &&
-      exists $locations{ $symbol_lookup{$symbol} })
+    next unless exists $symbol_lookup{$symbol};
+
+    if ($opts{'o'}{'scheme'} eq 'file' &&
+        exists $locations{ $symbol_lookup{$symbol} })
     {
       my $old_pos = pos $code;
       substr($code,pos($code) - length($value), length($value)) =
         $locations{ $symbol_lookup{$symbol} };
       pos($code) = $old_pos - length($value) +
         length($locations{ $symbol_lookup{$symbol} });
+    }
+    else
+    {
+      my $old_pos = pos $code;
+      substr($code,pos($code) - length($value), length($value)) =
+        $symbol_lookup{$symbol};
+      pos($code) = $old_pos - length($value) +
+        length( $symbol_lookup{$symbol} );
     }
   }
 
@@ -1319,7 +1331,7 @@ EOF
       }
 
       my $i_minus_1 = $i - 1;
-      $code = "    $return_type dollar_$i = (($rules[$i-1]*)(*this)[$i_minus_1])->Get_Value();\n$code";
+      $code = "    const $return_type dollar_$i = (($rules[$i-1]*)(*this)[$i_minus_1])->Get_Value();\n$code";
     }
   }
 
@@ -1957,16 +1969,16 @@ sub Build_Code
   if ($opts{'o'}{'scheme'} ne 'file')
   {
     dprint "Remote build command:";
-    dprint "  $rsh $opts{'o'}{'host'} 'cd $opts{'o'}{'path'} && make 1>make.stdout'";
+    dprint "  $rsh $opts{'o'}{'host'} 'cd $opts{'o'}{'path'} && make $opts{'M'} 1>make.stdout'";
 
-    system("$rsh $opts{'o'}{'host'} 'cd $opts{'o'}{'path'} && make 1>make.stdout'") == 0
+    system("$rsh $opts{'o'}{'host'} 'cd $opts{'o'}{'path'} && make $opts{'M'} 1>make.stdout'") == 0
       or report_and_exit "Compilation failed\n";
   }
   else
   {
     my $cwd = getcwd;
     chdir $opts{'o'}{'path'};
-    system("$yagg::Config{'programs'}{'make'} 1>make.stdout") == 0
+    system("$yagg::Config{'programs'}{'make'} $opts{'M'} 1>make.stdout") == 0
       or report_and_exit "Compilation failed\n";
     chdir $cwd;
   }
@@ -2083,6 +2095,12 @@ Run "make" in the output directory after completing the generation.
 If -o specifies a remote directory, this command will be run remotely using
 B<ssh>, or whatever the I<RSYNC_RSH> environment variable is set to.
 
+=item B<-M>
+
+Pass these additional arguments to "make". This is useful if you want to set a
+control what is built on the remote machine. For example, you can send
+"LD=g++" to set g++ as the linker, or send "test" to run the tests.
+
 =item B<-r <length>>
 
 Automatically run the generator program using the specified length. Implies
@@ -2094,6 +2112,9 @@ set up your public and private keys correctly, you should be able to run the
 generator without having to type in any passwords. That way you can
 transparently leverage the greater computational resources of a remote
 computer.
+
+WARNING: The makefile uses a set of programs such as ln, g++, etc. The remote
+build will use whatever program paths happen to be in your default path.
 
 =item B<-o directory>
 

@@ -16,26 +16,26 @@ extern void fault_tree_textual_parser_scanner_initialize(FILE* in_input_file);
 
 const Event Event_By_Identifier(const string &in_identifier);
 const Input_Sequence Identifier_List_To_Input_Sequence(const list<string> &in_identifiers);
-bool Cycle_Already_Reported(const searchable_list<Event>& in_cycle, const set< searchable_list<Event> >& in_cycles_reported);
-void Check_For_Cycles_Recursive(const searchable_list<Event>& in_path, set< searchable_list<Event> >& in_cycles_reported);
-void Ensure_No_Cycles_In_Inputs();
-void Ensure_Corresponding_References_And_Definitions();
-void Ensure_Spare_Gate_Inputs_Are_Basic_Events();
-void Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates();
-void Ensure_FDEP_Trigger_Is_Not_Replicated();
-void Ensure_FDEP_Dependents_Are_Basic_Events();
+const bool Cycle_Exists(searchable_list<Event>& in_path, set<Event> &in_events_to_visit);
+const bool Ensure_No_Cycles_In_Inputs();
+const bool Ensure_Corresponding_References_And_Definitions();
+const bool Ensure_Spare_Gate_Inputs_Are_Basic_Events();
+const bool Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates();
+const bool Ensure_FDEP_Trigger_Is_Not_Replicated();
+const bool Ensure_FDEP_Dependents_Are_Basic_Events();
 const string Get_Identifier_For_Event(const Event &in_event);
 
 Fault_Tree parsed_fault_tree;
 
 bijection<string, Event> identifiers_to_events;
 
-extern void Ensure_Valid_System_Event();
+extern const bool Ensure_Valid_System_Event();
 
 // This is an additional check to avoid generating lots of unconstrained
 // trees. We would need to update the grammar to get this.
-void Ensure_Connectedness();
-void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph);
+const bool Ensure_Connectedness();
+const bool Compute_Reachable_Events(const Event& in_event,
+    const set<Event>& in_seen_events, set<Event>& in_local_seen_events);
 
 // Added for constrained fault tree output
 const bool Ensure_Input_Order(const list<string> &in_list);
@@ -136,22 +136,35 @@ system_event:
 eof:
   END_OF_FILE {
     // This is a check which is specific to the textual language.
-    Ensure_Corresponding_References_And_Definitions();
+    if (!Ensure_Corresponding_References_And_Definitions())
+      return;
 
     // Now do the various checks for consistency as specified in the formal
     // definition of fault trees. Other checks (e.g. gates have replication
     // of 1) are not necessary because they are handled during creation of
     // the fault tree.
-    Ensure_Valid_System_Event();
-    Ensure_No_Cycles_In_Inputs();
-    Ensure_Spare_Gate_Inputs_Are_Basic_Events();
-    Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates();
-    Ensure_FDEP_Trigger_Is_Not_Replicated();
-    Ensure_FDEP_Dependents_Are_Basic_Events();
+    if (!Ensure_Valid_System_Event())
+      return;
+
+    if (!Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates())
+      return;
+
+    if (!Ensure_No_Cycles_In_Inputs())
+      return;
 
     // This is an additional check to avoid generating lots of unconstrained
     // trees. We would need to update the grammar to get this.
-    Ensure_Connectedness();
+    if (!Ensure_Connectedness())
+      return;
+
+    if (!Ensure_Spare_Gate_Inputs_Are_Basic_Events())
+      return;
+
+    if (!Ensure_FDEP_Dependents_Are_Basic_Events())
+      return;
+
+    if (!Ensure_FDEP_Trigger_Is_Not_Replicated())
+      return;
   };
 
 // ---------------------------------------------------------------------------
@@ -997,41 +1010,32 @@ const Input_Sequence Identifier_List_To_Input_Sequence(const list<string> &in_id
 
 // ---------------------------------------------------------------------------
 
-bool Cycle_Already_Reported(const searchable_list<Event>& in_cycle, const set< searchable_list<Event> >& in_cycles_reported)
+// If a cycle is found, it is left in in_path 
+const bool Cycle_Exists(searchable_list<Event>& in_path, set<Event> &in_events_to_visit)
 {
-  set< searchable_list<Event> >::const_iterator a_cycle_reported;
-  for(a_cycle_reported = in_cycles_reported.begin(); a_cycle_reported != in_cycles_reported.end(); a_cycle_reported++)
+  in_events_to_visit.erase(in_path.back());
+
+  if (parsed_fault_tree.Get_Gates().find(in_path.back()) == parsed_fault_tree.Get_Gates().end())
+    return false;
+
+  Input_Sequence::const_iterator an_input;
+  for(an_input = parsed_fault_tree.Get_Gate_Inputs(in_path.back()).begin(); an_input != parsed_fault_tree.Get_Gate_Inputs(in_path.back()).end(); an_input++)
   {
-    // If the lengths aren't the same, it's obviously not a match
-    if ((*a_cycle_reported).size() != in_cycle.size())
-      continue;
+    searchable_list<Event>::iterator location = in_path.find(*an_input);
 
-    // Find the start of the cycle, if there is one
-    searchable_list<Event>::const_iterator start_of_cycle = (*a_cycle_reported).find(in_cycle.front());
-
-    if (start_of_cycle == (*a_cycle_reported).end())
-      continue;
-
-    // Now compare the cycles
-    bool cycles_are_the_same = true;
-    searchable_list<Event>::const_iterator compare_event = start_of_cycle;
-
-    searchable_list<Event>::const_iterator check_event;
-    for(check_event = in_cycle.begin(); check_event != in_cycle.end(); check_event++)
+    if (location != in_path.end())
     {
-      if (*check_event != *compare_event)
-      {
-        cycles_are_the_same = false;
-        break;
-      }
+      in_path.erase(in_path.begin(), location);
 
-      compare_event++;
-      if (compare_event == (*a_cycle_reported).end())
-        compare_event = (*a_cycle_reported).begin();
-    }
-
-    if (cycles_are_the_same)
       return true;
+    }
+    
+    in_path.push_back(*an_input);
+        
+    if (Cycle_Exists(in_path, in_events_to_visit))
+      return true;
+
+    in_path.pop_back();
   }
 
   return false;
@@ -1039,52 +1043,7 @@ bool Cycle_Already_Reported(const searchable_list<Event>& in_cycle, const set< s
 
 // ---------------------------------------------------------------------------
 
-void Check_For_Cycles_Recursive(const searchable_list<Event>& in_path, set< searchable_list<Event> >& in_cycles_reported)
-{
-  if(parsed_fault_tree.Get_Gates().find(in_path.back()) == parsed_fault_tree.Get_Gates().end())
-    return;
-
-  Input_Sequence::const_iterator an_input;
-  for(an_input = parsed_fault_tree.Get_Gate_Inputs(in_path.back()).begin(); an_input != parsed_fault_tree.Get_Gate_Inputs(in_path.back()).end(); an_input++)
-  {
-    if (in_path.find(*an_input) != in_path.end())
-    {
-      searchable_list<Event> cycle;
-
-      searchable_list<Event>::const_iterator start = in_path.find(*an_input);
-
-      cycle.insert(cycle.end(),start,in_path.end());
-
-      if(!Cycle_Already_Reported(cycle, in_cycles_reported))
-      {
-        string error = "There is a cycle in the fault tree: " + parsed_fault_tree.Get_Event_Description(*an_input);
-
-        searchable_list<Event>::const_iterator a_cycle_event;
-        a_cycle_event = cycle.begin();
-        a_cycle_event++;
-        for(;a_cycle_event != cycle.end(); a_cycle_event++)
-          error += " -> " + parsed_fault_tree.Get_Event_Description(*a_cycle_event);
-
-        error += " -> " + parsed_fault_tree.Get_Event_Description(cycle.front());
-
-        fault_tree_textual_parser_error(error);
-
-        in_cycles_reported.insert(cycle);
-      }
-
-      continue;
-    }
-    
-    searchable_list<Event> new_path = in_path;
-    new_path.push_back(*an_input);
-        
-    Check_For_Cycles_Recursive(new_path, in_cycles_reported);
-  }
-}
-
-// ---------------------------------------------------------------------------
-
-void Ensure_Valid_System_Event()
+const bool Ensure_Valid_System_Event()
 {
   // Check the system level event
   if (parsed_fault_tree.Get_Events().find(parsed_fault_tree.Get_System_Event()) ==
@@ -1094,28 +1053,81 @@ void Ensure_Valid_System_Event()
       parsed_fault_tree.Get_Event_Description(parsed_fault_tree.Get_System_Event()) +
       " is not in the fault tree.";
     fault_tree_textual_parser_error(error);
+
+    return false;
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_No_Cycles_In_Inputs()
+const bool Ensure_No_Cycles_In_Inputs()
 {
-  set< searchable_list<Event> > cycles_already_reported;
+  set<Event> parent_events;
+  set<Event> events_to_visit = parsed_fault_tree.Get_Events();
 
   set<Event>::const_iterator an_event;
   for(an_event = parsed_fault_tree.Get_Events().begin(); an_event != parsed_fault_tree.Get_Events().end(); an_event++)
   {
+    if (parsed_fault_tree.Get_Gates_Event_Is_Input_To(*an_event).size() == 0)
+      parent_events.insert(*an_event);
+  }
+
+  // First we traverse starting with the parent events. This will hopefully
+  // visit all the events
+//  set<Event>::const_iterator an_event;
+  for(an_event = parent_events.begin(); an_event != parent_events.end(); an_event++)
+  {
     searchable_list<Event> path;
     path.push_back(*an_event);
 
-    Check_For_Cycles_Recursive(path, cycles_already_reported);
+    if (Cycle_Exists(path, events_to_visit))
+    {
+      string error = "There is a cycle in the fault tree: ";
+
+      searchable_list<Event>::const_iterator a_cycle_event;
+      for(a_cycle_event = path.begin(); a_cycle_event != path.end(); a_cycle_event++)
+        error += parsed_fault_tree.Get_Event_Description(*a_cycle_event) + " -> ";
+
+      error += parsed_fault_tree.Get_Event_Description(path.front());
+
+      fault_tree_textual_parser_error(error);
+
+      return false;
+    }
   }
+
+  // Now visit the remaining nodes
+  while (!events_to_visit.empty())
+  {
+    searchable_list<Event> path;
+    path.push_back(*(events_to_visit.begin()));
+
+    if (Cycle_Exists(path, events_to_visit))
+    {
+      string error = "There is a cycle in the fault tree: ";
+
+      searchable_list<Event>::const_iterator a_cycle_event;
+      for(a_cycle_event = path.begin(); a_cycle_event != path.end(); a_cycle_event++)
+        error += parsed_fault_tree.Get_Event_Description(*a_cycle_event) + " -> ";
+
+      error += parsed_fault_tree.Get_Event_Description(path.front());
+
+      fault_tree_textual_parser_error(error);
+
+      return false;
+    }
+  }
+
+  // We can get here if there are events that are not inputs to any gates,
+  // such as triggers for FDEPs or inputs to SEQs.
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_Corresponding_References_And_Definitions()
+const bool Ensure_Corresponding_References_And_Definitions()
 {
   const set<Event> events = parsed_fault_tree.Get_Events();
   const set<Event> gates = parsed_fault_tree.Get_Gates();
@@ -1135,6 +1147,8 @@ void Ensure_Corresponding_References_And_Definitions()
           parsed_fault_tree.Get_Event_Description(*aGate) +
           "\" but is not defined.";
         fault_tree_textual_parser_error(error);
+
+        return false;
       }
     }
   }
@@ -1156,6 +1170,8 @@ void Ensure_Corresponding_References_And_Definitions()
           parsed_fault_tree.Get_SEQ_Description(*aSeq) +
           "\" but is not defined.";
         fault_tree_textual_parser_error(error);
+
+        return false;
       }
     }
   }
@@ -1175,6 +1191,8 @@ void Ensure_Corresponding_References_And_Definitions()
         parsed_fault_tree.Get_FDEP_Description(*an_fdep) +
         "\" but is not defined.";
       fault_tree_textual_parser_error(error);
+
+      return false;
     }
 
     Input_Sequence::const_iterator aDependent;
@@ -1187,14 +1205,18 @@ void Ensure_Corresponding_References_And_Definitions()
           parsed_fault_tree.Get_FDEP_Description(*an_fdep) +
           "\" but is not defined.";
         fault_tree_textual_parser_error(error);
+
+        return false;
       }
     }
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_Spare_Gate_Inputs_Are_Basic_Events()
+const bool Ensure_Spare_Gate_Inputs_Are_Basic_Events()
 {
   set<Event>::const_iterator a_spare_gate;
   for(a_spare_gate = parsed_fault_tree.Get_Spare_Gates().begin(); a_spare_gate != parsed_fault_tree.Get_Spare_Gates().end(); a_spare_gate++)
@@ -1214,15 +1236,19 @@ void Ensure_Spare_Gate_Inputs_Are_Basic_Events()
             "\" is also input to the gate \"" + parsed_fault_tree.Get_Event_Description(*a_gate_input_to) +
             "\" which is not a spare gate.";
           fault_tree_textual_parser_error(error);
+
+          return false;
         }
       }
     }
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates()
+const bool Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates()
 {
   set<Event>::const_iterator a_spare_gate;
   for(a_spare_gate = parsed_fault_tree.Get_Spare_Gates().begin(); a_spare_gate != parsed_fault_tree.Get_Spare_Gates().end(); a_spare_gate++)
@@ -1236,14 +1262,18 @@ void Ensure_Spare_Gate_Inputs_Only_Input_To_Spare_Gates()
           "\" for spare gate \"" + parsed_fault_tree.Get_Event_Description(*a_spare_gate) + 
           "\" is not a basic event.";
         fault_tree_textual_parser_error(error);
+
+        return false;
       }
     }
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_FDEP_Trigger_Is_Not_Replicated()
+const bool Ensure_FDEP_Trigger_Is_Not_Replicated()
 {
   set<Functional_Dependency>::const_iterator an_fdep;
   for(an_fdep = parsed_fault_tree.Get_FDEP_Constraints().begin(); an_fdep != parsed_fault_tree.Get_FDEP_Constraints().end(); an_fdep++)
@@ -1254,13 +1284,17 @@ void Ensure_FDEP_Trigger_Is_Not_Replicated()
         "\" for the functional dependency \"" + parsed_fault_tree.Get_FDEP_Description(*an_fdep) + 
         "\" has a replication greater than 1.";
       fault_tree_textual_parser_error(error);
+
+      return false;
     }
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Ensure_FDEP_Dependents_Are_Basic_Events()
+const bool Ensure_FDEP_Dependents_Are_Basic_Events()
 {
   set<Functional_Dependency>::const_iterator an_fdep;
   for(an_fdep = parsed_fault_tree.Get_FDEP_Constraints().begin(); an_fdep != parsed_fault_tree.Get_FDEP_Constraints().end(); an_fdep++)
@@ -1274,9 +1308,13 @@ void Ensure_FDEP_Dependents_Are_Basic_Events()
           "\" for the functional dependency \"" + parsed_fault_tree.Get_FDEP_Description(*an_fdep) + 
           "\" is not a basic event.";
         fault_tree_textual_parser_error(error);
+
+        return false;
       }
     }
   }
+
+  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -1291,94 +1329,63 @@ const string Get_Identifier_For_Event(const Event &in_event)
 
 // ---------------------------------------------------------------------------
 
-void Ensure_Connectedness()
+// This algorithm works by tracking the set of seen events. We initialize the
+// seen events set, then we iterate over the remaining unseen events of the
+// fault tree. We construct a temporary set of seen events, and merge this set
+// with the main set if we encounter an event which is already in the main set.
+// If we can't do this, then we know that the temporary set is disjoint, and
+// we don't have a connected fault tree.
+const bool Ensure_Connectedness()
 {
-  list< set< Event > > reachable_subsets;
+  set<Event> parent_events;
 
-  // First compute the reachable events for each event
   set<Event>::const_iterator an_event;
   for(an_event = parsed_fault_tree.Get_Events().begin(); an_event != parsed_fault_tree.Get_Events().end(); an_event++)
   {
-    set<Event> subgraph;
-    Compute_Reachable_Events(*an_event, subgraph);
-
-    reachable_subsets.push_back(subgraph);
+    if (parsed_fault_tree.Get_Gates_Event_Is_Input_To(*an_event).size() == 0)
+      parent_events.insert(*an_event);
   }
 
-  // Now merge the subsets
-  list< set< Event > >::iterator a_subset;
-  a_subset = reachable_subsets.begin();
-  while(a_subset != reachable_subsets.end())
+  set< Event > seen_events;
+  set< Event > local_seen_events;
+
+//  set<Event>::const_iterator an_event;
+  for(an_event = parent_events.begin(); an_event != parent_events.end(); an_event++)
   {
-    bool merged = false;
-
-    list< set< Event > >::iterator a_later_subset = a_subset;
-    a_later_subset++;
-    while(a_later_subset != reachable_subsets.end())
+    if (!Compute_Reachable_Events(*an_event, seen_events, local_seen_events) && !seen_events.empty())
     {
-      set<Event> intersection;
-      set_intersection(a_subset->begin(), a_subset->end(), 
-        a_later_subset->begin(), a_later_subset->end(),
-        inserter(intersection,intersection.begin()));
+      fault_tree_textual_parser_error("The fault tree is not fully connected");
 
-      if (intersection.size() != 0)
-      {
-        set_union(a_subset->begin(), a_subset->end(),
-          a_later_subset->begin(), a_later_subset->end(),
-          inserter(*a_subset,a_subset->begin()));
-
-        merged = true;
-
-        list< set< Event > >::iterator the_next_subset = a_later_subset;
-        the_next_subset++;
-        reachable_subsets.erase(a_later_subset);
-        a_later_subset = the_next_subset;
-      }
-      else
-      {
-        a_later_subset++;
-      }
+      return false;
     }
 
-    if (merged)
-    {
-      merged = false;
-    }
-    else
-    {
-      a_subset++;
-    }
+    set_union(seen_events.begin(), seen_events.end(),
+      local_seen_events.begin(), local_seen_events.end(),
+      inserter(seen_events,seen_events.begin()));
+
+    local_seen_events.clear();
   }
 
-#if !NDEBUG
-  // Sanity check on our connectedness algorithm
-  for(a_subset = reachable_subsets.begin(); a_subset != reachable_subsets.end(); a_subset++)
-  {
-    list< set< Event > >::iterator a_later_subset = a_subset;
-    for(a_later_subset++; a_later_subset != reachable_subsets.end(); a_later_subset++)
-    {
-      set<Event> intersection;
-      set_intersection(a_subset->begin(), a_subset->end(), 
-        a_later_subset->begin(), a_later_subset->end(),
-        inserter(intersection,intersection.begin()));
-
-      assert(intersection.size() == 0);
-    }
-  }
-#endif // !NDEBUG
-
-  if (reachable_subsets.size() != 1)
-    fault_tree_textual_parser_error("The fault tree is not fully connected");
+  return true;
 }
 
 // ---------------------------------------------------------------------------
 
-void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph)
+// Returns true if the local search space connects to the seen events
+const bool Compute_Reachable_Events(const Event& in_event,
+    const set<Event>& in_seen_events, set<Event>& in_local_seen_events)
 {
-  if (in_subgraph.find(in_event) != in_subgraph.end())
-    return;
+  // Avoid cycles
+  if (in_local_seen_events.find(in_event) != in_local_seen_events.end())
+    return false;
 
-  in_subgraph.insert(in_event);
+  // Check for connected and avoid extra work
+  if (in_seen_events.find(in_event) != in_seen_events.end())
+    return true;
+
+  in_local_seen_events.insert(in_event);
+
+  bool connected = false;
 
   // If it's a gate, recurse into the inputs
   if(parsed_fault_tree.Get_Gates().find(in_event) != parsed_fault_tree.Get_Gates().end())
@@ -1388,7 +1395,9 @@ void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph)
         an_input != parsed_fault_tree.Get_Gate_Inputs(in_event).end();
         an_input++)
     {
-      Compute_Reachable_Events(*an_input, in_subgraph);
+      if (Compute_Reachable_Events(*an_input, in_seen_events,
+          in_local_seen_events))
+        connected = true;
     }
   }
 
@@ -1403,7 +1412,9 @@ void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph)
       Input_Sequence::const_iterator an_input;
       for(an_input = an_seq->begin(); an_input != an_seq->end(); an_input++)
       {
-        Compute_Reachable_Events(*an_input,in_subgraph);
+        if (Compute_Reachable_Events(*an_input,in_seen_events,
+            in_local_seen_events))
+          connected = true;
       }
     }
   }
@@ -1418,17 +1429,23 @@ void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph)
         (a_functional_dependency->Get_Dependents().find(in_event) !=
            a_functional_dependency->Get_Dependents().end()))
     {
-      Compute_Reachable_Events(a_functional_dependency->Get_Trigger(),in_subgraph);
+      if (Compute_Reachable_Events(a_functional_dependency->Get_Trigger(),
+          in_seen_events, in_local_seen_events))
+        connected = true;
 
       Input_Sequence::const_iterator an_input;
       for(an_input = a_functional_dependency->Get_Dependents().begin();
           an_input != a_functional_dependency->Get_Dependents().end();
           an_input++)
       {
-        Compute_Reachable_Events(*an_input,in_subgraph);
+        if (Compute_Reachable_Events(*an_input, in_seen_events,
+            in_local_seen_events))
+          connected = true;
       }
     }
   }
+
+  return connected;
 }
 
 // ---------------------------------------------------------------------------
@@ -1454,6 +1471,7 @@ const bool Ensure_Input_Order(const list<string> &in_list)
 #endif // DEBUG_FAULT_TREE_CONSTRAINTS
 
       fault_tree_textual_parser_error("Inputs must be in order");
+
       return false;
     }
   }

@@ -25,3 +25,6 @@ Run it with:
 
 $ yagg -m -u user_code fault_tree.yg fault_tree.lg
 $ ./output/progs/generate 12
+
+You may also want to tweak the compile flags:
+   -fdynamic-no-pic -falign-loops=16

@@ -7,8 +7,21 @@
 class [[[$terminal]]] : public Terminal_Rule
 {
 public:
+  virtual const bool Check_For_String();
   virtual const list<string> Get_String() const;
-  virtual [[[$return_type]]] Get_Value() const;
+  virtual const [[[$return_type]]] Get_Value() const;
+
+protected:
+[[[
+if (defined $nonpointer_return_type)
+{
+  $OUT .= "  $nonpointer_return_type return_value;";
+}
+else
+{
+  $OUT .= "  $return_type return_value;";
+}
+]]]
 };
 
 #endif // [[[$terminal]]]_h

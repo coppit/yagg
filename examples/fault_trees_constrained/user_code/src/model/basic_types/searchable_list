@@ -20,6 +20,18 @@ public:
 
     return a_value;
   }
+
+  typename searchable_list<_Tp>::iterator find(const _Tp& in_value)
+  {
+    typename searchable_list<_Tp>::iterator a_value;
+    for (a_value = begin(); a_value != end(); a_value++)
+    {
+      if (*a_value == in_value)
+      break;
+    }
+
+    return a_value;
+  }
 };
 
 #endif // SEARCHABLE_LIST_H

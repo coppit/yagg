@@ -24,6 +24,8 @@ using namespace std;
 
 class Fault_Tree
 {
+  typedef function< Event, set< Event > > Gates_Map;
+
 public:
   Fault_Tree();
   Fault_Tree(const Fault_Tree& in_fault_tree);
@@ -88,7 +90,7 @@ public:
   void Set_Gate_Inputs(const Event& in_gate, const Input_Sequence& in_inputs);
   void Remove_Gate_Inputs(const Event& in_gate);
   const Input_Sequence& Get_Gate_Inputs(const Event& in_gate) const;
-  const set<Event> Get_Gates_Event_Is_Input_To(const Event& in_event) const;
+  const set<Event>& Get_Gates_Event_Is_Input_To(const Event& in_event) const;
   const set<Event> Get_FDEP_Triggers_Of_Event(const Event& in_event) const;
   const set<Input_Sequence> Get_FDEP_Dependents_Of_Event(const Event& in_event) const;
 
@@ -131,6 +133,9 @@ protected:
   Threshold_Map thresholds;
 
   Inputs_Map inputs;
+
+  // For efficiency
+  Gates_Map gates_input_to;
 
   set<Event> gates;
   set<Event> events;
@@ -284,6 +289,7 @@ inline const Fault_Tree& Fault_Tree::operator=(const Fault_Tree& in_fault_tree)
   thresholds = in_fault_tree.thresholds;
 
   inputs = in_fault_tree.inputs;
+  gates_input_to = in_fault_tree.gates_input_to;
 
   gates = in_fault_tree.gates;
   events = in_fault_tree.events;

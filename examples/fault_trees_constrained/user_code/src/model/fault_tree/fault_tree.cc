@@ -181,6 +181,7 @@ void Fault_Tree::Clear()
   fdep_constraints.clear();
   thresholds.clear();
   inputs.clear();
+  gates_input_to.clear();
   gates.clear();
   events.clear();
   replications.clear();
@@ -382,10 +383,18 @@ const Replication_Map& Fault_Tree::Get_Replication_Map() const
 void Fault_Tree::Set_Gate_Inputs(const Event& in_gate, const Input_Sequence& in_inputs)
 {
   inputs[in_gate] = in_inputs;
+
+  Input_Sequence::const_iterator an_input;
+  for (an_input = in_inputs.begin(); an_input != in_inputs.end(); an_input++)
+    gates_input_to[*an_input].insert(in_gate);
 }
 
 void Fault_Tree::Remove_Gate_Inputs(const Event& in_gate)
 {
+  Input_Sequence::const_iterator an_input;
+  for (an_input = inputs[in_gate].begin(); an_input != inputs[in_gate].end(); an_input++)
+    gates_input_to[*an_input].erase(in_gate);
+
   inputs.erase(in_gate);
 }
 
@@ -396,29 +405,15 @@ const Input_Sequence& Fault_Tree::Get_Gate_Inputs(const Event& in_gate) const
   return (*inputs.find(in_gate)).second;
 }
 
-const set<Event> Fault_Tree::Get_Gates_Event_Is_Input_To(const Event& in_event) const
+const set<Event>& Fault_Tree::Get_Gates_Event_Is_Input_To(const Event& in_event) const
 {
-  set<Event> gates_input_to;
+  static set<Event> empty;
 
-  const set<Event> fault_tree_gates = Get_Gates();
+  if(gates_input_to.find(in_event) == gates_input_to.end())
+    return empty;
 
-  set<Event>::const_iterator gate;
-  for (gate = fault_tree_gates.begin(); gate != fault_tree_gates.end(); gate++)
-  {
-    Input_Sequence gate_inputs = Get_Gate_Inputs(*gate);
-
-    Input_Sequence::const_iterator input;
-    for (input = gate_inputs.begin(); input != gate_inputs.end(); input++)
-      if (*input == in_event)
-      {
-        gates_input_to.insert(*gate);
-        break;
-      }
-  }
-
-  return gates_input_to;
+  return (*gates_input_to.find(in_event)).second;
 }
-
 
 const set<Event> Fault_Tree::Get_FDEP_Triggers_Of_Event(const Event& in_event) const
 {
@@ -563,16 +558,8 @@ const bool Fault_Tree::Event_Not_Referenced(const Event &in_event)
       return false;
   }
 
-  set<Event>::const_iterator a_gate;
-  for(a_gate = gates.begin(); a_gate != gates.end(); a_gate++)
-  {
-    if (inputs.find(*a_gate) != inputs.end())
-    {
-      Input_Sequence gate_inputs = Get_Gate_Inputs(*a_gate);
-      if (gate_inputs.find(in_event) != gate_inputs.end())
-        return false;
-    }
-  }
+  if (gates_input_to[in_event].size() > 0)
+    return false;
 
   return true;
 }

@@ -128,26 +128,9 @@ EOF
 
   $return_type Get_Value() const
   {
-EOF
-      if (defined $nonpointer_return_type)
-      {
-        $OUT .=<<EOF;
-    // We return a copy when dollar_dollar is a pointer, since this function
-    // is called multiple times
-    return new $nonpointer_return_type(*dollar_dollar);
-EOF
-      }
-      else
-      {
-        $OUT .=<<EOF;
-    return $return_type(dollar_dollar);
-EOF
-      }
-
-    $OUT .=<<EOF;
+    return dollar_dollar;
   }
 EOF
-
     }
     $OUT .=<<EOF;
 

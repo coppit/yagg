@@ -39,6 +39,8 @@ Generator TODOs:
   "-"             return MINUS;
 - YYLVAL isn't supported instead of %union. See
   http://pltplp.net/lex-yacc/example.html.en
+- Make sure the default rule $$ = $1 is implemented, and that it doesn't
+  prevent the caching nonterminal rule template from being used.
 
 -----------------------------------------------------------------------------
 
@@ -46,7 +48,6 @@ Fault tree TODOs:
 
 - Check/fix type order vs. system event order. Maybe some FTs are not being
   generated...
-- All Ensure_* functions should return a bool
 
 -----------------------------------------------------------------------------
 
@@ -65,5 +66,3 @@ Generated code TODOs:
   but we could compute the modulus for recursive grammars. NOTE: It's not
   clear that this will actually save us a lot of work, given that I've
   implemented an optimization to cache previously generated allocations.
-*** Be smarter about when to make copies of $1, $2, etc in Do_Action and
-  Undo_Action. See if we can avoid all the new()s and delete()s.

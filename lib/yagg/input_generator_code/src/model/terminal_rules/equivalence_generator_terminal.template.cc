@@ -45,7 +45,6 @@ const list<string> [[[$terminal]]]::Get_String() const
   {
     $OUT .= "  $return_type value = Get_Value();\n";
     $OUT .= "  temp_stream << *value;\n";
-    $OUT .= "  delete value;\n";
   }
   else
   {
@@ -71,7 +70,12 @@ $OUT .= ";\n";
 
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  return new $nonpointer_return_type(temp_stream.str());";
+  $OUT .= <<EOF;
+  static $nonpointer_return_type return_value;
+  return_value = temp_stream.str();
+
+  return &return_value;
+EOF
 }
 else
 {

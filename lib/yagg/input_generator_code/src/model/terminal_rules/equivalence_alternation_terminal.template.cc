@@ -48,7 +48,6 @@ const list<string> [[[$terminal]]]::Get_String() const
   {
     $OUT .= "  $return_type value = Get_Value();\n";
     $OUT .= "  temp_stream << *value;\n";
-    $OUT .= "  delete value;\n";
   }
   else
   {
@@ -64,7 +63,15 @@ const list<string> [[[$terminal]]]::Get_String() const
 [[[$return_type]]] [[[$terminal]]]::Get_Value() const
 {
   assert(m_string_count <= [[[$size]]]);
+[[[
+  if (defined $nonpointer_return_type)
+  {
+    $OUT .=<<"EOF";
 
+  static $nonpointer_return_type return_value;
+EOF
+  }
+]]]
   switch (m_string_count)
   {
 [[[
@@ -75,7 +82,8 @@ for (my $i = 1; $i-1 < $size; $i++)
     $OUT .=<<"EOF";
     case $i :
     {
-      return new $nonpointer_return_type($strings[$i-1]);
+      return_value = $strings[$i-1];
+      return &return_value;
       break;
     }
 EOF
@@ -99,7 +107,7 @@ EOF
 
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  return new $nonpointer_return_type();";
+  $OUT .= "  return &return_value;";
 }
 else
 {

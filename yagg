@@ -900,6 +900,7 @@ sub Mirror_Directory
 
   my $exclusions = '';
   map { $exclusions .= " --exclude '$_'" } @exclusions;
+  $exclusions .= " --exclude '.*swp'";
 
   my $deletions = '';
   $deletions = ' --delete' if $delete_destination;
@@ -1285,23 +1286,37 @@ EOF
 
   for(my $i = scalar @rules; $i != 0; $i--)
   {
-    if($code =~ s/\$$i\b/dollar_$i/g)
+    my $return_type;
+    $return_type = 'int'
+      if grep { $_ eq $rules[$i-1] } @terminals;
+    $return_type = $return_types{$rules[$i-1]}
+      if exists $return_types{$rules[$i-1]};
+
+    if ($code =~ /\$$i\b/)
     {
+      report_and_exit "Don't know return type for nonterminal $nonterminal, rule \$$i\n" .
+        "($rules[$i-1])\n"
+        unless defined $return_type;
+
+      my $nonpointer_return_type = Get_Nonpointer_Type($return_type);
+
+      # Delete any deletes
+      $code =~ s/(^|\n)[ \t]*\bdelete\b\s*\$$i\b\s*;[ \t]*//g;
+
+      next unless $code =~ /\$$i\b/;
+
+      # Make a copy for any code that needs the raw pointer
+      $code =~ s/\*\s+\$$i\b/\*\$$i/g;
+      $code =~ s/\$$i\s+->/\$$i->/g;
+      $code =~ s/(?<!\*)\$$i\b(?!->)/new $nonpointer_return_type(*\$$i)/g;
+
+      $code =~ s/\$$i\b/dollar_$i/g;
+
       if ($first)
       {
         $code = "\n$code";
         $first = 0;
       }
-
-      my $return_type;
-      $return_type = 'int'
-        if grep { $_ eq $rules[$i-1] } @terminals;
-      $return_type = $return_types{$rules[$i-1]}
-        if exists $return_types{$rules[$i-1]};
-
-      report_and_exit "Don't know return type for nonterminal $nonterminal, rule \$$i\n" .
-        "($rules[$i-1])\n"
-        unless defined $return_type;
 
       my $i_minus_1 = $i - 1;
       $code = "    $return_type dollar_$i = (($rules[$i-1]*)(*this)[$i_minus_1])->Get_Value();\n$code";

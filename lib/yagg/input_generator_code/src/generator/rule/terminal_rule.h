@@ -21,8 +21,6 @@ public:
   virtual const bool Check_For_String();
   virtual const list<string> Get_String() const = 0;
 
-  virtual const list<const Rule*> Get_Terminals() const;
-
   virtual const Rule* operator[](const unsigned int in_index) const;
 
 protected:
@@ -33,6 +31,8 @@ protected:
 
 protected:
   unsigned int m_string_count;
+
+  list<const Rule*> m_terminals;
 };
 
 #endif // TERMINAL_RULE_H

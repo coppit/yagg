@@ -26,16 +26,18 @@ void Ensure_FDEP_Trigger_Is_Not_Replicated();
 void Ensure_FDEP_Dependents_Are_Basic_Events();
 const string Get_Identifier_For_Event(const Event &in_event);
 
-extern void Ensure_Valid_System_Event();
-
-void Ensure_Connectedness();
-void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph);
-
-class Rule_List;
-
 Fault_Tree parsed_fault_tree;
 
 bijection<string, Event> identifiers_to_events;
+
+extern void Ensure_Valid_System_Event();
+
+// This is an additional check to avoid generating lots of unconstrained
+// trees. We would need to update the grammar to get this.
+void Ensure_Connectedness();
+void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph);
+
+// Added for constrained fault tree output
 const bool Ensure_Input_Order(const list<string> &in_list);
 
 string NOT_FOUND("<NOT FOUND>");
@@ -46,8 +48,6 @@ set<string> declarations;
 %union {
   string*       text;
   Natural*      natural;
-  Whole*        zero;
-  Whole*        whole;
   Replication*  replication;
   char*         character;
   Event*        event;
@@ -77,12 +77,12 @@ set<string> declarations;
 %type  <text>        fdep_constraint
 %type  <text>        seq_constraint
 
-%type  <whole>       whole_nonterminal
+%type  <natural>     natural_nonterminal
 %type  <text_list>   identifier_list
 
 %token <text>        IDENTIFIER
 %token <natural>     NATURAL
-%token <zero>        ZERO
+%token <natural>     ZERO
 %token               SYSTEM_EVENT
 %token               AND
 %token               OR
@@ -110,7 +110,7 @@ fault_tree:
     delete $2;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 system_event:
   SYSTEM_EVENT EQUALS IDENTIFIER SEMICOLON {
@@ -131,17 +131,17 @@ system_event:
     delete $3;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 eof:
   END_OF_FILE {
-    /* This is a check which is specific to the textual language.*/
+    // This is a check which is specific to the textual language.
     Ensure_Corresponding_References_And_Definitions();
 
-    /* Now do the various checks for consistency as specified in the formal
-       definition of fault trees. Other checks (e.g. gates have replication
-       of 1) are not necessary because they are handled during creation of
-       the fault tree. */
+    // Now do the various checks for consistency as specified in the formal
+    // definition of fault trees. Other checks (e.g. gates have replication
+    // of 1) are not necessary because they are handled during creation of
+    // the fault tree.
     Ensure_Valid_System_Event();
     Ensure_No_Cycles_In_Inputs();
     Ensure_Spare_Gate_Inputs_Are_Basic_Events();
@@ -149,12 +149,12 @@ eof:
     Ensure_FDEP_Trigger_Is_Not_Replicated();
     Ensure_FDEP_Dependents_Are_Basic_Events();
 
-    /* This is an additional check to avoid generating lots of unconstrained
-       trees. We would need to update the grammar to get this.*/
+    // This is an additional check to avoid generating lots of unconstrained
+    // trees. We would need to update the grammar to get this.
     Ensure_Connectedness();
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 node_list:
   ands_list_opt ors_list_opt pands_list_opt thresholds_list_opt
@@ -184,7 +184,7 @@ node_list:
     delete $8;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 ands_list_opt :
   /* NOTHING */ {
@@ -271,7 +271,7 @@ and_gate :
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 ors_list_opt :
   /* NOTHING */ {
@@ -358,7 +358,7 @@ or_gate :
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 pands_list_opt :
   /* NOTHING */ {
@@ -445,7 +445,7 @@ pand_gate :
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 thresholds_list_opt :
   /* NOTHING */ {
@@ -468,7 +468,7 @@ thresholds_list_opt :
   };
 
 threshold_gate :
-  IDENTIFIER THRESHOLD MAXIMUM EQUALS whole_nonterminal identifier_list SEMICOLON {
+  IDENTIFIER THRESHOLD MAXIMUM EQUALS natural_nonterminal identifier_list SEMICOLON {
     if (!Ensure_Input_Order(*$6))
       fault_tree_textual_parser_error("Inputs to " + *$1 + " must be sorted");
     // Check for duplicate definition
@@ -533,19 +533,19 @@ threshold_gate :
     delete $1;
   };
 
-whole_nonterminal:
+natural_nonterminal:
   ZERO {
-    $$ = new Whole(*$1);
+    $$ = new Natural(*$1);
 
     delete $1;
   } |
   NATURAL {
-    $$ = new Whole(*$1);
+    $$ = new Natural(*$1);
 
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 spares_list_opt :
   /* NOTHING */ {
@@ -630,7 +630,7 @@ spare_gate :
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 fdeps_list_opt :
   /* NOTHING */ {
@@ -665,29 +665,41 @@ fdep_constraint :
     }
     else
     {
-      declarations.insert(*$1);
-
-      /* Using a global this way is really ugly, but I need to pass back
-         the threshold value somehow. */
+      // Using a global this way is really ugly, but I need to pass back
+      // the threshold value somehow.
       Input_Sequence dependents = Identifier_List_To_Input_Sequence(*$6);
-
-      Input_Sequence::const_iterator an_input_event;
-      list<string>::const_iterator an_input_identifier;
-      for (an_input_event = dependents.begin(), an_input_identifier = (*$6).begin();
-           an_input_event != dependents.end();
-           an_input_event++, an_input_identifier++)
-      {
-        parsed_fault_tree.Set_Event_Description(*an_input_event,*an_input_identifier);
-      }
+      Event trigger = Event_By_Identifier(*$5);
 
       Functional_Dependency an_fdep;
-      an_fdep.Set_Trigger(Event_By_Identifier(*$5));
+      an_fdep.Set_Trigger(trigger);
       an_fdep.Set_Dependents(dependents);
 
-      parsed_fault_tree.Set_Event_Description(an_fdep.Get_Trigger(),*$5);
+      if (parsed_fault_tree.Get_FDEP_Constraints().find(an_fdep) !=
+          parsed_fault_tree.Get_FDEP_Constraints().end())
+      {
+        string error = "\"" + *$1 +
+          "\" has already been defined as \"" +
+          parsed_fault_tree.Get_FDEP_Description(an_fdep) + "\". This definition will be ignored.";
+        fault_tree_textual_parser_error(error);
+      }
+      else
+      {
+        declarations.insert(*$1);
 
-      parsed_fault_tree.Insert_FDEP_Constraint(an_fdep);
-      parsed_fault_tree.Set_FDEP_Description(an_fdep,*$1);
+        Input_Sequence::const_iterator an_input_event;
+        list<string>::const_iterator an_input_identifier;
+        for (an_input_event = dependents.begin(), an_input_identifier = (*$6).begin();
+             an_input_event != dependents.end();
+             an_input_event++, an_input_identifier++)
+        {
+          parsed_fault_tree.Set_Event_Description(*an_input_event,*an_input_identifier);
+        }
+
+        parsed_fault_tree.Set_Event_Description(an_fdep.Get_Trigger(),*$5);
+
+        parsed_fault_tree.Insert_FDEP_Constraint(an_fdep);
+        parsed_fault_tree.Set_FDEP_Description(an_fdep,*$1);
+      }
     }
 
     delete $1;
@@ -724,7 +736,7 @@ fdep_constraint :
     delete $6;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 seqs_list_opt :
   /* NOTHING */ {
@@ -744,7 +756,7 @@ seqs_list_opt :
     }
 
     delete $2;
-  } ;
+  };
 
 seq_constraint :
   IDENTIFIER SEQ identifier_list SEMICOLON {
@@ -757,21 +769,32 @@ seq_constraint :
     }
     else
     {
-      declarations.insert(*$1);
-
       Input_Sequence seq = Identifier_List_To_Input_Sequence(*$3);
 
-      Input_Sequence::const_iterator an_input_event;
-      list<string>::const_iterator an_input_identifier;
-      for (an_input_event = seq.begin(), an_input_identifier = (*$3).begin();
-           an_input_event != seq.end();
-           an_input_event++, an_input_identifier++)
+      if (parsed_fault_tree.Get_SEQ_Constraints().find(seq) !=
+          parsed_fault_tree.Get_SEQ_Constraints().end())
       {
-        parsed_fault_tree.Set_Event_Description(*an_input_event,*an_input_identifier);
+        string error = "\"" + *$1 +
+          "\" has already been defined as \"" +
+          parsed_fault_tree.Get_SEQ_Description(seq) + "\". This definition will be ignored.";
+        fault_tree_textual_parser_error(error);
       }
+      else
+      {
+        declarations.insert(*$1);
 
-      parsed_fault_tree.Insert_SEQ_Constraint(seq);
-      parsed_fault_tree.Set_SEQ_Description(seq,*$1);
+        Input_Sequence::const_iterator an_input_event;
+        list<string>::const_iterator an_input_identifier;
+        for (an_input_event = seq.begin(), an_input_identifier = (*$3).begin();
+             an_input_event != seq.end();
+             an_input_event++, an_input_identifier++)
+        {
+          parsed_fault_tree.Set_Event_Description(*an_input_event,*an_input_identifier);
+        }
+
+        parsed_fault_tree.Insert_SEQ_Constraint(seq);
+        parsed_fault_tree.Set_SEQ_Description(seq,*$1);
+      }
     }
 
     delete $1;
@@ -796,9 +819,9 @@ seq_constraint :
 
     delete $1;
     delete $3;
-  } ;
+  };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 basic_events_list :
   basic_event {
@@ -882,7 +905,7 @@ basic_event:
     delete $1;
   };
 
-/*---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 identifier_list:
   IDENTIFIER {
@@ -910,7 +933,7 @@ identifier_list:
     delete $2;
   };
 
-/* ----------------------------------------------------------------- */
+// ---------------------------------------------------------------------------
 
 %% 
 
@@ -925,7 +948,7 @@ void fault_tree_textual_parser_parser_initialize(FILE* in_input_file)
   fault_tree_textual_parser_lineno = 1;
 }
 
-/* ---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 
 /*
  * Given a identifier, determines if the identifier has been associated with
@@ -934,20 +957,21 @@ void fault_tree_textual_parser_parser_initialize(FILE* in_input_file)
  */
 const Event Event_By_Identifier(const string &in_identifier)
 {
-  Event event;
+  bijection<string, Event>::const_iterator the_event =
+    identifiers_to_events.find(in_identifier);
 
-  if (identifiers_to_events.find(in_identifier) != identifiers_to_events.end())
+  if (the_event != identifiers_to_events.end())
   {
     // Already encountered this identifier and created an event for it
-    event = (identifiers_to_events.find(in_identifier))->second;
+    return the_event->second;
   }
   else
   {
     // Add the new event and identifier
-    identifiers_to_events[in_identifier] = event;
+    Event new_event;
+    identifiers_to_events[in_identifier] = new_event;
+    return new_event;
   }
-
-  return event;
 }
 
 // ---------------------------------------------------------------------------
@@ -1224,7 +1248,7 @@ void Ensure_FDEP_Trigger_Is_Not_Replicated()
   set<Functional_Dependency>::const_iterator an_fdep;
   for(an_fdep = parsed_fault_tree.Get_FDEP_Constraints().begin(); an_fdep != parsed_fault_tree.Get_FDEP_Constraints().end(); an_fdep++)
   {
-    if(parsed_fault_tree.Get_Replication((*an_fdep).Get_Trigger()) > (Whole)1)
+    if(parsed_fault_tree.Get_Replication((*an_fdep).Get_Trigger()) > (Natural)1)
     {
       string error = "The trigger input \"" + parsed_fault_tree.Get_Event_Description((*an_fdep).Get_Trigger()) +
         "\" for the functional dependency \"" + parsed_fault_tree.Get_FDEP_Description(*an_fdep) + 
@@ -1374,10 +1398,13 @@ void Compute_Reachable_Events(const Event& in_event, set<Event>& in_subgraph)
       an_seq != parsed_fault_tree.Get_SEQ_Constraints().end();
       an_seq++)
   {
-    Input_Sequence::const_iterator an_input;
-    for(an_input = an_seq->begin(); an_input != an_seq->end(); an_input++)
+    if (an_seq->find(in_event) != an_seq->end())
     {
-      Compute_Reachable_Events(*an_input,in_subgraph);
+      Input_Sequence::const_iterator an_input;
+      for(an_input = an_seq->begin(); an_input != an_seq->end(); an_input++)
+      {
+        Compute_Reachable_Events(*an_input,in_subgraph);
+      }
     }
   }
 

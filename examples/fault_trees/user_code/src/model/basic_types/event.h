@@ -10,6 +10,8 @@
 #include "model/basic_types/function.h"
 #include <cassert>
 
+using namespace std;
+
 // This class is a little more complicated that I would like. The static
 // variables references and relaimed_ids must be pointers so that this class
 // can explicitly manage the creation and destruction of the objects to which
@@ -30,7 +32,7 @@ public:
   friend bool operator== (const Event& in_first, const Event& in_second);
   friend bool operator!= (const Event& in_first, const Event& in_second);
   friend bool operator< (const Event& in_first, const Event& in_second);
-  friend std::ostream& operator<< (std::ostream& in_ostream, const Event& in_event);
+  friend ostream& operator<< (ostream& in_ostream, const Event& in_event);
 
 protected:
   void Decrease_Reference_Count() const;
@@ -42,7 +44,7 @@ protected:
 
   static unsigned long int max_allocated;
   static function<unsigned long int, unsigned long int>* references;
-  static std::set<unsigned long int>* reclaimed_ids;
+  static set<unsigned long int>* reclaimed_ids;
 };
 
 // ----------------------------------------------------------------------------------

@@ -3,8 +3,10 @@
 
 #include <list>
 
+using namespace std;
+
 template <class _Tp>
-class searchable_list : public std::list<_Tp>
+class searchable_list : public list<_Tp>
 {
 public:
   typename searchable_list<_Tp>::const_iterator find(const _Tp& in_value) const

@@ -30,7 +30,6 @@ public:
   virtual const list<string> Get_String() const = 0;
 
   virtual const Rule* Get_Previous_Rule() const;
-  virtual const list<const Rule*> Get_Terminals() const = 0;
 
   virtual const Rule* operator[](const unsigned int in_index) const = 0;
 

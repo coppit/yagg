@@ -2,7 +2,7 @@
 #include <sstream>
 #include <cassert>
 #include <list>
-#include <set>
+#include <map>
 
 using namespace std;
 
@@ -20,30 +20,25 @@ const bool [[[$terminal]]]::Check_For_String()
   if (!Is_Valid())
     return false;
 
-  set<unsigned int> counts;
+  static map<unsigned int, unsigned int> counts;
 
-  for(const Rule *a_rule = m_previous_rule;
-      a_rule != NULL; a_rule =
-      a_rule->Get_Previous_Rule())
+  if (counts.find(m_string_count) != counts.end())
   {
-    list<const Rule*> terminal_rules = a_rule->Get_Terminals();
-
-    list<const Rule*>::const_iterator a_terminal_rule;
-    for(a_terminal_rule = terminal_rules.begin();
-        a_terminal_rule != terminal_rules.end();
-        a_terminal_rule++)
-    {
-      const [[[$terminal]]] *casted_rule =
-        dynamic_cast<const [[[$terminal]]]*>(*a_terminal_rule);
-
-      if (casted_rule != NULL)
-        counts.insert(casted_rule->m_string_count);
-    }
+    if (counts[m_string_count] == 1)
+      counts.erase(m_string_count);
+    else
+      counts[m_string_count]--;
   }
 
   m_string_count++;
 
-  return (m_string_count <= counts.size() + 1 && m_string_count <= [[[$size]]]);
+  if (m_string_count <= counts.size() + 1 && m_string_count <= [[[$size]]])
+  {
+    counts[m_string_count]++;
+    return true;
+  }
+  else
+    return false;
 }
 
 // ---------------------------------------------------------------------------

@@ -33,8 +33,6 @@ if (defined $return_type)
   virtual const bool Check_For_String();
   virtual const list<string> Get_String() const;
 
-  virtual const list<const Rule*> Get_Terminals() const;
-
 #ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 public:
   [[[$nonterminal]]]();

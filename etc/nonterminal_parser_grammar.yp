@@ -182,6 +182,24 @@ symbol_declaration:
                 }
                 undef
             }
+| PERCENT_TOKEN TYPE symbol_defs_1
+            {
+                for (@{$_[3]}) {
+                    my($symbol,$lineno)=@$_;
+
+                        exists($$token{$symbol})
+                    and do {
+                        _SyntaxError(0,
+                                "Token $symbol redefined: ".
+                                "Previously defined line $$token{$symbol}",
+                                $lineno);
+                        next;
+                    };
+                    $$token{$symbol}=$lineno;
+                    $$term{$symbol} = [ ];
+                }
+                undef
+            }
 | PERCENT_TYPE TYPE symbols_1
             {
                 for ( @{$_[3]} ) {
@@ -244,8 +262,7 @@ symbols_1:
 
 /* One token definition.  */
 symbol_def:
-  TYPE
-| ID
+  ID
 | ID INT
     {
       _SyntaxError(0,"User-defined numeric token codes are not supported. ".

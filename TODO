@@ -25,6 +25,11 @@ Generator TODOs:
   This is hard because we don't know how many to generate! We would need to
   know the total number of terminals of the given type that are in the string,
   but all we have is a pointer to the previous rule.)
+- Why does left recursion generate same strings?
+  %%
+  fielder_list: fielder | fielder_list fielder
+  fielder:  '1' | '2'
+  %%
 
 -----------------------------------------------------------------------------
 
@@ -53,3 +58,5 @@ Generated code TODOs:
   but we could compute the modulus for recursive grammars. NOTE: It's not
   clear that this will actually save us a lot of work, given that I've
   implemented an optimization to cache previously generated allocations.
+- Be smarter about when to make copies of $1, $2, etc in Do_Action and
+  Undo_Action. See if we can avoid all the new()s and delete()s.

@@ -14,6 +14,10 @@ side effects of the action blocks. If the programmer already has a LEX or FLEX
 lexer input file, he or she only needs to remove extraneous code and replace
 any regular expressions with one of the terminal generator specifications.
 
+What's it good for? Automated testing, for one thing. Alan Karben at XML Team
+is using yagg along with sports data to compute the likelihood of all possible
+outcomes for certain play situations in baseball.
+
 
 NEW IN THIS VERSION
 

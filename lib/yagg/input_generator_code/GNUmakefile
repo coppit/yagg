@@ -19,9 +19,9 @@ YACCFILEEXT = y
 LEXFILEEXT = lex
 SCRIPTFILEEXT = sh
 
-# Typical flags for GNU compilers: -g (debugging information), -pg (profiling),
-# -O2 (optimization), -Idir (extra include directory), -DDEBUG,
-# -Wall (all warnings)
+# Typical flags for GNU compilers:
+#  -g (debugging information), -p (profiling), -Wall (all warnings)
+#  -O2 (optimization), -Idir (extra include directory), -DDEBUG
 
 #CFLAGS		= -Wall -g -DRULE_LIST_DEBUG \
 #                  -DTERMINAL_RULE_DEBUG -DNONTERMINAL_RULE_DEBUG -DRULE_DEBUG \

@@ -378,15 +378,3 @@ const list<string> [[[$nonterminal]]]::Get_String() const
 
   return Nonterminal_Rule::Get_String();
 }
-
-// ---------------------------------------------------------------------------
-
-const list<const Rule*> [[[$nonterminal]]]::Get_Terminals() const
-{
-#ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
-  if (m_generated_cache.find(m_allowed_length) != m_generated_cache.end())
-    assert(false);
-#endif // DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
-
-  return Nonterminal_Rule::Get_Terminals();
-}

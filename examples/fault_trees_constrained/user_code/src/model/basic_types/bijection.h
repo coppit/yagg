@@ -9,6 +9,8 @@
 #include "model/basic_types/function.h"
 #include <set>
 
+using namespace std;
+
 // Doesn't actually ensure that the values in the range are unique
 
 template <class _Key, class _Tp>

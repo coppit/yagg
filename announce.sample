@@ -18,9 +18,10 @@ Description:
   extraneous code and replace any regular expressions with one of the
   terminal generator specifications.
 
-This program is useful if you want to see examples of strings recognized
-by a YACC grammar. It can also be used to generate inputs for any program
-that uses textual input.
+What's it good for? Automated testing, for one thing, and checking the
+correctness of a grammar, for another. Alan Karben at XML Team is using yagg
+along with sports data to compute the likelihood of all possible outcomes for
+certain play situations in baseball.
 
 Changes:
 - Initial public release

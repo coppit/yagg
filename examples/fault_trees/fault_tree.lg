@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
       delete fault_tree_textual_parser_lval.natural;
 
     if (token == ZERO)
-      delete fault_tree_textual_parser_lval.zero;
+      delete fault_tree_textual_parser_lval.natural;
 
     if (token == INTEGER)
       delete fault_tree_textual_parser_lval.integer;

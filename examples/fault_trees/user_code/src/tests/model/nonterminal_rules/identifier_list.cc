@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   {
     identifier_list start;
 
-    start.Reset_String(3);
+    start.Initialize(3);
 
     while(start.Check_For_String())
     {

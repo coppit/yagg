@@ -174,7 +174,6 @@ examples/fault_trees/user_code/src/model/basic_types/function.h
 examples/fault_trees/user_code/src/model/basic_types/integer.h
 examples/fault_trees/user_code/src/model/basic_types/natural.h
 examples/fault_trees/user_code/src/model/basic_types/searchable_list
-examples/fault_trees/user_code/src/model/basic_types/whole.h
 examples/fault_trees/user_code/src/model/fault_tree/fault_tree.cc
 examples/fault_trees/user_code/src/model/fault_tree/fault_tree.h
 examples/fault_trees/user_code/src/model/fault_tree/functional_dependency.cc
@@ -200,7 +199,6 @@ examples/fault_trees_constrained/user_code/src/model/basic_types/function.h
 examples/fault_trees_constrained/user_code/src/model/basic_types/integer.h
 examples/fault_trees_constrained/user_code/src/model/basic_types/natural.h
 examples/fault_trees_constrained/user_code/src/model/basic_types/searchable_list
-examples/fault_trees_constrained/user_code/src/model/basic_types/whole.h
 examples/fault_trees_constrained/user_code/src/model/fault_tree/fault_tree.cc
 examples/fault_trees_constrained/user_code/src/model/fault_tree/fault_tree.h
 examples/fault_trees_constrained/user_code/src/model/fault_tree/functional_dependency.cc

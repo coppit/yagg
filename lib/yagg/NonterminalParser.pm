@@ -60,36 +60,36 @@ sub new {
 	},
 	{#State 1
 		ACTIONS => {
-			'PERCENT_DEFINES' => 4,
-			'PERCENT_START' => 3,
-			'PROLOGUE' => 7,
-			'PERCENT_NO_LINES' => 6,
-			'PERCENT_YACC' => 5,
-			'PERCENT_OUTPUT' => 8,
-			'PERCENT_DEBUG' => 9,
-			'PERCENT_PARSE_PARAM' => 11,
-			'PERCENT_VERBOSE' => 12,
-			'PERCENT_LOCATIONS' => 15,
-			'PERCENT_NAME_PREFIX' => 14,
-			'PERCENT_TOKEN_TABLE' => 17,
-			'PERCENT_UNION' => 16,
-			"%%" => 18,
-			'SEMICOLON' => 20,
-			'PERCENT_EXPECT' => 22,
-			'PERCENT_NONASSOC' => 23,
-			'PERCENT_TOKEN' => 24,
-			'PERCENT_PURE_PARSER' => 25,
-			'PERCENT_LEFT' => 26,
-			'PERCENT_RIGHT' => 27,
-			'PERCENT_FILE_PREFIX' => 29,
-			'PERCENT_TYPE' => 28
+			'PERCENT_PARSE_PARAM' => 4,
+			'PERCENT_NONASSOC' => 3,
+			'PERCENT_DEBUG' => 6,
+			'PERCENT_OUTPUT' => 5,
+			'PERCENT_LEFT' => 8,
+			'PERCENT_RIGHT' => 7,
+			'PERCENT_EXPECT' => 10,
+			'SEMICOLON' => 11,
+			'PERCENT_FILE_PREFIX' => 13,
+			'PERCENT_TOKEN_TABLE' => 12,
+			'PERCENT_TOKEN' => 14,
+			'PERCENT_YACC' => 15,
+			'PERCENT_VERBOSE' => 16,
+			'PERCENT_LOCATIONS' => 19,
+			'PERCENT_NAME_PREFIX' => 20,
+			'PERCENT_DEFINES' => 21,
+			'PERCENT_PURE_PARSER' => 23,
+			'PERCENT_UNION' => 24,
+			'PROLOGUE' => 25,
+			'PERCENT_NO_LINES' => 26,
+			'PERCENT_TYPE' => 27,
+			"%%" => 30,
+			'PERCENT_START' => 28
 		},
 		GOTOS => {
-			'precedence_declaration' => 19,
-			'symbol_declaration' => 13,
-			'declaration' => 21,
-			'grammar_declaration' => 30,
-			'precedence_declarator' => 10
+			'grammar_declaration' => 17,
+			'precedence_declaration' => 18,
+			'declaration' => 29,
+			'precedence_declarator' => 22,
+			'symbol_declaration' => 9
 		}
 	},
 	{#State 2
@@ -98,425 +98,441 @@ sub new {
 		}
 	},
 	{#State 3
-		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
-		},
-		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 35
-		}
+		DEFAULT => -31
 	},
 	{#State 4
-		DEFAULT => -8
+		DEFAULT => -15
 	},
 	{#State 5
-		DEFAULT => -19
-	},
-	{#State 6
-		DEFAULT => -13
-	},
-	{#State 7
-		DEFAULT => -6
-	},
-	{#State 8
 		DEFAULT => -14
 	},
-	{#State 9
+	{#State 6
 		DEFAULT => -7
+	},
+	{#State 7
+		DEFAULT => -30
+	},
+	{#State 8
+		DEFAULT => -29
+	},
+	{#State 9
+		DEFAULT => -22
 	},
 	{#State 10
 		ACTIONS => {
-			'TYPE' => 37
-		},
-		DEFAULT => -31,
-		GOTOS => {
-			'type_opt' => 38
+			'INT' => 32
 		}
 	},
 	{#State 11
-		DEFAULT => -15
+		DEFAULT => -20
 	},
 	{#State 12
-		DEFAULT => -18
+		DEFAULT => -17
 	},
 	{#State 13
-		DEFAULT => -22
+		ACTIONS => {
+			'EQUAL' => 33
+		}
 	},
 	{#State 14
+		ACTIONS => {
+			'IDENT' => 37,
+			'TYPE' => 38
+		},
+		GOTOS => {
+			'symbol_defs_1' => 36,
+			'symbol_def' => 34,
+			'ID' => 35
+		}
+	},
+	{#State 15
+		DEFAULT => -19
+	},
+	{#State 16
+		DEFAULT => -18
+	},
+	{#State 17
+		DEFAULT => -5
+	},
+	{#State 18
+		DEFAULT => -21
+	},
+	{#State 19
+		DEFAULT => -11
+	},
+	{#State 20
 		ACTIONS => {
 			'EQUAL' => 39
 		}
 	},
-	{#State 15
-		DEFAULT => -11
-	},
-	{#State 16
-		ACTIONS => {
-			'BRACED_CODE' => 40
-		}
-	},
-	{#State 17
-		DEFAULT => -17
-	},
-	{#State 18
-		ACTIONS => {
-			'ERROR' => 41,
-			'SEMICOLON' => 45,
-			'ID_COLON' => 42
-		},
-		DEFAULT => -2,
-		GOTOS => {
-			'rules' => 43,
-			'grammar' => 44,
-			'rules_or_grammar_declaration' => 46
-		}
-	},
-	{#State 19
-		DEFAULT => -21
-	},
-	{#State 20
-		DEFAULT => -20
-	},
 	{#State 21
-		DEFAULT => -4
+		DEFAULT => -8
 	},
 	{#State 22
 		ACTIONS => {
-			'INT' => 47
+			'TYPE' => 41
+		},
+		DEFAULT => -32,
+		GOTOS => {
+			'type_opt' => 40
 		}
 	},
 	{#State 23
-		DEFAULT => -30
+		DEFAULT => -16
 	},
 	{#State 24
 		ACTIONS => {
-			'IDENT' => 32,
-			'TYPE' => 50
-		},
-		GOTOS => {
-			'ID' => 51,
-			'symbol_defs_1' => 48,
-			'symbol_def' => 49
+			'BRACED_CODE' => 42
 		}
 	},
 	{#State 25
-		DEFAULT => -16
+		DEFAULT => -6
 	},
 	{#State 26
-		DEFAULT => -28
+		DEFAULT => -13
 	},
 	{#State 27
-		DEFAULT => -29
+		ACTIONS => {
+			'TYPE' => 43
+		}
 	},
 	{#State 28
 		ACTIONS => {
-			'TYPE' => 52
+			'IDENT' => 37,
+			'STRING' => 46
+		},
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 47,
+			'ID' => 45
 		}
 	},
 	{#State 29
-		ACTIONS => {
-			'EQUAL' => 53
-		}
+		DEFAULT => -4
 	},
 	{#State 30
-		DEFAULT => -5
+		ACTIONS => {
+			'SEMICOLON' => 49,
+			'ID_COLON' => 53,
+			'ERROR' => 48
+		},
+		DEFAULT => -2,
+		GOTOS => {
+			'grammar' => 52,
+			'rules' => 50,
+			'rules_or_grammar_declaration' => 51
+		}
 	},
 	{#State 31
 		DEFAULT => 0
 	},
 	{#State 32
-		DEFAULT => -64
+		DEFAULT => -9
 	},
 	{#State 33
-		DEFAULT => -56
+		ACTIONS => {
+			'STRING' => 54
+		},
+		GOTOS => {
+			'string_content' => 55
+		}
 	},
 	{#State 34
-		DEFAULT => -60
+		DEFAULT => -40
 	},
 	{#State 35
-		DEFAULT => -23
+		ACTIONS => {
+			'INT' => 57,
+			'STRING' => 46
+		},
+		DEFAULT => -36,
+		GOTOS => {
+			'string_as_id' => 56
+		}
 	},
 	{#State 36
-		DEFAULT => -55
+		ACTIONS => {
+			'IDENT' => 37
+		},
+		DEFAULT => -25,
+		GOTOS => {
+			'symbol_def' => 58,
+			'ID' => 35
+		}
 	},
 	{#State 37
-		DEFAULT => -32
+		DEFAULT => -64
 	},
 	{#State 38
 		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
+			'IDENT' => 37
 		},
 		GOTOS => {
-			'ID' => 36,
-			'symbols_1' => 55,
-			'string_as_id' => 33,
-			'symbol' => 54
+			'symbol_defs_1' => 59,
+			'symbol_def' => 34,
+			'ID' => 35
 		}
 	},
 	{#State 39
 		ACTIONS => {
-			'STRING' => 56
+			'STRING' => 54
 		},
 		GOTOS => {
-			'string_content' => 57
+			'string_content' => 60
 		}
 	},
 	{#State 40
-		DEFAULT => -24
+		ACTIONS => {
+			'IDENT' => 37,
+			'STRING' => 46
+		},
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 61,
+			'ID' => 45,
+			'symbols_1' => 62
+		}
 	},
 	{#State 41
-		ACTIONS => {
-			'SEMICOLON' => 58,
-			'IDENT' => 32,
-			'STRING' => 34
-		},
-		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 59
-		}
+		DEFAULT => -33
 	},
 	{#State 42
-		DEFAULT => -51,
-		GOTOS => {
-			'rhses_1' => 60,
-			'rhs' => 61
-		}
+		DEFAULT => -24
 	},
 	{#State 43
-		DEFAULT => -44
-	},
-	{#State 44
 		ACTIONS => {
-			'ERROR' => 41,
-			'SEMICOLON' => 45,
-			'ID_COLON' => 42,
-			"%%" => 62
+			'IDENT' => 37,
+			'STRING' => 46
 		},
-		DEFAULT => -62,
 		GOTOS => {
-			'epilogue_opt' => 63,
-			'rules' => 43,
-			'rules_or_grammar_declaration' => 64
+			'string_as_id' => 44,
+			'symbol' => 61,
+			'ID' => 45,
+			'symbols_1' => 63
 		}
 	},
+	{#State 44
+		DEFAULT => -56
+	},
 	{#State 45
-		DEFAULT => -47
+		DEFAULT => -55
 	},
 	{#State 46
-		DEFAULT => -42
+		DEFAULT => -60
 	},
 	{#State 47
-		DEFAULT => -9
+		DEFAULT => -23
 	},
 	{#State 48
 		ACTIONS => {
-			'TYPE' => 50,
-			'IDENT' => 32
+			'SEMICOLON' => 64,
+			'IDENT' => 37,
+			'STRING' => 46
 		},
-		DEFAULT => -25,
 		GOTOS => {
-			'ID' => 51,
-			'symbol_def' => 65
+			'string_as_id' => 44,
+			'symbol' => 65,
+			'ID' => 45
 		}
 	},
 	{#State 49
-		DEFAULT => -40
+		DEFAULT => -47
 	},
 	{#State 50
-		DEFAULT => -35
+		DEFAULT => -44
 	},
 	{#State 51
-		ACTIONS => {
-			'INT' => 66,
-			'STRING' => 34
-		},
-		DEFAULT => -36,
-		GOTOS => {
-			'string_as_id' => 67
-		}
+		DEFAULT => -42
 	},
 	{#State 52
 		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
+			'SEMICOLON' => 49,
+			'ID_COLON' => 53,
+			"%%" => 68,
+			'ERROR' => 48
 		},
+		DEFAULT => -62,
 		GOTOS => {
-			'ID' => 36,
-			'symbols_1' => 68,
-			'string_as_id' => 33,
-			'symbol' => 54
+			'rules' => 50,
+			'epilogue_opt' => 66,
+			'rules_or_grammar_declaration' => 67
 		}
 	},
 	{#State 53
-		ACTIONS => {
-			'STRING' => 56
-		},
+		DEFAULT => -51,
 		GOTOS => {
-			'string_content' => 69
+			'rhses_1' => 69,
+			'rhs' => 70
 		}
 	},
 	{#State 54
-		DEFAULT => -33
-	},
-	{#State 55
-		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
-		},
-		DEFAULT => -27,
-		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 70
-		}
-	},
-	{#State 56
 		DEFAULT => -61
 	},
+	{#State 55
+		DEFAULT => -10
+	},
+	{#State 56
+		DEFAULT => -38
+	},
 	{#State 57
-		DEFAULT => -12
-	},
-	{#State 58
-		DEFAULT => -46
-	},
-	{#State 59
 		ACTIONS => {
-			'SEMICOLON' => 71
-		}
-	},
-	{#State 60
-		ACTIONS => {
-			'PIPE' => 72
-		},
-		DEFAULT => -48
-	},
-	{#State 61
-		ACTIONS => {
-			'STRING' => 34,
-			'IDENT' => 32,
-			'BRACED_CODE' => -57,
-			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 73,
-			'PERCENT_PREC' => 74
-		},
-		DEFAULT => -49,
-		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 76,
-			'action_opt' => 75
-		}
-	},
-	{#State 62
-		ACTIONS => {
-			'EPILOGUE' => 77
-		}
-	},
-	{#State 63
-		DEFAULT => -1
-	},
-	{#State 64
-		DEFAULT => -43
-	},
-	{#State 65
-		DEFAULT => -41
-	},
-	{#State 66
-		ACTIONS => {
-			'STRING' => 34
+			'STRING' => 46
 		},
 		DEFAULT => -37,
 		GOTOS => {
-			'string_as_id' => 78
+			'string_as_id' => 71
 		}
 	},
-	{#State 67
-		DEFAULT => -38
+	{#State 58
+		DEFAULT => -41
 	},
-	{#State 68
+	{#State 59
 		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
+			'IDENT' => 37
 		},
 		DEFAULT => -26,
 		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 70
+			'symbol_def' => 58,
+			'ID' => 35
+		}
+	},
+	{#State 60
+		DEFAULT => -12
+	},
+	{#State 61
+		DEFAULT => -34
+	},
+	{#State 62
+		ACTIONS => {
+			'IDENT' => 37,
+			'STRING' => 46
+		},
+		DEFAULT => -28,
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 72,
+			'ID' => 45
+		}
+	},
+	{#State 63
+		ACTIONS => {
+			'IDENT' => 37,
+			'STRING' => 46
+		},
+		DEFAULT => -27,
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 72,
+			'ID' => 45
+		}
+	},
+	{#State 64
+		DEFAULT => -46
+	},
+	{#State 65
+		ACTIONS => {
+			'SEMICOLON' => 73
+		}
+	},
+	{#State 66
+		DEFAULT => -1
+	},
+	{#State 67
+		DEFAULT => -43
+	},
+	{#State 68
+		ACTIONS => {
+			'EPILOGUE' => 74
 		}
 	},
 	{#State 69
-		DEFAULT => -10
+		ACTIONS => {
+			'PIPE' => 75
+		},
+		DEFAULT => -48
 	},
 	{#State 70
-		DEFAULT => -34
+		ACTIONS => {
+			'PERCENT_PREC' => 76,
+			'BRACED_CODE' => -57,
+			'STRING' => 46,
+			'IDENT' => 37,
+			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 78
+		},
+		DEFAULT => -49,
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 79,
+			'ID' => 45,
+			'action_opt' => 77
+		}
 	},
 	{#State 71
-		DEFAULT => -45
+		DEFAULT => -39
 	},
 	{#State 72
-		DEFAULT => -51,
-		GOTOS => {
-			'rhs' => 79
-		}
+		DEFAULT => -35
 	},
 	{#State 73
-		DEFAULT => -58
+		DEFAULT => -45
 	},
 	{#State 74
-		ACTIONS => {
-			'IDENT' => 32,
-			'STRING' => 34
-		},
-		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 80
-		}
+		DEFAULT => -63
 	},
 	{#State 75
-		ACTIONS => {
-			'BRACED_CODE' => 81
-		},
+		DEFAULT => -51,
 		GOTOS => {
-			'action' => 82
+			'rhs' => 80
 		}
 	},
 	{#State 76
-		DEFAULT => -52
+		ACTIONS => {
+			'IDENT' => 37,
+			'STRING' => 46
+		},
+		GOTOS => {
+			'string_as_id' => 44,
+			'symbol' => 81,
+			'ID' => 45
+		}
 	},
 	{#State 77
-		DEFAULT => -63
+		ACTIONS => {
+			'BRACED_CODE' => 82
+		},
+		GOTOS => {
+			'action' => 83
+		}
 	},
 	{#State 78
-		DEFAULT => -39
+		DEFAULT => -58
 	},
 	{#State 79
+		DEFAULT => -52
+	},
+	{#State 80
 		ACTIONS => {
-			'STRING' => 34,
-			'IDENT' => 32,
+			'PERCENT_PREC' => 76,
 			'BRACED_CODE' => -57,
-			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 73,
-			'PERCENT_PREC' => 74
+			'STRING' => 46,
+			'IDENT' => 37,
+			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 78
 		},
 		DEFAULT => -50,
 		GOTOS => {
-			'ID' => 36,
-			'string_as_id' => 33,
-			'symbol' => 76,
-			'action_opt' => 75
+			'string_as_id' => 44,
+			'symbol' => 79,
+			'ID' => 45,
+			'action_opt' => 77
 		}
 	},
-	{#State 80
+	{#State 81
 		DEFAULT => -54
 	},
-	{#State 81
+	{#State 82
 		DEFAULT => -59
 	},
-	{#State 82
+	{#State 83
 		DEFAULT => -53
 	}
 ],
@@ -727,6 +743,28 @@ sub
 sub
 #line 186 "etc/nonterminal_parser_grammar.yp"
 {
+                for (@{$_[3]}) {
+                    my($symbol,$lineno)=@$_;
+
+                        exists($$token{$symbol})
+                    and do {
+                        _SyntaxError(0,
+                                "Token $symbol redefined: ".
+                                "Previously defined line $$token{$symbol}",
+                                $lineno);
+                        next;
+                    };
+                    $$token{$symbol}=$lineno;
+                    $$term{$symbol} = [ ];
+                }
+                undef
+            }
+	],
+	[#Rule 27
+		 'symbol_declaration', 3,
+sub
+#line 204 "etc/nonterminal_parser_grammar.yp"
+{
                 for ( @{$_[3]} ) {
                     my($symbol,$lineno)=@$_;
 
@@ -743,10 +781,10 @@ sub
                 }
             }
 	],
-	[#Rule 27
+	[#Rule 28
 		 'precedence_declaration', 3,
 sub
-#line 206 "etc/nonterminal_parser_grammar.yp"
+#line 224 "etc/nonterminal_parser_grammar.yp"
 {
       for (@{$_[3]}) {
           my($symbol,$lineno)=@$_;
@@ -767,9 +805,6 @@ sub
       undef
     }
 	],
-	[#Rule 28
-		 'precedence_declarator', 1, undef
-	],
 	[#Rule 29
 		 'precedence_declarator', 1, undef
 	],
@@ -777,25 +812,25 @@ sub
 		 'precedence_declarator', 1, undef
 	],
 	[#Rule 31
-		 'type_opt', 0, undef
+		 'precedence_declarator', 1, undef
 	],
 	[#Rule 32
-		 'type_opt', 1, undef
+		 'type_opt', 0, undef
 	],
 	[#Rule 33
-		 'symbols_1', 1,
-sub
-#line 241 "etc/nonterminal_parser_grammar.yp"
-{ [ $_[1] ] }
+		 'type_opt', 1, undef
 	],
 	[#Rule 34
-		 'symbols_1', 2,
+		 'symbols_1', 1,
 sub
-#line 242 "etc/nonterminal_parser_grammar.yp"
-{ push(@{$_[1]},$_[2]); $_[1] }
+#line 259 "etc/nonterminal_parser_grammar.yp"
+{ [ $_[1] ] }
 	],
 	[#Rule 35
-		 'symbol_def', 1, undef
+		 'symbols_1', 2,
+sub
+#line 260 "etc/nonterminal_parser_grammar.yp"
+{ push(@{$_[1]},$_[2]); $_[1] }
 	],
 	[#Rule 36
 		 'symbol_def', 1, undef
@@ -803,7 +838,7 @@ sub
 	[#Rule 37
 		 'symbol_def', 2,
 sub
-#line 250 "etc/nonterminal_parser_grammar.yp"
+#line 267 "etc/nonterminal_parser_grammar.yp"
 {
       _SyntaxError(0,"User-defined numeric token codes are not supported. ".
                      "The value \"$_[2][0]\" will be ignored",$_[2][1]);
@@ -813,7 +848,7 @@ sub
 	[#Rule 38
 		 'symbol_def', 2,
 sub
-#line 256 "etc/nonterminal_parser_grammar.yp"
+#line 273 "etc/nonterminal_parser_grammar.yp"
 {
       $$aliases{$_[2][0]} = $_[1][0];
       delete $$term{$_[2][0]};
@@ -823,7 +858,7 @@ sub
 	[#Rule 39
 		 'symbol_def', 3,
 sub
-#line 262 "etc/nonterminal_parser_grammar.yp"
+#line 279 "etc/nonterminal_parser_grammar.yp"
 {
       $$aliases{$_[3][0]} = $_[1][0];
       delete $$term{$_[3][0]};
@@ -835,13 +870,13 @@ sub
 	[#Rule 40
 		 'symbol_defs_1', 1,
 sub
-#line 274 "etc/nonterminal_parser_grammar.yp"
+#line 291 "etc/nonterminal_parser_grammar.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 41
 		 'symbol_defs_1', 2,
 sub
-#line 276 "etc/nonterminal_parser_grammar.yp"
+#line 293 "etc/nonterminal_parser_grammar.yp"
 { push(@{$_[1]},$_[2]); $_[1]; }
 	],
 	[#Rule 42
@@ -856,7 +891,7 @@ sub
 	[#Rule 45
 		 'rules_or_grammar_declaration', 3,
 sub
-#line 301 "etc/nonterminal_parser_grammar.yp"
+#line 318 "etc/nonterminal_parser_grammar.yp"
 {
       $_[0]->YYErrok
     }
@@ -864,7 +899,7 @@ sub
 	[#Rule 46
 		 'rules_or_grammar_declaration', 2,
 sub
-#line 305 "etc/nonterminal_parser_grammar.yp"
+#line 322 "etc/nonterminal_parser_grammar.yp"
 {
       $_[0]->YYErrok
     }
@@ -875,7 +910,7 @@ sub
 	[#Rule 48
 		 'rules', 2,
 sub
-#line 313 "etc/nonterminal_parser_grammar.yp"
+#line 330 "etc/nonterminal_parser_grammar.yp"
 {
       # For some reason Parse::Yapp treats the last code array as a
       # non-reference. i.e. instead of
@@ -946,25 +981,25 @@ sub
 	[#Rule 49
 		 'rhses_1', 1,
 sub
-#line 382 "etc/nonterminal_parser_grammar.yp"
+#line 399 "etc/nonterminal_parser_grammar.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 50
 		 'rhses_1', 3,
 sub
-#line 383 "etc/nonterminal_parser_grammar.yp"
+#line 400 "etc/nonterminal_parser_grammar.yp"
 { push(@{$_[1]},$_[3]); $_[1] }
 	],
 	[#Rule 51
 		 'rhs', 0,
 sub
-#line 388 "etc/nonterminal_parser_grammar.yp"
+#line 405 "etc/nonterminal_parser_grammar.yp"
 { }
 	],
 	[#Rule 52
 		 'rhs', 2,
 sub
-#line 390 "etc/nonterminal_parser_grammar.yp"
+#line 407 "etc/nonterminal_parser_grammar.yp"
 {
       push(@{$_[1]},[ 'SYMB', $_[2] ]);
       $_[1];
@@ -973,7 +1008,7 @@ sub
 	[#Rule 53
 		 'rhs', 3,
 sub
-#line 395 "etc/nonterminal_parser_grammar.yp"
+#line 412 "etc/nonterminal_parser_grammar.yp"
 {
       if (defined $_[2])
       {
@@ -989,7 +1024,7 @@ sub
 	[#Rule 54
 		 'rhs', 3,
 sub
-#line 407 "etc/nonterminal_parser_grammar.yp"
+#line 424 "etc/nonterminal_parser_grammar.yp"
 {
                        	defined($$precedences{$_[3][0]})
                     or  do {
@@ -1011,7 +1046,7 @@ sub
 	[#Rule 56
 		 'symbol', 1,
 sub
-#line 426 "etc/nonterminal_parser_grammar.yp"
+#line 443 "etc/nonterminal_parser_grammar.yp"
 {
     if (exists $$aliases{$_[1][0]})
     {
@@ -1036,7 +1071,7 @@ sub
 	[#Rule 60
 		 'string_as_id', 1,
 sub
-#line 451 "etc/nonterminal_parser_grammar.yp"
+#line 468 "etc/nonterminal_parser_grammar.yp"
 {
         if (exists $$aliases{$_[1][0]})
         {
@@ -1060,7 +1095,7 @@ sub
 	[#Rule 61
 		 'string_content', 1,
 sub
-#line 475 "etc/nonterminal_parser_grammar.yp"
+#line 492 "etc/nonterminal_parser_grammar.yp"
 {
       $_[1][0] =~ s/.(.*)./$1/;
       $_[1]
@@ -1072,7 +1107,7 @@ sub
 	[#Rule 63
 		 'epilogue_opt', 2,
 sub
-#line 484 "etc/nonterminal_parser_grammar.yp"
+#line 501 "etc/nonterminal_parser_grammar.yp"
 {
       $epilogue=$_[2]
     }
@@ -1080,7 +1115,7 @@ sub
 	[#Rule 64
 		 'ID', 1,
 sub
-#line 489 "etc/nonterminal_parser_grammar.yp"
+#line 506 "etc/nonterminal_parser_grammar.yp"
 {
                         exists($$syms{$_[1][0]})
                     or  do {
@@ -1095,7 +1130,7 @@ sub
     bless($self,$class);
 }
 
-#line 499 "etc/nonterminal_parser_grammar.yp"
+#line 516 "etc/nonterminal_parser_grammar.yp"
 
 sub _Error {
     my($value)=$_[0]->YYCurval;

@@ -274,15 +274,6 @@ const list<string> Nonterminal_Rule::Get_String() const
 
 // ---------------------------------------------------------------------------
 
-const list<const Rule*> Nonterminal_Rule::Get_Terminals() const
-{
-  assert(m_current_rule_list != m_rule_lists.end());
-
-  return (*m_current_rule_list)->Get_Terminals();
-}
-
-// ---------------------------------------------------------------------------
-
 const Rule* Nonterminal_Rule::operator[](const unsigned int in_index) const
 {
   assert(in_index <= (*m_current_rule_list)->size()-1);

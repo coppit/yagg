@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <cassert>
 
 #ifdef __GNUC__
 #include <cxxabi.h>

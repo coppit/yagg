@@ -21,13 +21,13 @@ yagg::Tutorial - Tutorial for yagg
 
 =head1 OVERVIEW
 
-This tutorial will show you how to use the B<yagg>, by way of two examples. In
-the first example, we create a simple logical expression generator from
-scratch. In the second example, we create a more sophisticated logical
-expression generator from existing parser/lexer input files, such as those
-used by YACC/Bison and LEX/FLEX.  These examples, plus another more
-sophisticated fault tree generator are included with the distribution in the
-F<examples/> directory.
+This tutorial will show you how to use B<yagg>, by way of two examples. In the
+first example, we create a simple logical expression generator from scratch.
+In the second example, we create a more sophisticated logical expression
+generator from existing parser/lexer input files, such as those used by
+YACC/Bison and LEX/FLEX.  These examples, plus another more sophisticated
+fault tree generator are included with the distribution in the F<examples/>
+directory.
 
 It is assumed that the reader knows a little about formal grammars. Ideally,
 the reader would have some experience writing grammars for input to parser
@@ -317,7 +317,9 @@ Put all your source code in that directory, being careful to create proper
 subdirectories if you need them. For example, if you have
 C<#include "module/header.h">, you'd want to put F<header.h> in
 F<input_user_code_myproject/src/model/module>. (You don't however, need to
-change the include to C<#include> at all.
+change the include to C<#include> at all. The default C++ extension is
+.cc--you may need to rename your files. (Alternatively, you can copy the
+GNUmakefile and edit the value of CCFILEEXT.)
 
 =back
 

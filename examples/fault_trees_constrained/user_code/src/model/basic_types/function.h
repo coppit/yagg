@@ -9,7 +9,7 @@
 using namespace std;
 
 template <class _Key, class _Tp>
-class function : public std::map<_Key,_Tp>
+class function : public map<_Key,_Tp>
 {
 public:
   function()
@@ -23,7 +23,7 @@ public:
   // This modifies the first argument instead of returning a value because we
   // don't know what type to return. For example, someone could pass something
   // which is of a class derived from function.
-  friend void range_restrict(function<_Key, _Tp>& in_function, const std::set<_Tp>& in_range_set)
+  friend void range_restrict(function<_Key, _Tp>& in_function, const set<_Tp>& in_range_set)
   {
     // We have to be careful deleting and incrementing iterators at the same
     // time. We could probably use remove_if, but I don't really have
@@ -48,9 +48,9 @@ public:
     return (this->find(in_argument))->second;
   }
 
-  const std::set<_Key> domain() const
+  const set<_Key> domain() const
   {
-    std::set<_Key> domain;
+    set<_Key> domain;
 
     typename function<_Key,_Tp>::const_iterator a_mapping;
     for (a_mapping = this->begin(); a_mapping != this->end(); a_mapping++)
@@ -61,7 +61,7 @@ public:
     return domain;
   }
 
-  const std::set<_Tp> range() const
+  const set<_Tp> range() const
   {
     typename std::set<_Tp> range;
 
@@ -74,9 +74,9 @@ public:
     return range;
   }
 
-  friend std::ostream& operator<< (std::ostream& in_ostream, const function<_Key,_Tp>& in_function)
+  friend ostream& operator<< (ostream& in_ostream, const function<_Key,_Tp>& in_function)
   {
-    in_ostream << "{" << std::endl;
+    in_ostream << "{" << endl;
 
     typename function<_Key,_Tp>::const_iterator a_mapping;
     for (a_mapping = in_function.begin(); a_mapping != in_function.end(); a_mapping++)
@@ -88,7 +88,7 @@ public:
       if (next_mapping != in_function.end())
         in_ostream << ",";
 
-      in_ostream << std::endl;
+      in_ostream << endl;
     }
 
     in_ostream << "}";

@@ -1,3 +1,7 @@
+Version ???:
+- 2-3X faster. Figured out how to do equivalence classes without computing the
+  terminal rules. So I got rid of Get_Terminals().
+
 Version 1.20:
 - Over 30X faster. Added an allocations cache for rule lists
 - Changed the name to "yagg" and moved development to SourceForge

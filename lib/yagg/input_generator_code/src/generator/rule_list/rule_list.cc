@@ -70,6 +70,7 @@ const Rule_List& Rule_List::operator= (const Rule_List &in_rule_list)
   m_is_valid = in_rule_list.m_is_valid;
   m_first_string = in_rule_list.m_first_string;
   m_needs_reset = in_rule_list.m_needs_reset;
+  m_terminals = in_rule_list.m_terminals;
 
   return *this;
 }
@@ -532,33 +533,6 @@ const list<string> Rule_List::Get_String()
   }
 
   return strings;
-}
-
-// ---------------------------------------------------------------------------
-
-const list<const Rule*> Rule_List::Get_Terminals() const
-{
-  if(size() == 0)
-    return list<const Rule*>();
-
-
-  list<const Rule*> terminals;
-
-  const_iterator a_rule;
-  for(a_rule = begin(); a_rule != end(); a_rule++)
-  {
-    list<const Rule*> temp_terminals = (*a_rule)->Get_Terminals();
-
-    list<const Rule*>::const_iterator a_terminal;
-    for(a_terminal = temp_terminals.begin();
-        a_terminal != temp_terminals.end();
-        a_terminal++)
-    {
-      terminals.push_back( *a_terminal );
-    }
-  }
-
-  return terminals;
 }
 
 // ---------------------------------------------------------------------------

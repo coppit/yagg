@@ -53,8 +53,6 @@ public:
   friend void Utility::yyerror();
 
 protected:
-  virtual const list<const Rule*> Get_Terminals() const;
-
   virtual const Rule_List& operator= (const Rule_List &in_rule_list);
 
 protected:
@@ -77,6 +75,8 @@ protected:
   bool m_needs_reset;
   bool m_first_string;
   bool m_error_occurred;
+
+  list<const Rule*> m_terminals;
 
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
   static Allocations_Cache m_allocations_cache;

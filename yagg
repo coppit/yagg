@@ -18,7 +18,7 @@ use File::Path;
 
 use vars qw( $VERSION );
 
-$VERSION = '1.20';
+$VERSION = sprintf "%d.%02d%02d", q/1.20.00/ =~ /(\d+)/g;
 
 # Make unbuffered
 $| = 1;

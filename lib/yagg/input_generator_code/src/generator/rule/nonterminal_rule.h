@@ -21,7 +21,6 @@ public:
   virtual const bool Check_For_String();
   virtual const list<string> Get_String() const;
 
-  virtual const list<const Rule*> Get_Terminals() const;
   virtual const Rule* operator[](const unsigned int in_index) const;
 
 protected:

@@ -52,6 +52,12 @@ print "\n", '-'x78, "\n\n";
 
 MakeParsers();
 
+foreach my $program (keys %LOCATIONS)
+{
+  warn "Warning: prerequisite program \"$program\" not found\n"
+    unless defined $LOCATIONS{$program};
+}
+
 exit;
 
 # -------------------------------------------------------------------------
@@ -119,12 +125,6 @@ EOF
   );
 
   %LOCATIONS = Get_Program_Locations(\%info);
-
-  foreach my $program (keys %LOCATIONS)
-  {
-    warn "Warning: prerequisite program \"$program\" not found\n"
-      unless defined $LOCATIONS{$program};
-  }
 
   Update_Config('lib/yagg/Config.pm', \%LOCATIONS);
   Update_Makefile('examples/logical_expressions_constrained/logical_expression_parser/GNUmakefile', \%LOCATIONS);

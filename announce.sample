@@ -1,16 +1,15 @@
-SUBJECT: yagg 1.10 released
+SUBJECT: ANNOUNCE: yagg 1.20 released
 
-generator_generator - generate a C++ string generator from a grammar
+yagg - generate a C++ string generator from a grammar
 
 Description:
-  Given YACC-like and LEX-like input files, generator_generator is a Perl
-  program that generates a C++ program that generates all strings of a
-  user-specified length.  The YACC-like language grammar file provides the
-  grammar productions for string generation, along with optional action
-  blocks that can per- form context-sensitive checks in order to limit the
-  generated strings.  The LEX-like terminal generator file provides
-  specifications that instruct the program how to generate strings for
-  terminals in the gram- mar.
+  Given YACC-like and LEX-like input files, yagg is a Perl program that
+  generates a C++ program that generates all strings of a user-specified
+  length.  The YACC-like language grammar file provides the grammar
+  productions for string generation, along with optional action blocks that
+  can per- form context-sensitive checks in order to limit the generated
+  strings.  The LEX-like terminal generator file provides specifications that
+  instruct the program how to generate strings for terminals in the gram- mar.
 
   If the programmer already has a YACC or Bison parser file, he or she
   only needs to add "unaction" blocks to allow the recursive generator to
@@ -23,16 +22,14 @@ This program is useful if you want to see examples of strings recognized
 by a YACC grammar. It can also be used to generate inputs for any program
 that uses textual input.
 
+Changes:
+- Initial public release
+
 Download:
 - You can download yagg from CPAN:
-  http://www.cpan.org/authors/id/D/DC/DCOPPIT/yagg-1.10.tar.gz
+  http://www.cpan.org/authors/id/D/DC/DCOPPIT/yagg-1.20.tar.gz
 - Until the file propagates to the mirrors, you can use the following URL:
-  http://prdownloads.sourceforge.net/yagg/yagg-1.10.tar.gz
-
-Changes:
-
-See the README for additional notes on complex queries, and generation of
-message IDs.
+  http://prdownloads.sourceforge.net/yagg/yagg-1.20.tar.gz
 
 A complete change log is at:
 - http://yagg.sourceforge.net/CHANGES

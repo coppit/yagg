@@ -62,11 +62,8 @@ sub TestIt
     ok(0, "Encountered an error executing the test.\n" .
       "See $test_stdout and $test_stderr.\n\n");
   }
-
-  SKIP:
+  else
   {
-    skip("Generation failed earlier",1) if $?;
-
     my $generated = '';
     my $actual = '';
     find(sub

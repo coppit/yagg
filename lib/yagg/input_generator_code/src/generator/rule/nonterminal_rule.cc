@@ -33,11 +33,6 @@ Nonterminal_Rule::Nonterminal_Rule(const Nonterminal_Rule& in_nonterminal) :
 
 Nonterminal_Rule::~Nonterminal_Rule()
 {
-  list<Rule_List*>::iterator a_rule_list;
-  for(a_rule_list = m_rule_lists.begin();
-      a_rule_list != m_rule_lists.end();
-      a_rule_list++)
-    delete *a_rule_list;
 }
 
 // ---------------------------------------------------------------------------

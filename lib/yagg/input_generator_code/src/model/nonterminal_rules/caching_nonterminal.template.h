@@ -20,6 +20,9 @@ for (my $i = 1; $i <= @productions; $i++)
 }
 ]]]
 public:
+  [[[$nonterminal]]]();
+  virtual ~[[[$nonterminal]]]();
+
   virtual [[[$nonterminal]]]* Clone() const;
 
   virtual void Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule = NULL);
@@ -28,21 +31,14 @@ if (defined $return_type)
 {
   $OUT .= "\n  virtual $return_type Get_Value() const;\n";
 }
-]]]  virtual void Reset_String();
+]]]
+  virtual void Reset_String();
 
   virtual const bool Check_For_String();
   virtual const list<string> Get_String() const;
 
+protected:
 #ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
-public:
-  [[[$nonterminal]]]();
-
-protected:
-  [[[$nonterminal]]](const [[[$nonterminal]]] &in_[[[$nonterminal]]]);
-
-  virtual const [[[$nonterminal]]]& operator= (const [[[$nonterminal]]] &in_[[[$nonterminal]]]);
-
-protected:
   // Caching implementation
   static map<const unsigned int, list< list< string> > > m_generated_cache;
   static map<const unsigned int, list< list< string> > > m_intermediate_cache;
@@ -51,6 +47,12 @@ protected:
   bool m_first_cache_string;
   bool m_using_cache;
 #endif // DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
-};
+
+[[[
+foreach my $i (1..$#productions+1)
+{
+  $OUT .= "  match_$i *m_$i;\n";
+}
+]]]};
 
 #endif // [[[$nonterminal]]]_h

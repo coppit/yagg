@@ -51,6 +51,6 @@ Checklist for a release:
 - Check in code:
   $ cvs ci
 - Tag the release for easy retrieval later
-  $ cvs tag "v5_20_0"
+  $ cvs tag "v1_2100"
 - Make a backup in old
   $ cvs -z3 -d:ext:coppit@cvs.sourceforge.net:/cvsroot/yagg export -d old -r v5_20_0 devel

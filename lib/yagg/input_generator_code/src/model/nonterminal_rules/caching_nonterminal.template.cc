@@ -174,43 +174,35 @@ EOF
   return new [[[$nonterminal]]](*this);
 }
 
-#ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 // ---------------------------------------------------------------------------
 
 [[[$nonterminal]]]::[[[$nonterminal]]]() : Nonterminal_Rule()
 {
-}
+[[[
+  foreach my $i (1..$#productions+1)
+  {
+    $OUT .= "  m_$i = NULL;\n";
+  }
+]]]}
 
 // ---------------------------------------------------------------------------
 
-[[[$nonterminal]]]::[[[$nonterminal]]](const [[[$nonterminal]]] &in_[[[$nonterminal]]]) : Nonterminal_Rule(in_[[[$nonterminal]]])
+[[[$nonterminal]]]::~[[[$nonterminal]]]()
 {
-  *this = in_[[[$nonterminal]]];
-}
+[[[
+  foreach my $i (1..$#productions+1)
+  {
+    $OUT .= <<EOF;
+  if (m_$i != NULL)
+    delete m_$i;
+EOF
+  }
+]]]}
 
-// ---------------------------------------------------------------------------
-
-const [[[$nonterminal]]]& [[[$nonterminal]]]::operator= (const [[[$nonterminal]]] &in_[[[$nonterminal]]])
-{
-  Nonterminal_Rule::operator=(in_[[[$nonterminal]]]);
-
-  m_first_cache_string = in_[[[$nonterminal]]].m_first_cache_string;
-  m_using_cache = in_[[[$nonterminal]]].m_using_cache;
-
-  return *this;
-}
-
-#endif // DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 // ---------------------------------------------------------------------------
 
 void [[[$nonterminal]]]::Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule)
 {
-  list<Rule_List*>::iterator a_rule_list;
-  for(a_rule_list = m_rule_lists.begin();
-      a_rule_list != m_rule_lists.end();
-      a_rule_list++)
-    delete *a_rule_list;
-
   m_rule_lists.clear();
 [[[
   foreach my $i (1..$#productions+1)
@@ -223,7 +215,12 @@ void [[[$nonterminal]]]::Initialize(const unsigned int in_allowed_length, const 
 #ifndef DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
   if (in_allowed_length $operator $number)
 #endif // DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-    m_rule_lists.push_back(new match_$i);
+  {
+    if (m_$i == NULL)
+      m_$i = new match_$i;
+
+    m_rule_lists.push_back(m_$i);
+  }
 EOF
   }
 
@@ -263,6 +260,7 @@ EOF
     $OUT .= "}\n";
   }
 
+  chomp $OUT;
 ]]]
 // ---------------------------------------------------------------------------
 

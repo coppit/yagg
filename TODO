@@ -31,6 +31,14 @@ Generator TODOs:
     rules. That way we could just count how many total terminals have been
     created of a given type. (If more than one match_# has allocated its
     rules, this count will be more than it should be.)
+- Doesn't process grammar here: http://pltplp.net/lex-yacc/example.html.en
+  correctly
+- .lg files aren't parsed correctly if a definition follows right after
+  another:
+  "+"             return PLUS;
+  "-"             return MINUS;
+- YYLVAL isn't supported instead of %union. See
+  http://pltplp.net/lex-yacc/example.html.en
 
 -----------------------------------------------------------------------------
 

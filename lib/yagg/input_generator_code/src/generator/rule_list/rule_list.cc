@@ -480,15 +480,14 @@ void Rule_List::Undo_Action()
 
 // ---------------------------------------------------------------------------
 
-const list<string> Rule_List::Get_String()
+const list<string>& Rule_List::Get_String()
 {
-  if (size() == 0)
-    return list<string>();
+  strings.clear();
 
+  if (size() == 0)
+    return strings;
 
   assert(Is_Valid());
-
-  list<string> strings;
 
   const_iterator a_rule;
   for(a_rule = begin(); a_rule != end(); a_rule++)

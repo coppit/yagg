@@ -7,6 +7,7 @@ Version 1.3000: Sat Mar 19 2005
 - Changed the syntax for alternation in the terminal file from "a|b" to
   "(a|b)"
 - Paths are removed from the makefile when compiling remotely
+- Generator program can now generate any rule in the grammar
 
 Version 1.2100: Sun Feb 6 2005
 - 2-3X faster. Figured out how to do equivalence classes without computing the

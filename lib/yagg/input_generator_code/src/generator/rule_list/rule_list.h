@@ -39,7 +39,7 @@ public:
   virtual const bool Is_Valid();
 
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String();
+  virtual const list<string>& Get_String();
 
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
   virtual const unsigned int Get_Allowed_Length() const;
@@ -76,6 +76,8 @@ protected:
   bool m_error_occurred;
 
   list<const Rule*> m_terminals;
+
+  list<string> strings;
 
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
   static Allocations_Cache m_allocations_cache;

@@ -1,7 +1,7 @@
 #include "model/terminal_rules/[[[$terminal]]].h"
 [[[
-if ($return_type ne 'string' && defined $nonpointer_return_type &&
-    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
+if ($return_type ne 'string' ||
+    defined $nonpointer_return_type && $nonpointer_return_type ne 'string')
 {
   $OUT .= "#include <sstream>";
 }
@@ -19,8 +19,8 @@ using namespace std;
   strings.clear();
 
 [[[
-if ($return_type ne 'string' && defined $nonpointer_return_type &&
-    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
+if ($return_type ne 'string' ||
+    defined $nonpointer_return_type && $nonpointer_return_type ne 'string')
 {
   $OUT .= <<EOF;
   stringstream temp_stream;

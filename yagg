@@ -18,7 +18,7 @@ use File::Path;
 
 use vars qw( $VERSION );
 
-$VERSION = sprintf "%d.%02d%02d", q/1.21.00/ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d%02d", q/1.3.0/ =~ /(\d+)/g;
 
 # Make unbuffered
 $| = 1;
@@ -1913,28 +1913,24 @@ sub Generate_Main_Program
 
   my $starting_rule = $grammar->{'STARTING_RULE'};
 
-  my $starting_rule_type;
+  my %minimum_lengths;
 
-  if (grep { $_ eq $starting_rule } @{$grammar->{'NONTERMINALS'}})
+  foreach my $rule ( @{$grammar->{'NONTERMINALS'}} )
   {
-    $starting_rule_type = 'NONTERMINAL';
-  }
-  else
-  {
-    $starting_rule_type = 'TERMINAL';
-  }
-
-  my $minimum_length;
-  foreach my $length (@{$grammar->{'PRODUCTION_LENGTHS'}{$grammar->{'STARTING_RULE'}}})
-  {
-    $length =~ s/(=|>=)//;
-    unless (defined $minimum_length)
+    my $minimum_length;
+    foreach my $length (@{$grammar->{'PRODUCTION_LENGTHS'}{$rule}})
     {
-      $minimum_length = $length;
-      next;
+      $length =~ s/(=|>=)//;
+      unless (defined $minimum_length)
+      {
+        $minimum_length = $length;
+        next;
+      }
+
+      $minimum_length = $length if $length < $minimum_length;
     }
 
-    $minimum_length = $length if $length < $minimum_length;
+    $minimum_lengths{$rule} = $minimum_length;
   }
 
   open (OUT,">$tempdir/src/progs/generate.cc")
@@ -1947,9 +1943,9 @@ sub Generate_Main_Program
     or report_and_exit "Couldn't construct template: $Text::Template::ERROR";
 
   print OUT $template->fill_in(HASH => {
-    starting_rule_type => $starting_rule_type,
+    grammar => \$grammar,
     starting_rule => $starting_rule,
-    minimum_length => $minimum_length,
+    minimum_lengths => \%minimum_lengths,
   });
 
   close(OUT);

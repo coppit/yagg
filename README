@@ -1,0 +1,98 @@
+yagg - generates a string generator from a grammar
+
+Given YACC-like and LEX-like input files, yagg generates a C++ program that
+generates all strings of a user-specified length.  The YACC-like language
+grammar file provides the grammar productions for string generation, along
+with optional action blocks that can perform context-sensitive checks in order
+to limit the generated strings.  The LEX-like terminal generator file provides
+specifications that instruct the program how to generate strings for terminals
+in the grammar.
+
+If the programmer already has a YACC or Bison parser file, he or she only
+needs to add "unaction" blocks to allow the recursive generator to undo the
+side effects of the action blocks. If the programmer already has a LEX or FLEX
+lexer input file, he or she only needs to remove extraneous code and replace
+any regular expressions with one of the terminal generator specifications.
+
+
+MODULE DEPENDENCIES
+
+- File::Temp
+- File::Find
+- File::Spec::Functions
+- File::Path
+- Storable
+- Getopt::Std
+- Text::Template
+- Parse::Yapp
+- Test::More
+
+File::Temp, File::Find, File::Spec, Storable, and Getopt::Std are part of the
+standard Perl distribution. 
+
+You should be prompted to install missing modules automatically when you run
+"perl Makefile.PL".
+
+INSTALLATION
+
+=> On Non-Windows (Unix/Cygwin/etc.) systems:
+
+To install this package, change to the directory where you unarchived this
+distribution and type the following:
+
+  perl Makefile.PL
+  make
+  make test
+  make install
+
+You will be prompted to install this package into a non-default location. You
+may wish to do this if you do not have access to the default perl installation
+directories. See "perldoc -q own.*module" for more information.
+
+You will also be prompted for the locations of key programs. All of these
+programs are necessary, so be sure to provide paths to them.
+
+If "make test" fails, please see the INSTALLATION PROBLEMS section below.
+
+Note that you can also run the script directly from the current directory
+before installing, like so:
+
+  perl -Ilib yagg ...
+
+
+INSTALLATION PROBLEMS
+
+First, make sure that your program paths are correct. For example, you might
+want to try using the same path as your compiler for the "ld" program.
+
+
+DOCUMENTATION
+
+Just "perldoc yagg". After installation on Unix systems, you can also do "man
+yagg".
+
+
+HOMEPAGE
+
+The latest version can be found at http://www.coppit.org/code/
+
+
+REPORTING BUGS
+
+Send email to david@coppit.org.
+
+
+COPYRIGHT
+
+Copyright (c) 2004 David Coppit. All rights reserved, save those granted by the license.
+
+
+LICENSE
+
+This code is distributed under the GNU General Public License (GPL).  See
+the file LICENSE included in the distribution.
+
+
+AUTHOR
+
+David Coppit <david@coppit.org>

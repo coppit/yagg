@@ -1,0 +1,61 @@
+Version 1.20:
+- Over 30X faster. Added an allocations cache for rule lists
+- Changed the name to "yagg" and moved development to SourceForge
+
+Version 1.11:
+- Added support for empty productions
+- Fixed chmod to do the right thing on remote machines
+- Fixed a bug where a remote command would be executed even if "cd" failed
+- Fixed a missing unindent and a typo for SHORT_RULE_TRACE debug output
+- Enhanced debugging information for length computations.
+
+Version 1.10:
+- Updated all the examples, tutorial, and documentation
+- Polished off everything for public distribution
+
+Version 1.02:
+- Switch from File::Find to rsync, which is *much* faster
+- This version works completely for the logical expressions and fault trees
+  examples.
+  - Added a tutorial
+  - Changed the terminals input file into a lex-like format
+  - Nonterminal input file is now basically yacc+undo actions.
+- Added -c flag to rsync to avoid copying identical files, which prevents
+  recompilation unless it is needed. Also added --delete to remove previously
+  generated files.
+- Fixed some bugs in generator_generator when input files don't have head or
+  tail blocks
+- Moved example input files into separate directories in new examples/
+  directory
+- Added support for constant strings like "x" 'x' 23 to the nonterminal .yg
+  file.
+- Added #line directives in the generated code
+- Added string length optimization for disabling infeasible productions
+- Added test cases.
+- Prepared everything for installation and distribution
+- Wrote a tutorial and finished the documentation
+- Added -L and -C flags
+- Restructured the file layout
+
+Version 1.01:
+- Added TODO file
+- Restructured parsing of the grammars. Grammar now returns info on the union,
+  and parses the union name declarations. (See the comments for the Post_Parse
+  function)
+- Moved template files into the input_generator_code directory, renaming them
+  to foo.template.cc, foo.template.h, etc.
+- Added code to remove any rule lists containing the special "error" token
+- Changed syntax for 'atomic_#' to ['atomic_#']
+- Updated the grammar to bless rules as 'SIMPLE' or 'ALTERNATION'. Renamed
+  'GENERATOR' to 'GENERATOR_EQUIVALENCE' and 'EQUIVALENCE' to
+  'ALTERNATION_EQUIVALENCE'.
+- Implemented action code blocks, with a few rough parts. See TODO file
+- Fixed terminal generation for alternation
+- Updated the generator with the changes from generate-dfts-oo
+  (yacc_compatible branch). This makes it easier to generate the code blocks.
+  I can see that the terminal generation isn't quite right... Need to fix
+  that.
+- Renamed template files.
+
+Version 1.0:
+- Initial version

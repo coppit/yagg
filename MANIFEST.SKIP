@@ -31,10 +31,11 @@ output/
 lib/yagg/NonterminalParser.pm
 lib/yagg/TerminalParser.pm
 
-# grepmail extra files
+# yagg extra files
 ^misc/
 ^threading/
 ^rfc822.htm$
-^grepmail\.
+^yagg\.
 ^windows/
 ^lib/Module/Install/
+^compare_output.pl

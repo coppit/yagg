@@ -251,7 +251,7 @@ sub _Write_Code
   my $code = shift;
 
   open SOURCE, ">$filename"
-    or die "Couldn't open grepmail file \"$filename\": $!";
+    or die "Couldn't open file \"$filename\": $!";
   print SOURCE $code;
   close SOURCE;
 }

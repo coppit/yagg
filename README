@@ -15,6 +15,13 @@ lexer input file, he or she only needs to remove extraneous code and replace
 any regular expressions with one of the terminal generator specifications.
 
 
+NEW IN THIS VERSION
+
+Version 1.20:
+- Over 30X faster. Added an allocations cache for rule lists
+- Changed the name to "yagg" and moved development to SourceForge
+
+
 MODULE DEPENDENCIES
 
 - File::Temp
@@ -32,6 +39,7 @@ standard Perl distribution.
 
 You should be prompted to install missing modules automatically when you run
 "perl Makefile.PL".
+
 
 INSTALLATION
 
@@ -65,6 +73,14 @@ INSTALLATION PROBLEMS
 First, make sure that your program paths are correct. For example, you might
 want to try using the same path as your compiler for the "ld" program.
 
+If "make test" fails, run
+
+  make test TEST_VERBOSE=1
+
+and see which test(s) are failing. Please email, to the address below, the
+output of the above command, as well as any output files, if any are noted in
+the test output when the test fails. 
+
 
 DOCUMENTATION
 
@@ -74,12 +90,13 @@ yagg".
 
 HOMEPAGE
 
-The latest version can be found at http://www.coppit.org/code/
+Visit http://yagg.sourceforge.net/ for the latest version, CVS access, and
+more.
 
 
 REPORTING BUGS
 
-Send email to david@coppit.org.
+You can report bugs at http://sourceforge.net/tracker/?group_id=126089.
 
 
 COPYRIGHT

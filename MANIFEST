@@ -245,6 +245,7 @@ examples/logical_expressions_simple/logical_expression.lg
  => Module::Install files
 inc/ExtUtils/AutoInstall.pm
 inc/File/HomeDir.pm
+inc/File/Glob.pm
 inc/File/Spec.pm
 inc/File/Spec/Functions.pm
 inc/File/Spec/Unix.pm

@@ -27,8 +27,9 @@ SCRIPTFILEEXT = sh
 #                  -DTERMINAL_RULE_DEBUG -DNONTERMINAL_RULE_DEBUG -DRULE_DEBUG \
 #                  -DSHORT_RULE_TRACE -DACTION_TRACE \
 #                  -DDEBUG_FAULT_TREE_CONSTRAINTS \
-#                  -DDISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-#                  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION
+#                  -DDISABLE_PRODUCTION_LENGTH_OPTIMIZATION \
+#                  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION \
+#                  -DDISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 CFLAGS		= -Wall -pedantic -O3
 FFLAGS		= -g -C
 
@@ -106,7 +107,7 @@ STORAGE_DIRECTORY = /tmp/$(USER)/$(PROJECTNAME)
 
 ###############################################################################
 
-default : progs
+all : progs
 
 # Custom dependencies, if any, go here
 
@@ -594,7 +595,7 @@ $(LIBDIR)/lib$(LIBRARY_NAME).a : $(call compute_ofiles,$(SRC_DIRS_PATTERN))
 	@$(call sub_step_msg,Making library $@)
 	@$(call make_directory,$(shell $(DIRNAME) $@))
 	@$(AR) rv $@ $^ 2>&1
-	@ranlib $@
+	@ranlib $@ 2>/dev/null
 
 # Rule to generate parser .$(CCFILEEXT) files from .$(YACCFILEEXT) files
 $(BUILDDIR)/%.$(CCFILEEXT) $(BUILDDIR)/%.h : $(SRCDIR)/%.$(YACCFILEEXT)

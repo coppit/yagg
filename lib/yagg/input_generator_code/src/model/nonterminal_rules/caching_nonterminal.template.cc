@@ -309,7 +309,8 @@ const bool [[[$nonterminal]]]::Check_For_String()
       ") [Checking cache]" << endl;
 #endif // SHORT_RULE_TRACE
 
-    if (!m_first_cache_string)
+    if (!m_first_cache_string &&
+        m_current_string_list != m_generated_cache[m_allowed_length].end())
       m_current_string_list++;
 
     m_first_cache_string = false;

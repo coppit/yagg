@@ -590,6 +590,7 @@ const vector< unsigned int > Rule_List::Get_Allocations() const
 
   return allocations;
 }
+#endif // DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 // ---------------------------------------------------------------------------
 
@@ -606,7 +607,6 @@ void Rule_List::Set_Allocations(const vector< unsigned int > &in_allocations)
     (*a_rule)->Initialize(*an_allocation, previous_rule);
   }
 }
-#endif // DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 // ---------------------------------------------------------------------------
 

@@ -1,6 +1,13 @@
 Version ???:
 - 2-3X faster. Figured out how to do equivalence classes without computing the
   terminal rules. So I got rid of Get_Terminals().
+- Added missing -DDISABLE_GENERATED_STRING_CACHING_OPTIMIZATION to generated
+  makefile
+- Fixed build failure and runtime failure when using
+  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION
+- Fixed an infinite loop for some grammars which was related to a string
+  caching optimization. (Thanks to Ted Turocy <arbiter@econmail.tamu.edu> for
+  the bug report.)
 
 Version 1.20:
 - Over 30X faster. Added an allocations cache for rule lists

@@ -46,8 +46,9 @@ public:
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
   virtual const unsigned int Get_Allowed_Length() const;
   virtual const vector< unsigned int > Get_Allocations() const;
-  virtual void Set_Allocations(const vector< unsigned int > &in_allocations);
 #endif // DISABLE_ALLOCATION_CACHING_OPTIMIZATION
+
+  virtual void Set_Allocations(const vector< unsigned int > &in_allocations);
 
   friend ostream& operator<< (ostream& in_ostream, const Rule_List& in_rule_list);
   friend void Utility::yyerror();

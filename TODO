@@ -29,7 +29,6 @@ Generator TODOs:
   %%
   fielder_list: fielder | fielder_list fielder
   fielder:  '1' | '2'
-  %%
 
 -----------------------------------------------------------------------------
 

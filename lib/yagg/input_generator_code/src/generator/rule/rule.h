@@ -25,7 +25,7 @@ public:
   virtual const bool Needs_Reset() const;
 
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const = 0;
+  virtual const list<string>& Get_String() const = 0;
 
   virtual const Rule* Get_Previous_Rule() const;
 

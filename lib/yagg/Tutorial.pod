@@ -82,7 +82,7 @@ F<logical_expression.lg>:
 
   %%
 
-  "<=>" | "and" | "or" | "=>" return BINARY_OPERATOR;
+  ( "<=>" | "and" | "or" | "=>" ) return BINARY_OPERATOR;
 
   "-" return UNARY_OPERATOR;
 
@@ -90,7 +90,7 @@ F<logical_expression.lg>:
 
   ")" return RIGHT_PAREN;
 
-  "p" | "q" | "r" return ATOMIC;
+  ( "p" | "q" | "r" ) return ATOMIC;
 
 This file is similar to a LEX input file, but instead of regular expressions
 you must provide one of several terminal formats. (We'll describe these
@@ -126,7 +126,7 @@ formats:
 
 A simple string is used wherever the terminal appears.
 
-=item Simple Alternation (C<"p" | "q">)
+=item Simple Alternation (C<( "p" | "q" )>)
 
 When such a terminal appears, multiple versions will be generated, one for
 each alternative.

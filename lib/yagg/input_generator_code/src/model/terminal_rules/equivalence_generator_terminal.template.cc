@@ -41,48 +41,41 @@ $OUT .= ";\n";
 $OUT .= "  return_value = temp_stream.str();";
 ]]]
 
+  strings.clear();
+
+  strings.push_back(return_value);
+
   return true;
 }
 
 // ---------------------------------------------------------------------------
 
-const list<string> [[[$terminal]]]::Get_String() const
+const list<string>& [[[$terminal]]]::Get_String() const
 {
-  list<string> strings;
-
-[[[
-if ($return_type ne 'string' && defined $nonpointer_return_type &&
-    $nonpointer_return_type ne 'string' && $nonpointer_return_type ne 'char')
-{
-  $OUT .= <<EOF;
-  stringstream temp_stream;
-  temp_stream << return_value;
-
-  strings.push_back(temp_stream.str());
-EOF
-}
-else
-{
-  $OUT .= <<EOF;
-  strings.push_back(return_value);
-EOF
-}
-]]]
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-const [[[$return_type]]] [[[$terminal]]]::Get_Value() const
-{
 [[[
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  return &return_value;";
+  $OUT .= <<EOF;
+const $return_type ${terminal}::Get_Value() const
+{
+  return &return_value;
+}
+EOF
 }
 else
 {
-  $OUT .= "  return $return_type();";
+  $OUT .= <<EOF;
+const $return_type& ${terminal}::Get_Value() const
+{
+  return return_value;
 }
+EOF
+}
+
+chomp $OUT;
 ]]]
-}

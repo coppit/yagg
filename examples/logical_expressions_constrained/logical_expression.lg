@@ -33,7 +33,7 @@ bool logical_expression_parser_reached_end_of_file;
   return NEWLINE;
 }
 
-"<=>" | "and" | "or" | "=>" {
+( "<=>" | "and" | "or" | "=>" ) {
   return BINARY_OPERATOR;
 }
 

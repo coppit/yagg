@@ -1,9 +1,8 @@
 Generator TODOs:
 
-- Un-full-path programs when using remote compilation and execution
 - Update the language grammar so that it supports equivalences, so that the
   terminal input file is not necessary in this case either.
-- Change the directory mirroring so that it removes additonal files from
+- Change the directory mirroring so that it removes additional files from
   output/src, but not others. Need to update the GNUmakefile to remove .o and
   .d files if the corresponding source file is missing. This will make -f
   largely unnecessary, and will allow reuse of already compiled generator
@@ -33,6 +32,9 @@ Generator TODOs:
     rules, this count will be more than it should be.)
 - Doesn't process grammar here: http://pltplp.net/lex-yacc/example.html.en
   correctly
+- Modify the terminal parser grammar so that it accepts unquoted strings in
+  alternations and equivalences. e.g. (a|b) and [a|b] instead of ("a"|"b") and
+  ["a"|"b"]
 - .lg files aren't parsed correctly if a definition follows right after
   another:
   "+"             return PLUS;

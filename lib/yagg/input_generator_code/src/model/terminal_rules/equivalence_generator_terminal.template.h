@@ -8,10 +8,20 @@ class [[[$terminal]]] : public Terminal_Rule
 {
 public:
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const;
-  virtual const [[[$return_type]]] Get_Value() const;
+  virtual const list<string>& Get_String() const;
+[[[
+if (defined $nonpointer_return_type)
+{
+  $OUT .= "  virtual const $return_type Get_Value() const;";
+}
+else
+{
+  $OUT .= "  virtual const $return_type& Get_Value() const;";
+}
+]]]
 
 protected:
+  list<string> strings;
 [[[
 if (defined $nonpointer_return_type)
 {

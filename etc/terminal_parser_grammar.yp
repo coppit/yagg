@@ -97,7 +97,7 @@ pattern		:
                           {data => $_[1][0],type => 'simple'};
 			}
 
-		|  alternation
+		|  simple_alternation
                         {
                           $_[1];
 			}
@@ -122,6 +122,13 @@ alternation	:
 		|  alternation '|' value
                         {
                           {data => [@{$_[1]->{'data'}},$_[3][0]],type => 'alternation'};
+			}
+		;
+
+simple_alternation	:
+                   '(' alternation ')'
+			{
+                          {data => $_[2]->{'data'},type => 'alternation'};
 			}
 		;
 

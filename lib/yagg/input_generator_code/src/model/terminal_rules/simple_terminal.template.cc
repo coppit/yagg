@@ -12,29 +12,11 @@ using namespace std;
 
 // ---------------------------------------------------------------------------
 
-const bool [[[$terminal]]]::Check_For_String()
+[[[$terminal]]]::[[[$terminal]]]()
 {
-
   return_value = [[[ $strings[0] ]]];
 
-  if (!Is_Valid())
-    return false;
-
-  m_string_count++;
-
-  if (m_string_count > 1)
-    return false;
-
-  return_value = [[[ $strings[0] ]]];
-
-  return true;
-}
-
-// ---------------------------------------------------------------------------
-
-const list<string> [[[$terminal]]]::Get_String() const
-{
-  list<string> strings;
+  strings.clear();
 
 [[[
 if ($return_type ne 'string' && defined $nonpointer_return_type &&
@@ -53,22 +35,54 @@ else
   strings.push_back(return_value);
 EOF
 }
+
+chomp $OUT;
 ]]]
+}
+
+// ---------------------------------------------------------------------------
+
+const bool [[[$terminal]]]::Check_For_String()
+{
+  m_string_count++;
+
+  if (m_string_count > 1)
+    return false;
+
+  if (!Is_Valid())
+    return false;
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& [[[$terminal]]]::Get_String() const
+{
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-const [[[$return_type]]] [[[$terminal]]]::Get_Value() const
-{
 [[[
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  return &return_value;";
+  $OUT .= <<EOF;
+const $return_type ${terminal}::Get_Value() const
+{
+  return &return_value;
+}
+EOF
 }
 else
 {
-  $OUT .= "  return $return_type();";
+  $OUT .= <<EOF;
+const $return_type& ${terminal}::Get_Value() const
+{
+  return return_value;
 }
+EOF
+}
+
+chomp $OUT;
 ]]]
-}

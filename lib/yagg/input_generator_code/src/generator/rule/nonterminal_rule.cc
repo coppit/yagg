@@ -230,7 +230,7 @@ const bool Nonterminal_Rule::Check_For_String()
 
 // ---------------------------------------------------------------------------
 
-const list<string> Nonterminal_Rule::Get_String() const
+const list<string>& Nonterminal_Rule::Get_String() const
 {
   assert(m_current_rule_list != m_rule_lists.end());
 

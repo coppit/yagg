@@ -58,9 +58,9 @@ sub new {
 	},
 	{#State 1
 		ACTIONS => {
-			"%%" => 3,
+			'PROLOGUE' => 3,
 			'OPTION_OP' => 6,
-			'PROLOGUE' => 7
+			"%%" => 7
 		},
 		GOTOS => {
 			'options' => 4,
@@ -73,22 +73,7 @@ sub new {
 		}
 	},
 	{#State 3
-		ACTIONS => {
-			'CHAR' => 13,
-			'EOF_OP' => 18,
-			'STRING' => 17,
-			"[" => 12,
-			'NUMBER' => 20
-		},
-		GOTOS => {
-			'value' => 14,
-			'equivalence_generator' => 9,
-			'rules' => 15,
-			'equivalence_alternation' => 16,
-			'rule' => 10,
-			'pattern' => 19,
-			'alternation' => 11
-		}
+		DEFAULT => -5
 	},
 	{#State 4
 		DEFAULT => -4
@@ -99,207 +84,238 @@ sub new {
 	{#State 6
 		DEFAULT => -8,
 		GOTOS => {
-			'optionlist' => 21
+			'optionlist' => 9
 		}
 	},
 	{#State 7
-		DEFAULT => -5
+		ACTIONS => {
+			"(" => 10,
+			"[" => 20,
+			'CHAR' => 19,
+			'EOF_OP' => 13,
+			'NUMBER' => 22,
+			'STRING' => 14
+		},
+		GOTOS => {
+			'value' => 16,
+			'pattern' => 15,
+			'equivalence_generator' => 11,
+			'simple_alternation' => 18,
+			'rules' => 17,
+			'equivalence_alternation' => 12,
+			'rule' => 21
+		}
 	},
 	{#State 8
 		DEFAULT => 0
 	},
 	{#State 9
-		DEFAULT => -18
-	},
-	{#State 10
-		DEFAULT => -11
-	},
-	{#State 11
 		ACTIONS => {
-			"|" => 22
-		},
-		DEFAULT => -16
-	},
-	{#State 12
-		ACTIONS => {
-			'CHAR' => 13,
-			'GENERATOR_STRING' => 25,
-			'STRING' => 17,
-			'NUMBER' => 20
-		},
-		GOTOS => {
-			'value' => 24,
-			'alternation' => 23
-		}
-	},
-	{#State 13
-		DEFAULT => -24
-	},
-	{#State 14
-		ACTIONS => {
-			"|" => 26
-		},
-		DEFAULT => -15
-	},
-	{#State 15
-		ACTIONS => {
-			'CHAR' => 13,
-			"%%" => 27,
-			'EOF_OP' => 18,
-			'STRING' => 17,
-			"[" => 12,
-			'NUMBER' => 20
-		},
-		DEFAULT => -26,
-		GOTOS => {
-			'value' => 14,
-			'equivalence_generator' => 9,
-			'epilogue_opt' => 29,
-			'equivalence_alternation' => 16,
-			'rule' => 28,
-			'pattern' => 19,
-			'alternation' => 11
-		}
-	},
-	{#State 16
-		DEFAULT => -17
-	},
-	{#State 17
-		DEFAULT => -23
-	},
-	{#State 18
-		DEFAULT => -14
-	},
-	{#State 19
-		ACTIONS => {
-			'RETURN' => 31,
-			"{" => 30
-		}
-	},
-	{#State 20
-		DEFAULT => -25
-	},
-	{#State 21
-		ACTIONS => {
-			'OPT_PREFIX' => 33
+			'OPT_PREFIX' => 24
 		},
 		DEFAULT => -6,
 		GOTOS => {
-			'option' => 32
+			'option' => 23
 		}
 	},
-	{#State 22
+	{#State 10
 		ACTIONS => {
-			'CHAR' => 13,
-			'STRING' => 17,
-			'NUMBER' => 20
+			'CHAR' => 19,
+			'NUMBER' => 22,
+			'STRING' => 14
 		},
 		GOTOS => {
-			'value' => 34
+			'alternation' => 25,
+			'value' => 26
 		}
 	},
-	{#State 23
+	{#State 11
+		DEFAULT => -18
+	},
+	{#State 12
+		DEFAULT => -17
+	},
+	{#State 13
+		DEFAULT => -14
+	},
+	{#State 14
+		DEFAULT => -24
+	},
+	{#State 15
 		ACTIONS => {
-			"|" => 22,
-			"]" => 35
+			"{" => 27,
+			'RETURN' => 28
 		}
+	},
+	{#State 16
+		DEFAULT => -15
+	},
+	{#State 17
+		ACTIONS => {
+			"(" => 10,
+			"[" => 20,
+			'CHAR' => 19,
+			"%%" => 29,
+			'EOF_OP' => 13,
+			'NUMBER' => 22,
+			'STRING' => 14
+		},
+		DEFAULT => -27,
+		GOTOS => {
+			'pattern' => 15,
+			'value' => 16,
+			'equivalence_generator' => 11,
+			'simple_alternation' => 18,
+			'equivalence_alternation' => 12,
+			'rule' => 30,
+			'epilogue_opt' => 31
+		}
+	},
+	{#State 18
+		DEFAULT => -16
+	},
+	{#State 19
+		DEFAULT => -25
+	},
+	{#State 20
+		ACTIONS => {
+			'GENERATOR_STRING' => 33,
+			'CHAR' => 19,
+			'NUMBER' => 22,
+			'STRING' => 14
+		},
+		GOTOS => {
+			'alternation' => 32,
+			'value' => 26
+		}
+	},
+	{#State 21
+		DEFAULT => -11
+	},
+	{#State 22
+		DEFAULT => -26
+	},
+	{#State 23
+		DEFAULT => -7
 	},
 	{#State 24
 		ACTIONS => {
-			"|" => 26
+			"=" => 34
 		}
 	},
 	{#State 25
 		ACTIONS => {
-			"]" => 36
+			")" => 35,
+			"|" => 36
 		}
 	},
 	{#State 26
 		ACTIONS => {
-			'CHAR' => 13,
-			'STRING' => 17,
-			'NUMBER' => 20
-		},
-		GOTOS => {
-			'value' => 37
+			"|" => 37
 		}
 	},
 	{#State 27
 		ACTIONS => {
-			'EPILOGUE' => 38
+			'RETURN' => 38
 		}
 	},
 	{#State 28
-		DEFAULT => -10
+		ACTIONS => {
+			'IDENTIFIER' => 39
+		}
 	},
 	{#State 29
-		DEFAULT => -1
+		ACTIONS => {
+			'EPILOGUE' => 40
+		}
 	},
 	{#State 30
-		ACTIONS => {
-			'RETURN' => 39
-		}
+		DEFAULT => -10
 	},
 	{#State 31
-		ACTIONS => {
-			'IDENTIFIER' => 40
-		}
+		DEFAULT => -1
 	},
 	{#State 32
-		DEFAULT => -7
+		ACTIONS => {
+			"|" => 36,
+			"]" => 41
+		}
 	},
 	{#State 33
 		ACTIONS => {
-			"=" => 41
+			"]" => 42
 		}
 	},
 	{#State 34
-		DEFAULT => -20
+		ACTIONS => {
+			'STRING' => 43
+		}
 	},
 	{#State 35
 		DEFAULT => -21
 	},
 	{#State 36
-		DEFAULT => -22
+		ACTIONS => {
+			'CHAR' => 19,
+			'NUMBER' => 22,
+			'STRING' => 14
+		},
+		GOTOS => {
+			'value' => 44
+		}
 	},
 	{#State 37
-		DEFAULT => -19
+		ACTIONS => {
+			'CHAR' => 19,
+			'NUMBER' => 22,
+			'STRING' => 14
+		},
+		GOTOS => {
+			'value' => 45
+		}
 	},
 	{#State 38
-		DEFAULT => -27
+		ACTIONS => {
+			'IDENTIFIER' => 46
+		}
 	},
 	{#State 39
 		ACTIONS => {
-			'IDENTIFIER' => 42
+			";" => 47
 		}
 	},
 	{#State 40
-		ACTIONS => {
-			";" => 43
-		}
+		DEFAULT => -28
 	},
 	{#State 41
-		ACTIONS => {
-			'STRING' => 44
-		}
+		DEFAULT => -22
 	},
 	{#State 42
-		ACTIONS => {
-			";" => 45
-		}
+		DEFAULT => -23
 	},
 	{#State 43
-		DEFAULT => -13
-	},
-	{#State 44
 		DEFAULT => -9
 	},
+	{#State 44
+		DEFAULT => -20
+	},
 	{#State 45
-		ACTIONS => {
-			"}" => 46
-		}
+		DEFAULT => -19
 	},
 	{#State 46
+		ACTIONS => {
+			";" => 48
+		}
+	},
+	{#State 47
+		DEFAULT => -13
+	},
+	{#State 48
+		ACTIONS => {
+			"}" => 49
+		}
+	},
+	{#State 49
 		DEFAULT => -12
 	}
 ],
@@ -437,23 +453,28 @@ sub
 			}
 	],
 	[#Rule 21
-		 'equivalence_alternation', 3,
+		 'simple_alternation', 3,
 sub
 #line 130 "etc/terminal_parser_grammar.yp"
+{
+                          {data => $_[2]->{'data'},type => 'alternation'};
+			}
+	],
+	[#Rule 22
+		 'equivalence_alternation', 3,
+sub
+#line 137 "etc/terminal_parser_grammar.yp"
 {
                           {data => $_[2]->{'data'},type => 'equivalence alternation'};
 			}
 	],
-	[#Rule 22
+	[#Rule 23
 		 'equivalence_generator', 3,
 sub
-#line 137 "etc/terminal_parser_grammar.yp"
+#line 144 "etc/terminal_parser_grammar.yp"
 {
                           {data => $_[2][0],type => 'equivalence generator'};
 			}
-	],
-	[#Rule 23
-		 'value', 1, undef
 	],
 	[#Rule 24
 		 'value', 1, undef
@@ -462,12 +483,15 @@ sub
 		 'value', 1, undef
 	],
 	[#Rule 26
-		 'epilogue_opt', 0, undef
+		 'value', 1, undef
 	],
 	[#Rule 27
+		 'epilogue_opt', 0, undef
+	],
+	[#Rule 28
 		 'epilogue_opt', 2,
 sub
-#line 151 "etc/terminal_parser_grammar.yp"
+#line 158 "etc/terminal_parser_grammar.yp"
 {
       $EPILOGUE=$_[2]
     }
@@ -477,7 +501,7 @@ sub
     bless($self,$class);
 }
 
-#line 156 "etc/terminal_parser_grammar.yp"
+#line 163 "etc/terminal_parser_grammar.yp"
 
 
 sub _Error {

@@ -52,11 +52,11 @@ bool fault_tree_textual_parser_reached_end_of_file;
 "replication" return REPLICATION; 
 
 // "id_1" return IDENTIFIER;
-// "id_1" | "id_2" | "id_3" return IDENTIFIER;
+// ( "id_1" | "id_2" | "id_3" ) return IDENTIFIER;
 // ["id_1" | "id_2" | "id_3"] return IDENTIFIER;
 ["id_#"] return IDENTIFIER;
 
-0 | 1 | 2 | 10 return NATURAL;
+( 0 | 1 | 2 | 10 ) return NATURAL;
 
 0 return ZERO;
 

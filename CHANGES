@@ -4,6 +4,9 @@ Version 1.3000: Sat Mar 19 2005
   - $1 values are now only copied when needed
   - Rule lists in nonterminals are now not deleted and recreated
 - Added -M option to allow the user to provide additional make arguments
+- Changed the syntax for alternation in the terminal file from "a|b" to
+  "(a|b)"
+- Paths are removed from the makefile when compiling remotely
 
 Version 1.2100: Sun Feb 6 2005
 - 2-3X faster. Figured out how to do equivalence classes without computing the

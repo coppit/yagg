@@ -17,7 +17,7 @@ public:
   virtual void Reset_String();
 
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const;
+  virtual const list<string>& Get_String() const;
 
   virtual const Rule* operator[](const unsigned int in_index) const;
 

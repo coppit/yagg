@@ -77,7 +77,7 @@ void basic_event_model_textual_parser_error (string s);
   return LOGNORMAL; 
 }
 
-0 | 1 | 2 | 5 {
+( 0 | 1 | 2 | 5 ) {
   return NATURAL;
 }
 

@@ -33,7 +33,7 @@ if (defined $return_type)
   virtual void Reset_String();
 
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const;
+  virtual const list<string>& Get_String() const;
 
 protected:
 #ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION

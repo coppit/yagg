@@ -347,7 +347,7 @@ const bool [[[$nonterminal]]]::Check_For_String()
 
 // ---------------------------------------------------------------------------
 
-const list<string> [[[$nonterminal]]]::Get_String() const
+const list<string>& [[[$nonterminal]]]::Get_String() const
 {
 #ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
   // We check m_using_cache in case this terminal was in the middle of

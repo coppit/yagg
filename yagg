@@ -2252,10 +2252,10 @@ specification.
 
 =head3 Alternation
 
-If there are several possibilities for a terminal, you can use the pipe (C<|>)
-character to specify them. for example:
+If there are several possibilities for a terminal, you can use the syntax
+"C<(alt1|alt2)>" to specify them. for example:
 
-  "+" | "-" | "*" | "/" {
+  ( "+" | "-" | "*" | "/" ) {
     return OPERATOR;
   }
 

@@ -39,16 +39,7 @@ EOF
 ]]]
   }
 
-  return true;
-}
-
-// ---------------------------------------------------------------------------
-
-const list<string> [[[$terminal]]]::Get_String() const
-{
-  assert(m_string_count <= [[[$size]]]);
-
-  list<string> strings;
+  strings.clear();
 
 [[[
 if ($return_type ne 'string' && defined $nonpointer_return_type &&
@@ -68,23 +59,39 @@ else
 EOF
 }
 ]]]
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& [[[$terminal]]]::Get_String() const
+{
+  assert(m_string_count <= [[[$size]]]);
+
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-const [[[$return_type]]] [[[$terminal]]]::Get_Value() const
-{
-  assert(m_string_count <= [[[$size]]]);
-
 [[[
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  return &return_value;";
+  $OUT .= <<EOF;
+const $return_type ${terminal}::Get_Value() const
+{
+  return &return_value;
+}
+EOF
 }
 else
 {
-  $OUT .= "  return return_value;";
+  $OUT .= <<EOF;
+const $return_type& ${terminal}::Get_Value() const
+{
+  return return_value;
 }
+EOF
+}
+
+chomp $OUT;
 ]]]
-}

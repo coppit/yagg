@@ -43,6 +43,7 @@ Generator TODOs:
   http://pltplp.net/lex-yacc/example.html.en
 - Make sure the default rule $$ = $1 is implemented, and that it doesn't
   prevent the caching nonterminal rule template from being used.
+- During installation, ask for default make arguments like "-j4"
 
 -----------------------------------------------------------------------------
 

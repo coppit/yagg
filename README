@@ -21,21 +21,19 @@ outcomes for certain play situations in baseball.
 
 NEW IN THIS VERSION
 
-Version 1.2100:
-- 2-3X faster. Figured out how to do equivalence classes without computing the
-  terminal rules. So I got rid of Get_Terminals().
-- Added missing -DDISABLE_GENERATED_STRING_CACHING_OPTIMIZATION to generated
-  makefile
-- Fixed build failure and runtime failure when using
-  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION
-- Fixed an infinite loop for some grammars which was related to a string
-  caching optimization. (Thanks to Ted Turocy for the bug report.)
-- Fixed a bug that would cause left recursion to reproduce some strings.
-  (Thanks to Ted Turocy for the bug report.)
-- Enhanced test cases
-- Improved interactions with "find" that would cause running make on the
-  generated code to not build anything, on some systems.
-
+Version 1.3000:
+- Removed unnecessary copy constructors, operator= functions, Clone functions
+- Optimization for 2X speedup
+  - $1 values are now only copied when needed
+  - Rule lists in nonterminals are now not deleted and recreated
+  - More values are passed by reference
+- Added -M option to allow the user to provide additional make arguments
+- Changed the syntax for alternation in the terminal file from "a|b" to
+  "(a|b)"
+- Paths are removed from the makefile when compiling remotely
+- Generator program can now generate any rule in the grammar
+- Modified setup to automatically use g++ for LD, since the LD given by Perl
+  is the C compiler, not the C++ compiler
 
 MODULE DEPENDENCIES
 

@@ -18,7 +18,7 @@ use File::Path;
 
 use vars qw( $VERSION );
 
-$VERSION = sprintf "%d.%02d%02d", q/1.3.0/ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d%02d", q/1.30.0/ =~ /(\d+)/g;
 
 # Make unbuffered
 $| = 1;
@@ -976,7 +976,7 @@ sub Update_Makefile_Programs
     'GREP' => 'grep',
     'CHMOD' => 'chmod',
     'CXX' => 'g++',
-    'LD' => 'ld',
+    'LD' => 'g++',
     'AR' => 'ar',
     'MKDIR' => 'mkdir',
     'DATE' => 'date',

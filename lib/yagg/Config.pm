@@ -19,7 +19,6 @@ $VERSION = 0.01;
     'find' => '/sw/bin/find',
     'g++' => '/usr/bin/g++',
     'grep' => '/usr/bin/grep',
-    'ld' => '/usr/bin/g++',
     'ln' => '/sw/bin/ln',
     'make' => '/sw/bin/make',
     'mkdir' => '/sw/bin/mkdir',

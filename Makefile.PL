@@ -106,7 +106,6 @@ EOF
                                      numbers => '[3.0,)', },
                        },
                      },
-      'ld'        => { default => 'g++', argname => 'LD' },
       'ar'        => { default => 'ar', argname => 'AR' },
       'mkdir'     => { default => 'mkdir', argname => 'MKDIR' },
       'date'      => { default => 'date', argname => 'DATE' },
@@ -151,7 +150,7 @@ EOF
 
   {
     my @missing_programs;
-    foreach my $program qw(ar cp cpp chmod dirname find grep g++ ld make mkdir rm mv perl)
+    foreach my $program qw(ar cp cpp chmod dirname find grep g++ make mkdir rm mv perl)
     {
       push @missing_programs, $program
         unless defined $LOCATIONS{$program}{'path'};
@@ -250,7 +249,7 @@ sub _Update_Makefile_Program_Locations
     'GREP' => 'grep',
     'CHMOD' => 'chmod',
     'CXX' => 'g++',
-    'LD' => 'ld',
+    'LD' => 'g++',
     'AR' => 'ar',
     'MKDIR' => 'mkdir',
     'DATE' => 'date',

@@ -24,6 +24,8 @@ my %expected_errors = (
 
 plan tests => scalar (keys %tests) * 2;
 
+diag "Generating, compiling, and running test generators. Please be patient...";
+
 my %skip = SetSkip(\%tests);
 
 foreach my $test (sort keys %tests) 

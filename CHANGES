@@ -1,3 +1,8 @@
+Version 
+- 10% faster. Rule lists in nonterminals are now not deleted and recreated,
+  which speeds things up a little bit. Other small optimizations.
+- Removed unnecessary copy constructors, operator= functions, Clone functions
+
 Version 1.2100: Sun Feb 6 2005
 - 2-3X faster. Figured out how to do equivalence classes without computing the
   terminal rules. So I got rid of Get_Terminals().

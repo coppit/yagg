@@ -12,8 +12,6 @@ using namespace std;
 class IDENTIFIER : public Terminal_Rule
 {
 public:
-  virtual IDENTIFIER* Clone() const { return new IDENTIFIER(*this); }
-
   virtual const bool Check_For_String()
   {
     if (!Is_Valid())

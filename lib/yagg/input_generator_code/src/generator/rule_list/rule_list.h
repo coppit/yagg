@@ -29,8 +29,6 @@ class Rule_List : public vector<Rule*>
 
 public:
   Rule_List();
-  Rule_List(const Rule_List &in_rule_list);
-  virtual Rule_List* Clone() const;
 
   virtual ~Rule_List();
 
@@ -53,8 +51,8 @@ public:
   friend ostream& operator<< (ostream& in_ostream, const Rule_List& in_rule_list);
   friend void Utility::yyerror();
 
-protected:
-  virtual const Rule_List& operator= (const Rule_List &in_rule_list);
+private:
+  Rule_List(const Rule_List &in_rule_list);
 
 protected:
   virtual const bool Check_For_String_Without_Incrementing(

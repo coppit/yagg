@@ -13,8 +13,6 @@ using namespace std;
 class IDENTIFIER : public Terminal_Rule
 {
 public:
-  virtual IDENTIFIER* Clone() const { return new IDENTIFIER(*this); }
-
   virtual const bool Check_For_String()
   {
     if (!Is_Valid())
@@ -58,8 +56,6 @@ public:
 class identifier_list : public Nonterminal_Rule
 {
 public:
-  virtual identifier_list* Clone() const { return new identifier_list(*this); }
-
   virtual void Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule = NULL)
   {
     list<Rule_List*>::iterator a_rule_list;

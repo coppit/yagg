@@ -31,20 +31,6 @@ Rule_List::Rule_List()
 
 // ---------------------------------------------------------------------------
 
-Rule_List::Rule_List(const Rule_List& in_rule_list)
-{
-  *this = in_rule_list;
-}
-
-// ---------------------------------------------------------------------------
-
-Rule_List* Rule_List::Clone() const
-{
-  return new Rule_List(*this);
-}
-
-// ---------------------------------------------------------------------------
-
 Rule_List::~Rule_List()
 {
   const_iterator a_rule;
@@ -52,27 +38,6 @@ Rule_List::~Rule_List()
   {
     delete *a_rule;
   }
-}
-
-// ---------------------------------------------------------------------------
-
-const Rule_List& Rule_List::operator= (const Rule_List &in_rule_list)
-{
-  const_iterator a_rule;
-  for(a_rule = in_rule_list.begin();
-      a_rule != in_rule_list.end();
-      a_rule++)
-  {
-    push_back( (*a_rule)->Clone() );
-  }
-
-  m_allowed_length = in_rule_list.m_allowed_length;
-  m_is_valid = in_rule_list.m_is_valid;
-  m_first_string = in_rule_list.m_first_string;
-  m_needs_reset = in_rule_list.m_needs_reset;
-  m_terminals = in_rule_list.m_terminals;
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------

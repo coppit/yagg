@@ -7,8 +7,6 @@
 class [[[$terminal]]] : public Terminal_Rule
 {
 public:
-  virtual [[[$terminal]]]* Clone() const;
-
   virtual const list<string> Get_String() const;
   virtual [[[$return_type]]] Get_Value() const;
 };

@@ -5,13 +5,6 @@ using namespace std;
 
 // ---------------------------------------------------------------------------
 
-[[[$terminal]]]* [[[$terminal]]]::Clone() const
-{
-  return new [[[$terminal]]](*this);
-}
-
-// ---------------------------------------------------------------------------
-
 const list<string> [[[$terminal]]]::Get_String() const
 {
   list<string> strings;

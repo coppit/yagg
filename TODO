@@ -52,10 +52,8 @@ Fault tree TODOs:
 
 Generated code TODOs:
 
-- Is there some way to implement Clone() in the Rule base class using RTTI?
 - make dist fails for generated code (todo.txt, etc). Need to update the
   makefile
-- See if we can prevent so many copies for Get_Value() and Do/Undo_Action.
 - Speed up the generation, hopefully by reducing the amount of recursion. (1)
   I've noticed that the generator calls reset a lot, then calls reset again
   while checking for strings. Sometimes this is necessary, but always? (2) Can
@@ -67,5 +65,5 @@ Generated code TODOs:
   but we could compute the modulus for recursive grammars. NOTE: It's not
   clear that this will actually save us a lot of work, given that I've
   implemented an optimization to cache previously generated allocations.
-- Be smarter about when to make copies of $1, $2, etc in Do_Action and
+*** Be smarter about when to make copies of $1, $2, etc in Do_Action and
   Undo_Action. See if we can avoid all the new()s and delete()s.

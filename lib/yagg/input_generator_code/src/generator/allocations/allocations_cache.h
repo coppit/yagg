@@ -4,7 +4,6 @@
 #define ALLOCATIONS_CACHE_H
 
 #include <map>
-#include <string>
 #include <list>
 #include <vector>
 
@@ -28,9 +27,9 @@ public:
     End(const Rule_List &in_rule_list) const;
 
 protected:
-  static map< string, map< unsigned int, searchable_list< vector< unsigned int > > > >
+  static map< const char*, map< unsigned int, searchable_list< vector< unsigned int > > > >
     m_cache;
-  static map< string, map< unsigned int, bool > >
+  static map< const char*, map< unsigned int, bool > >
     m_finalized;
 };
 

@@ -13,8 +13,6 @@ using namespace std;
 class NATURAL : public Terminal_Rule
 {
 public:
-  virtual NATURAL* Clone() const { return new NATURAL(*this); }
-
   virtual const bool Check_For_String()
   {
     if (!Is_Valid())

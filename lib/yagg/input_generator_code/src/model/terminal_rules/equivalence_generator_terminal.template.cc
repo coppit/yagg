@@ -7,13 +7,6 @@ using namespace std;
 
 // ---------------------------------------------------------------------------
 
-[[[$terminal]]]* [[[$terminal]]]::Clone() const
-{
-  return new [[[$terminal]]](*this);
-}
-
-// ---------------------------------------------------------------------------
-
 const bool [[[$terminal]]]::Check_For_String()
 {
   if (!Is_Valid())

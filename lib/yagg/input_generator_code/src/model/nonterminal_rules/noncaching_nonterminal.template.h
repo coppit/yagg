@@ -16,8 +16,6 @@ public:
   [[[$nonterminal]]]();
   virtual ~[[[$nonterminal]]]();
 
-  virtual [[[$nonterminal]]]* Clone() const;
-
   virtual void Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule = NULL);
 [[[
 if (defined $return_type)

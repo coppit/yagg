@@ -19,28 +19,8 @@ Terminal_Rule::Terminal_Rule()
 
 // ---------------------------------------------------------------------------
 
-Terminal_Rule::Terminal_Rule(const Terminal_Rule &in_terminal) :
-  Rule(in_terminal)
-{
-  *this = in_terminal;
-}
-
-// ---------------------------------------------------------------------------
-
 Terminal_Rule::~Terminal_Rule()
 {
-}
-
-// ---------------------------------------------------------------------------
-
-const Terminal_Rule& Terminal_Rule::operator= (const Terminal_Rule &in_terminal)
-{
-  Rule::operator=(in_terminal);
-
-  m_string_count = in_terminal.m_string_count;
-  m_terminals.push_back(this);
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------

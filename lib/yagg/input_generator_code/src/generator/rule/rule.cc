@@ -11,26 +11,8 @@ Rule::Rule()
 
 // ---------------------------------------------------------------------------
 
-Rule::Rule(const Rule& in_rule)
-{
-  *this = in_rule;
-}
-
-// ---------------------------------------------------------------------------
-
 Rule::~Rule()
 {
-}
-
-// ---------------------------------------------------------------------------
-
-const Rule& Rule::operator= (const Rule &in_rule)
-{
-  m_allowed_length = in_rule.m_allowed_length;
-  m_is_valid = in_rule.m_is_valid;
-  m_needs_reset = in_rule.m_needs_reset;
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------

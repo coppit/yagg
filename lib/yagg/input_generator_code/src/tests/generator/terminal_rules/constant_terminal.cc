@@ -12,8 +12,6 @@ using namespace std;
 class ZERO : public Terminal_Rule
 {
 public:
-  virtual ZERO* Clone() const { return new ZERO(*this); }
-
   virtual const list<string> Get_String() const
   {
     list<string> strings;

@@ -12,8 +12,6 @@ using namespace std;
 class Nonterminal_Rule : public Rule
 {
 public:
-  virtual Nonterminal_Rule* Clone() const = 0;
-
   virtual ~Nonterminal_Rule();
 
   virtual void Reset_String();
@@ -25,9 +23,9 @@ public:
 
 protected:
   Nonterminal_Rule();
-  Nonterminal_Rule(const Nonterminal_Rule &in_nonterminal);
 
-  virtual const Nonterminal_Rule& operator= (const Nonterminal_Rule &in_nonterminal);
+private:
+  Nonterminal_Rule(const Nonterminal_Rule &in_nonterminal);
 
 protected:
   list<Rule_List*> m_rule_lists;

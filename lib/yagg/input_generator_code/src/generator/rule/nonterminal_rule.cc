@@ -23,38 +23,8 @@ Nonterminal_Rule::Nonterminal_Rule()
 
 // ---------------------------------------------------------------------------
 
-Nonterminal_Rule::Nonterminal_Rule(const Nonterminal_Rule& in_nonterminal) :
-  Rule(in_nonterminal)
-{
-  *this = in_nonterminal;
-}
-
-// ---------------------------------------------------------------------------
-
 Nonterminal_Rule::~Nonterminal_Rule()
 {
-}
-
-// ---------------------------------------------------------------------------
-
-const Nonterminal_Rule& Nonterminal_Rule::operator= (const Nonterminal_Rule &in_nonterminal)
-{
-  Rule::operator=(in_nonterminal);
-
-  m_current_rule_list = m_rule_lists.end();
-
-  list<Rule_List*>::const_iterator a_rule_list;
-  for(a_rule_list = in_nonterminal.m_rule_lists.begin();
-      a_rule_list != in_nonterminal.m_rule_lists.end();
-      a_rule_list++)
-  {
-    m_rule_lists.push_back( (*a_rule_list)->Clone() );
-
-    if (in_nonterminal.m_current_rule_list == a_rule_list)
-      m_current_rule_list--;
-  }
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------

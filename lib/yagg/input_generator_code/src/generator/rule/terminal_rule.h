@@ -11,8 +11,6 @@ using namespace std;
 class Terminal_Rule : public Rule
 {
 public:
-  virtual Rule* Clone() const = 0;
-
   virtual ~Terminal_Rule();
 
   virtual void Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule = NULL);
@@ -25,9 +23,9 @@ public:
 
 protected:
   Terminal_Rule();
-  Terminal_Rule(const Terminal_Rule &in_terminal);
 
-  virtual const Terminal_Rule& operator= (const Terminal_Rule &in_terminal);
+private:
+  Terminal_Rule(const Terminal_Rule &in_terminal);
 
 protected:
   unsigned int m_string_count;

@@ -59,12 +59,12 @@ sub new {
 	{#State 1
 		ACTIONS => {
 			"%%" => 3,
-			'PROLOGUE' => 4,
-			'OPTION_OP' => 7
+			'OPTION_OP' => 6,
+			'PROLOGUE' => 7
 		},
 		GOTOS => {
-			'declaration' => 5,
-			'options' => 6
+			'options' => 4,
+			'declaration' => 5
 		}
 	},
 	{#State 2
@@ -74,45 +74,45 @@ sub new {
 	},
 	{#State 3
 		ACTIONS => {
-			'CHAR' => 10,
-			'NUMBER' => 9,
-			"[" => 19,
-			'STRING' => 13,
-			'EOF_OP' => 20
+			'CHAR' => 13,
+			'EOF_OP' => 18,
+			'STRING' => 17,
+			"[" => 12,
+			'NUMBER' => 20
 		},
 		GOTOS => {
-			'alternation' => 11,
-			'pattern' => 16,
-			'rule' => 17,
-			'rules' => 12,
-			'value' => 18,
-			'equivalence_generator' => 14,
-			'equivalence_alternation' => 15
+			'value' => 14,
+			'equivalence_generator' => 9,
+			'rules' => 15,
+			'equivalence_alternation' => 16,
+			'rule' => 10,
+			'pattern' => 19,
+			'alternation' => 11
 		}
 	},
 	{#State 4
-		DEFAULT => -5
+		DEFAULT => -4
 	},
 	{#State 5
 		DEFAULT => -2
 	},
 	{#State 6
-		DEFAULT => -4
-	},
-	{#State 7
 		DEFAULT => -8,
 		GOTOS => {
 			'optionlist' => 21
 		}
 	},
+	{#State 7
+		DEFAULT => -5
+	},
 	{#State 8
 		DEFAULT => 0
 	},
 	{#State 9
-		DEFAULT => -25
+		DEFAULT => -18
 	},
 	{#State 10
-		DEFAULT => -24
+		DEFAULT => -11
 	},
 	{#State 11
 		ACTIONS => {
@@ -122,62 +122,62 @@ sub new {
 	},
 	{#State 12
 		ACTIONS => {
-			'CHAR' => 10,
-			'NUMBER' => 9,
-			"%%" => 23,
-			'STRING' => 13,
-			"[" => 19,
-			'EOF_OP' => 20
+			'CHAR' => 13,
+			'GENERATOR_STRING' => 25,
+			'STRING' => 17,
+			'NUMBER' => 20
 		},
-		DEFAULT => -26,
 		GOTOS => {
-			'epilogue_opt' => 24,
-			'alternation' => 11,
-			'pattern' => 16,
-			'rule' => 25,
-			'value' => 18,
-			'equivalence_generator' => 14,
-			'equivalence_alternation' => 15
+			'value' => 24,
+			'alternation' => 23
 		}
 	},
 	{#State 13
-		DEFAULT => -23
+		DEFAULT => -24
 	},
 	{#State 14
-		DEFAULT => -18
-	},
-	{#State 15
-		DEFAULT => -17
-	},
-	{#State 16
 		ACTIONS => {
-			'RETURN' => 27,
-			"{" => 26
-		}
-	},
-	{#State 17
-		DEFAULT => -11
-	},
-	{#State 18
-		ACTIONS => {
-			"|" => 28
+			"|" => 26
 		},
 		DEFAULT => -15
 	},
+	{#State 15
+		ACTIONS => {
+			'CHAR' => 13,
+			"%%" => 27,
+			'EOF_OP' => 18,
+			'STRING' => 17,
+			"[" => 12,
+			'NUMBER' => 20
+		},
+		DEFAULT => -26,
+		GOTOS => {
+			'value' => 14,
+			'equivalence_generator' => 9,
+			'epilogue_opt' => 29,
+			'equivalence_alternation' => 16,
+			'rule' => 28,
+			'pattern' => 19,
+			'alternation' => 11
+		}
+	},
+	{#State 16
+		DEFAULT => -17
+	},
+	{#State 17
+		DEFAULT => -23
+	},
+	{#State 18
+		DEFAULT => -14
+	},
 	{#State 19
 		ACTIONS => {
-			'CHAR' => 10,
-			'NUMBER' => 9,
-			'GENERATOR_STRING' => 30,
-			'STRING' => 13
-		},
-		GOTOS => {
-			'alternation' => 29,
-			'value' => 31
+			'RETURN' => 31,
+			"{" => 30
 		}
 	},
 	{#State 20
-		DEFAULT => -14
+		DEFAULT => -25
 	},
 	{#State 21
 		ACTIONS => {
@@ -190,9 +190,9 @@ sub new {
 	},
 	{#State 22
 		ACTIONS => {
-			'CHAR' => 10,
-			'NUMBER' => 9,
-			'STRING' => 13
+			'CHAR' => 13,
+			'STRING' => 17,
+			'NUMBER' => 20
 		},
 		GOTOS => {
 			'value' => 34
@@ -200,49 +200,49 @@ sub new {
 	},
 	{#State 23
 		ACTIONS => {
-			'EPILOGUE' => 35
+			"|" => 22,
+			"]" => 35
 		}
 	},
 	{#State 24
-		DEFAULT => -1
+		ACTIONS => {
+			"|" => 26
+		}
 	},
 	{#State 25
-		DEFAULT => -10
+		ACTIONS => {
+			"]" => 36
+		}
 	},
 	{#State 26
 		ACTIONS => {
-			'RETURN' => 36
+			'CHAR' => 13,
+			'STRING' => 17,
+			'NUMBER' => 20
+		},
+		GOTOS => {
+			'value' => 37
 		}
 	},
 	{#State 27
 		ACTIONS => {
-			'IDENTIFIER' => 37
+			'EPILOGUE' => 38
 		}
 	},
 	{#State 28
-		ACTIONS => {
-			'CHAR' => 10,
-			'NUMBER' => 9,
-			'STRING' => 13
-		},
-		GOTOS => {
-			'value' => 38
-		}
+		DEFAULT => -10
 	},
 	{#State 29
-		ACTIONS => {
-			"]" => 39,
-			"|" => 22
-		}
+		DEFAULT => -1
 	},
 	{#State 30
 		ACTIONS => {
-			"]" => 40
+			'RETURN' => 39
 		}
 	},
 	{#State 31
 		ACTIONS => {
-			"|" => 28
+			'IDENTIFIER' => 40
 		}
 	},
 	{#State 32
@@ -257,26 +257,26 @@ sub new {
 		DEFAULT => -20
 	},
 	{#State 35
-		DEFAULT => -27
+		DEFAULT => -21
 	},
 	{#State 36
+		DEFAULT => -22
+	},
+	{#State 37
+		DEFAULT => -19
+	},
+	{#State 38
+		DEFAULT => -27
+	},
+	{#State 39
 		ACTIONS => {
 			'IDENTIFIER' => 42
 		}
 	},
-	{#State 37
+	{#State 40
 		ACTIONS => {
 			";" => 43
 		}
-	},
-	{#State 38
-		DEFAULT => -19
-	},
-	{#State 39
-		DEFAULT => -21
-	},
-	{#State 40
-		DEFAULT => -22
 	},
 	{#State 41
 		ACTIONS => {

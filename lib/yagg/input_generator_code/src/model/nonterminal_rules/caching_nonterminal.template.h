@@ -46,7 +46,7 @@ protected:
   // Caching implementation
   static map<const unsigned int, list< list< string> > > m_generated_cache;
   static map<const unsigned int, list< list< string> > > m_intermediate_cache;
-  static map<const unsigned int, [[[$nonterminal]]]*> m_intermediate_owner;
+  static map<const unsigned int, searchable_list< [[[$nonterminal]]]* > > m_active_terminals;
   list< list< string > >::const_iterator m_current_string_list;
   bool m_first_cache_string;
   bool m_using_cache;

@@ -65,13 +65,13 @@ exit;
 sub MakeParsers
 {
   die "No \"yapp\" available to create the parsers\n"
-    unless defined $LOCATIONS{'yapp'};
+    unless defined $LOCATIONS{'yapp'}{'path'};
 
   print "Running yapp to create the parsers\n";
 
-  system("$LOCATIONS{'yapp'} -m 'yagg::NonterminalParser' -o 'lib/yagg/NonterminalParser.pm' etc/nonterminal_parser_grammar.yp") == 0
+  system("$LOCATIONS{'yapp'}{'path'} -m 'yagg::NonterminalParser' -o 'lib/yagg/NonterminalParser.pm' etc/nonterminal_parser_grammar.yp") == 0
     or die "Could not run yapp to create the NonterminalParser.pm file: $!";
-  system("$LOCATIONS{'yapp'} -m 'yagg::TerminalParser' -o 'lib/yagg/TerminalParser.pm' etc/terminal_parser_grammar.yp") == 0
+  system("$LOCATIONS{'yapp'}{'path'} -m 'yagg::TerminalParser' -o 'lib/yagg/TerminalParser.pm' etc/terminal_parser_grammar.yp") == 0
     or die "Could not run yapp to create the TerminalParser.pm file: $!";
 }
 
@@ -101,8 +101,8 @@ EOF
       'chmod'     => { default => 'chmod', argname => 'CHMOD' },
       'rsync'     => { default => 'rsync', argname => 'RSYNC' },
       'g++'       => { default => 'g++', argname => 'CXX',
-                       versions => {
-                          'GNU' => { fetch => \&Get_GNU_GPP_Version,
+                       types    => {
+                          'GNU' => { fetch => \&Get_GNU_Version,
                                      numbers => '[3.0,)', },
                        },
                      },
@@ -114,20 +114,60 @@ EOF
       'dirname'   => { default => 'dirname', argname => 'DIRNAME' },
       'expr'      => { default => 'expr', argname => 'EXPR' },
       'make'      => { default => 'make', argname => 'MAKE',
-                       versions => {
-                          'GNU' => { fetch => \&Get_GNU_Make_Version,
+                       types    => {
+                          'GNU' => { fetch => \&Get_GNU_Version,
                                      numbers => '[1.0,)', },
                        },
                      },
       'rm'        => { default => 'rm', argname => 'RM' },
-      'find'      => { default => 'find', argname => 'FIND' },
+      'find'      => { default => 'find', argname => 'FIND',
+                       types    => {
+                          'Non-GNU' => { fetch => \&Get_NonGNU_Find_Version,
+                                     numbers => '[0,)', },
+                          'GNU' => { fetch => \&Get_GNU_Version,
+                                     numbers => '[1.0,)', },
+                       },
+                     },
       'ssh'       => { default => 'ssh', argname => 'SSH' },
   );
 
   %LOCATIONS = Get_Program_Locations(\%info);
 
+  die "Can't create parsers without \"yapp\"\n" 
+    unless defined $LOCATIONS{'yapp'}{'path'};
+
+  {
+    my @missing_programs;
+    foreach my $program qw(chmod perl rsync)
+    {
+      push @missing_programs, $program
+        unless defined $LOCATIONS{$program}{'path'};
+    }
+
+    warn "You won't be able to use yapp to generate code without:\n" .
+      "@missing_programs\n"
+      if @missing_programs;
+  }
+
+  {
+    my @missing_programs;
+    foreach my $program qw(ar cp cpp chmod dirname find grep g++ ld make mkdir rm mv perl)
+    {
+      push @missing_programs, $program
+        unless defined $LOCATIONS{$program}{'path'};
+    }
+
+    warn "You won't be able to build the generated code without:\n" .
+      "@missing_programs\n"
+      if @missing_programs;
+  }
+
   Update_Config('lib/yagg/Config.pm', \%LOCATIONS);
+
+  Update_Makefile('examples/ab/ab_parser/GNUmakefile', \%LOCATIONS);
   Update_Makefile('examples/logical_expressions_constrained/logical_expression_parser/GNUmakefile', \%LOCATIONS);
+
+  Update_Makefile('lib/yagg/input_generator_code/GNUmakefile', \%LOCATIONS);
   Update_Makefile('t/logical_expressions_simple/GNUmakefile', \%LOCATIONS);
 }
 
@@ -142,13 +182,13 @@ sub Update_Config
 
   foreach my $program (keys %locations)
   {
-    if (defined $locations{$program})
+    if (defined $locations{$program}{'path'})
     {
-      $locations{$program} = "\'$locations{$program}\'";
+      $locations{$program}{'path'} = "\'$locations{$program}{'path'}\'";
     }
     else
     {
-      $locations{$program} = "undef";
+      $locations{$program}{'path'} = "undef";
     }
   }
 
@@ -159,7 +199,7 @@ sub Update_Config
 
     foreach my $program (sort keys %locations)
     {
-      $new_programs .= "    '$program' => $locations{$program},\n";
+      $new_programs .= "    '$program' => $locations{$program}{'path'},\n";
     }
 
     $code =~ s/\Q$original_programs\E/$new_programs/;
@@ -181,9 +221,24 @@ sub Update_Makefile
 
   my $code = _Read_Code($filename);
 
+  $code = _Update_Makefile_Program_Locations($code, \%locations);
+
+  $code = _Update_Makefile_Find_Code($code, $locations{'find'});
+
+  _Write_Code($filename, $code);
+}
+
+# --------------------------------------------------------------------------
+
+sub _Update_Makefile_Program_Locations
+{
+  my $code = shift;
+  my %locations = %{ shift @_ };
+
   foreach my $program (keys %locations)
   {
-    $locations{$program} = "NONE" unless defined $locations{$program};
+    $locations{$program}{'path'} = "NONE"
+      unless defined $locations{$program}{'path'};
   }
 
   my %symbol_lookup = (
@@ -215,7 +270,7 @@ sub Update_Makefile
     {
       my $old_pos = pos $code;
 
-      my $new_value = $locations{ $symbol_lookup{$symbol} };
+      my $new_value = $locations{ $symbol_lookup{$symbol} }{'path'};
       $new_value = " $new_value" unless $middle =~ / $/;
 
       substr($code,pos($code) - length($value), length($value)) = $new_value;
@@ -224,7 +279,58 @@ sub Update_Makefile
     }
   }
 
-  _Write_Code($filename, $code);
+  return $code;
+}
+
+# --------------------------------------------------------------------------
+
+sub _Update_Makefile_Find_Code
+{
+  my $code = shift;
+  my %find_info = %{ shift @_ };
+
+  # First add in all the -E flags if we need them.
+  while ($code =~ /(\$\(FIND\) +)(-E +)?(\$\(\w+\) -regex)/mg)
+  {
+    my $prefix = $1;
+    my $flag = $2;
+    my $suffix = $3;
+
+    my $value = "$prefix$flag$suffix";
+
+    my $old_pos = pos $code;
+    my $new_value = "$prefix -E $suffix";
+
+    $new_value = "$prefix $suffix"
+      if defined $find_info{'type'} && $find_info{'type'} eq 'GNU';
+
+    substr( $code, pos($code) - length($value), length($value)) = $new_value;
+    pos($code) = $old_pos - length($value) + length($new_value);
+  }
+
+  if ($code =~ /(make_pattern\s*=\s*)(.*)$/mg)
+  {
+    my $prefix = $1;
+    my $pattern = $2;
+
+    my $value = "$prefix$pattern";
+
+    my $old_pos = pos $code;
+    my $new_value = "$prefix(\$(subst \$(SPACE),|,\$(1)))";
+
+    $new_value = "$prefix\\(\$(subst \$(SPACE),\\|,\$(1))\\)"
+      if defined $find_info{'type'} && $find_info{'type'} eq 'GNU';
+
+    substr( $code, pos($code) - length($value), length($value)) = $new_value;
+    pos($code) = $old_pos - length($value) + length($new_value);
+
+  }
+  else
+  {
+    warn "Couldn't find make_pattern in Makefile to configure it\n";
+  }
+
+  return $code;
 }
 
 # --------------------------------------------------------------------------
@@ -254,4 +360,18 @@ sub _Write_Code
     or die "Couldn't open file \"$filename\": $!";
   print SOURCE $code;
   close SOURCE;
+}
+
+# --------------------------------------------------------------------------
+
+sub Get_NonGNU_Find_Version
+{
+  my $program = shift;
+  
+  my $command = "$program -E . -regex './(R|L).*E' 2>" . File::Spec->devnull();
+  my @results = `$command`;
+  
+  return undef unless @results;
+    
+  return 0;
 }

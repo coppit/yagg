@@ -6,8 +6,10 @@ use Test::More;
 use lib 't';
 use Test::Utils;
 use File::Find;
+use File::Path;
 use File::Spec::Functions qw( :ALL );
 
+rmtree 't/temp';
 mkdir 't/temp', 0700;
 
 my %tests = (
@@ -74,21 +76,27 @@ sub TestIt
   if (!$? && defined $error_expected)
   {
     ok(0,"Did not encounter an error executing the test when one was expected.\n\n");
+
+    SKIP: skip("Error running previous test",1);
+
     return;
   }
 
   if ($? && !defined $error_expected)
   {
     ok(0, "Encountered an error executing the test when one was not expected.\n" .
-      "See $test_stdout and $test_stderr.\n\n");
+      "See $test_stdout and\n$test_stderr.\n\n");
+
+    SKIP: skip("Error running previous test",1);
+
     return;
   }
 
   my $real_stdout = catfile('t','results',$stdout_file);
   my $real_stderr = catfile('t','results',$stderr_file);
 
-  Do_Diff($real_stdout,$test_stdout);
-  Do_Diff($real_stderr,$test_stderr);
+  Do_Diff($test_stdout,$real_stdout);
+  Do_Diff($test_stderr,$real_stderr,'ranlib.*no symbols');
 }
 
 # ---------------------------------------------------------------------------

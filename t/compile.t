@@ -50,8 +50,12 @@ SKIP:
   if ($?)
   {
     ok(0, "Encountered an error building the sample code.\n" .
-      "See t/logical_expressions_simple/make.stdout and\n" .
-      "t/logical_expressions_simple/make.stderr.\n\n");
+      "See $test_stdout and\n$test_stderr.\n\n");
+  }
+  elsif (!-e 'progs/generate')
+  {
+    ok(0, "Build succeeded, but there is no \"progs/generate\".\n" .
+      "See $test_stdout and\n$test_stderr.\n\n");
   }
   else
   {

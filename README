@@ -21,9 +21,20 @@ outcomes for certain play situations in baseball.
 
 NEW IN THIS VERSION
 
-Version 1.20:
-- Over 30X faster. Added an allocations cache for rule lists
-- Changed the name to "yagg" and moved development to SourceForge
+Version 1.2100:
+- 2-3X faster. Figured out how to do equivalence classes without computing the
+  terminal rules. So I got rid of Get_Terminals().
+- Added missing -DDISABLE_GENERATED_STRING_CACHING_OPTIMIZATION to generated
+  makefile
+- Fixed build failure and runtime failure when using
+  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION
+- Fixed an infinite loop for some grammars which was related to a string
+  caching optimization. (Thanks to Ted Turocy for the bug report.)
+- Fixed a bug that would cause left recursion to reproduce some strings.
+  (Thanks to Ted Turocy for the bug report.)
+- Enhanced test cases
+- Improved interactions with "find" that would cause running make on the
+  generated code to not build anything, on some systems.
 
 
 MODULE DEPENDENCIES

@@ -1,6 +1,10 @@
 #include "model/nonterminal_rules/[[[$nonterminal]]].h"
 #include <cassert>
 
+#ifdef SHORT_RULE_TRACE
+#include "generator/utility/utility.h"
+#endif // SHORT_RULE_TRACE
+
 [[[
 
   my %rules;
@@ -36,7 +40,7 @@ using namespace std;
 #ifndef DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 map<const unsigned int, list< list< string> > > [[[$nonterminal]]]::m_generated_cache;
 map<const unsigned int, list< list< string> > > [[[$nonterminal]]]::m_intermediate_cache;
-map<const unsigned int, [[[$nonterminal]]]*> [[[$nonterminal]]]::m_intermediate_owner;
+map<const unsigned int, searchable_list< [[[$nonterminal]]]* > > [[[$nonterminal]]]::m_active_terminals;
 #endif // DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 [[[
 foreach my $i (1..$#productions+1)
@@ -269,7 +273,7 @@ void [[[$nonterminal]]]::Reset_String()
   {
 #ifdef SHORT_RULE_TRACE
     cerr << "RESET: " << Utility::indent << "Nonterminal: " <<
-      readable_type_name(typeid(*this)) <<
+      Utility::readable_type_name(typeid(*this)) <<
       "(" << m_allowed_length << ") [Resetting cache pointer]" << endl;
 #endif // SHORT_RULE_TRACE
 
@@ -284,10 +288,10 @@ void [[[$nonterminal]]]::Reset_String()
   m_using_cache = false;
 
   // Since Reset_String will be called for each terminal of this kind, the
-  // last one will be the one that will be incremented first. We'll keep
-  // assigning ourselves as the owner--the last terminal of this kind will
-  // actually be the owner.
-  m_intermediate_owner[m_allowed_length] = this;
+  // last one will be the one that will be incremented first.
+  if (m_active_terminals[m_allowed_length].find(this) ==
+      m_active_terminals[m_allowed_length].end())
+    m_active_terminals[m_allowed_length].push_back(this);
 #endif // DISABLE_GENERATED_STRING_CACHING_OPTIMIZATION
 
   Nonterminal_Rule::Reset_String();
@@ -305,7 +309,7 @@ const bool [[[$nonterminal]]]::Check_For_String()
   {
 #ifdef SHORT_RULE_TRACE
     cerr << "CHECK: " << Utility::indent << "Nonterminal: " <<
-      readable_type_name(typeid(*this)) << "(" << m_allowed_length <<
+      Utility::readable_type_name(typeid(*this)) << "(" << m_allowed_length <<
       ") [Checking cache]" << endl;
 #endif // SHORT_RULE_TRACE
 
@@ -335,7 +339,8 @@ const bool [[[$nonterminal]]]::Check_For_String()
     }
   }
 
-  if (m_intermediate_owner[m_allowed_length] == this)
+  if (m_active_terminals[m_allowed_length].size() > 0 &&
+      m_active_terminals[m_allowed_length].back() == this)
   {
     const bool more_strings = Nonterminal_Rule::Check_For_String();
 
@@ -355,7 +360,7 @@ const bool [[[$nonterminal]]]::Check_For_String()
         m_intermediate_cache[m_allowed_length];
 
       m_intermediate_cache[m_allowed_length].clear();
-      m_intermediate_owner.erase(m_allowed_length);
+      m_active_terminals.erase(m_allowed_length);
     }
 
     return more_strings;

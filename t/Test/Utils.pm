@@ -42,6 +42,7 @@ sub Do_Diff
 {
   my $filename = shift;
   my $output_filename = shift;
+  my $exclude_pattern = shift;
 
   local $Test::Builder::Level = 2;
 
@@ -51,6 +52,9 @@ sub Do_Diff
     open IN, $filename;
     @data1 = <IN>;
     close IN;
+
+    @data1 = grep { !/$exclude_pattern/ } @data1
+      if defined $exclude_pattern;
   }
 
   {

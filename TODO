@@ -1,5 +1,6 @@
 Generator TODOs:
 
+- Un-full-path programs when using remote compilation and execution
 - Update the language grammar so that it supports equivalences, so that the
   terminal input file is not necessary in this case either.
 - Change the directory mirroring so that it removes additonal files from
@@ -21,14 +22,15 @@ Generator TODOs:
 - Test it on more grammars
 - Once Parse::Yapp progresses past 1.05, see if we can update our code to
   remove any workarounds and such.
-- Add a simple non-equivalence "FOO_#" which just generates strings.  (OOPS!
-  This is hard because we don't know how many to generate! We would need to
-  know the total number of terminals of the given type that are in the string,
-  but all we have is a pointer to the previous rule.)
-- Why does left recursion generate same strings?
-  %%
-  fielder_list: fielder | fielder_list fielder
-  fielder:  '1' | '2'
+- Add a simple non-equivalence "FOO_#" which just generates strings.
+  - OOPS!  This is hard because we don't know how many to generate! We would
+    need to know the total number of terminals of the given type that are in
+    the string, but all we have is a pointer to the previous rule.
+  - It might be possible to do this if we deferred creation of the match_#
+    rule lists so that there is only one active rule list with its allocated
+    rules. That way we could just count how many total terminals have been
+    created of a given type. (If more than one match_# has allocated its
+    rules, this count will be more than it should be.)
 
 -----------------------------------------------------------------------------
 

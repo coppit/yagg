@@ -60,36 +60,36 @@ sub new {
 	},
 	{#State 1
 		ACTIONS => {
-			'PERCENT_PARSE_PARAM' => 4,
-			'PERCENT_NONASSOC' => 3,
-			'PERCENT_DEBUG' => 6,
-			'PERCENT_OUTPUT' => 5,
-			'PERCENT_LEFT' => 8,
-			'PERCENT_RIGHT' => 7,
-			'PERCENT_EXPECT' => 10,
-			'SEMICOLON' => 11,
-			'PERCENT_FILE_PREFIX' => 13,
-			'PERCENT_TOKEN_TABLE' => 12,
-			'PERCENT_TOKEN' => 14,
-			'PERCENT_YACC' => 15,
-			'PERCENT_VERBOSE' => 16,
-			'PERCENT_LOCATIONS' => 19,
-			'PERCENT_NAME_PREFIX' => 20,
-			'PERCENT_DEFINES' => 21,
-			'PERCENT_PURE_PARSER' => 23,
-			'PERCENT_UNION' => 24,
-			'PROLOGUE' => 25,
-			'PERCENT_NO_LINES' => 26,
-			'PERCENT_TYPE' => 27,
-			"%%" => 30,
-			'PERCENT_START' => 28
+			'PERCENT_LOCATIONS' => 3,
+			'PERCENT_PURE_PARSER' => 5,
+			'PERCENT_TOKEN_TABLE' => 4,
+			'PERCENT_TYPE' => 6,
+			'PERCENT_EXPECT' => 8,
+			'PERCENT_YACC' => 9,
+			'PERCENT_START' => 11,
+			'PERCENT_TOKEN' => 12,
+			'PERCENT_NAME_PREFIX' => 14,
+			'PERCENT_RIGHT' => 13,
+			'PERCENT_DEBUG' => 16,
+			"%%" => 15,
+			'PERCENT_OUTPUT' => 17,
+			'PERCENT_FILE_PREFIX' => 18,
+			'PERCENT_LEFT' => 21,
+			'PERCENT_PARSE_PARAM' => 23,
+			'PERCENT_NONASSOC' => 22,
+			'PERCENT_VERBOSE' => 25,
+			'PROLOGUE' => 24,
+			'SEMICOLON' => 28,
+			'PERCENT_DEFINES' => 27,
+			'PERCENT_UNION' => 29,
+			'PERCENT_NO_LINES' => 30
 		},
 		GOTOS => {
-			'grammar_declaration' => 17,
-			'precedence_declaration' => 18,
-			'declaration' => 29,
-			'precedence_declarator' => 22,
-			'symbol_declaration' => 9
+			'precedence_declarator' => 26,
+			'symbol_declaration' => 19,
+			'declaration' => 10,
+			'precedence_declaration' => 20,
+			'grammar_declaration' => 7
 		}
 	},
 	{#State 2
@@ -98,380 +98,380 @@ sub new {
 		}
 	},
 	{#State 3
-		DEFAULT => -31
+		DEFAULT => -11
 	},
 	{#State 4
-		DEFAULT => -15
-	},
-	{#State 5
-		DEFAULT => -14
-	},
-	{#State 6
-		DEFAULT => -7
-	},
-	{#State 7
-		DEFAULT => -30
-	},
-	{#State 8
-		DEFAULT => -29
-	},
-	{#State 9
-		DEFAULT => -22
-	},
-	{#State 10
-		ACTIONS => {
-			'INT' => 32
-		}
-	},
-	{#State 11
-		DEFAULT => -20
-	},
-	{#State 12
 		DEFAULT => -17
 	},
-	{#State 13
+	{#State 5
+		DEFAULT => -16
+	},
+	{#State 6
 		ACTIONS => {
-			'EQUAL' => 33
+			'TYPE' => 32
 		}
+	},
+	{#State 7
+		DEFAULT => -5
+	},
+	{#State 8
+		ACTIONS => {
+			'INT' => 33
+		}
+	},
+	{#State 9
+		DEFAULT => -19
+	},
+	{#State 10
+		DEFAULT => -4
+	},
+	{#State 11
+		ACTIONS => {
+			'IDENT' => 34,
+			'STRING' => 36
+		},
+		GOTOS => {
+			'symbol' => 35,
+			'string_as_id' => 37,
+			'ID' => 38
+		}
+	},
+	{#State 12
+		ACTIONS => {
+			'IDENT' => 34,
+			'TYPE' => 40
+		},
+		GOTOS => {
+			'symbol_def' => 39,
+			'ID' => 42,
+			'symbol_defs_1' => 41
+		}
+	},
+	{#State 13
+		DEFAULT => -30
 	},
 	{#State 14
 		ACTIONS => {
-			'IDENT' => 37,
-			'TYPE' => 38
-		},
-		GOTOS => {
-			'symbol_defs_1' => 36,
-			'symbol_def' => 34,
-			'ID' => 35
+			'EQUAL' => 43
 		}
 	},
 	{#State 15
-		DEFAULT => -19
-	},
-	{#State 16
-		DEFAULT => -18
-	},
-	{#State 17
-		DEFAULT => -5
-	},
-	{#State 18
-		DEFAULT => -21
-	},
-	{#State 19
-		DEFAULT => -11
-	},
-	{#State 20
 		ACTIONS => {
-			'EQUAL' => 39
-		}
-	},
-	{#State 21
-		DEFAULT => -8
-	},
-	{#State 22
-		ACTIONS => {
-			'TYPE' => 41
-		},
-		DEFAULT => -32,
-		GOTOS => {
-			'type_opt' => 40
-		}
-	},
-	{#State 23
-		DEFAULT => -16
-	},
-	{#State 24
-		ACTIONS => {
-			'BRACED_CODE' => 42
-		}
-	},
-	{#State 25
-		DEFAULT => -6
-	},
-	{#State 26
-		DEFAULT => -13
-	},
-	{#State 27
-		ACTIONS => {
-			'TYPE' => 43
-		}
-	},
-	{#State 28
-		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
-		},
-		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 47,
-			'ID' => 45
-		}
-	},
-	{#State 29
-		DEFAULT => -4
-	},
-	{#State 30
-		ACTIONS => {
-			'SEMICOLON' => 49,
-			'ID_COLON' => 53,
-			'ERROR' => 48
+			'ID_COLON' => 47,
+			'ERROR' => 44,
+			'SEMICOLON' => 49
 		},
 		DEFAULT => -2,
 		GOTOS => {
-			'grammar' => 52,
-			'rules' => 50,
-			'rules_or_grammar_declaration' => 51
+			'rules' => 48,
+			'rules_or_grammar_declaration' => 45,
+			'grammar' => 46
 		}
+	},
+	{#State 16
+		DEFAULT => -7
+	},
+	{#State 17
+		DEFAULT => -14
+	},
+	{#State 18
+		ACTIONS => {
+			'EQUAL' => 50
+		}
+	},
+	{#State 19
+		DEFAULT => -22
+	},
+	{#State 20
+		DEFAULT => -21
+	},
+	{#State 21
+		DEFAULT => -29
+	},
+	{#State 22
+		DEFAULT => -31
+	},
+	{#State 23
+		DEFAULT => -15
+	},
+	{#State 24
+		DEFAULT => -6
+	},
+	{#State 25
+		DEFAULT => -18
+	},
+	{#State 26
+		ACTIONS => {
+			'TYPE' => 51
+		},
+		DEFAULT => -32,
+		GOTOS => {
+			'type_opt' => 52
+		}
+	},
+	{#State 27
+		DEFAULT => -8
+	},
+	{#State 28
+		DEFAULT => -20
+	},
+	{#State 29
+		ACTIONS => {
+			'BRACED_CODE' => 53
+		}
+	},
+	{#State 30
+		DEFAULT => -13
 	},
 	{#State 31
 		DEFAULT => 0
 	},
 	{#State 32
-		DEFAULT => -9
+		ACTIONS => {
+			'IDENT' => 34,
+			'STRING' => 36
+		},
+		GOTOS => {
+			'symbols_1' => 55,
+			'symbol' => 54,
+			'string_as_id' => 37,
+			'ID' => 38
+		}
 	},
 	{#State 33
-		ACTIONS => {
-			'STRING' => 54
-		},
-		GOTOS => {
-			'string_content' => 55
-		}
+		DEFAULT => -9
 	},
 	{#State 34
-		DEFAULT => -40
-	},
-	{#State 35
-		ACTIONS => {
-			'INT' => 57,
-			'STRING' => 46
-		},
-		DEFAULT => -36,
-		GOTOS => {
-			'string_as_id' => 56
-		}
-	},
-	{#State 36
-		ACTIONS => {
-			'IDENT' => 37
-		},
-		DEFAULT => -25,
-		GOTOS => {
-			'symbol_def' => 58,
-			'ID' => 35
-		}
-	},
-	{#State 37
 		DEFAULT => -64
 	},
+	{#State 35
+		DEFAULT => -23
+	},
+	{#State 36
+		DEFAULT => -60
+	},
+	{#State 37
+		DEFAULT => -56
+	},
 	{#State 38
-		ACTIONS => {
-			'IDENT' => 37
-		},
-		GOTOS => {
-			'symbol_defs_1' => 59,
-			'symbol_def' => 34,
-			'ID' => 35
-		}
+		DEFAULT => -55
 	},
 	{#State 39
-		ACTIONS => {
-			'STRING' => 54
-		},
-		GOTOS => {
-			'string_content' => 60
-		}
+		DEFAULT => -40
 	},
 	{#State 40
 		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
+			'IDENT' => 34
 		},
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 61,
-			'ID' => 45,
-			'symbols_1' => 62
+			'symbol_def' => 39,
+			'ID' => 42,
+			'symbol_defs_1' => 56
 		}
 	},
 	{#State 41
-		DEFAULT => -33
+		ACTIONS => {
+			'IDENT' => 34
+		},
+		DEFAULT => -25,
+		GOTOS => {
+			'symbol_def' => 57,
+			'ID' => 42
+		}
 	},
 	{#State 42
-		DEFAULT => -24
+		ACTIONS => {
+			'INT' => 58,
+			'STRING' => 36
+		},
+		DEFAULT => -36,
+		GOTOS => {
+			'string_as_id' => 59
+		}
 	},
 	{#State 43
 		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
+			'STRING' => 60
 		},
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 61,
-			'ID' => 45,
-			'symbols_1' => 63
+			'string_content' => 61
 		}
 	},
 	{#State 44
-		DEFAULT => -56
-	},
-	{#State 45
-		DEFAULT => -55
-	},
-	{#State 46
-		DEFAULT => -60
-	},
-	{#State 47
-		DEFAULT => -23
-	},
-	{#State 48
 		ACTIONS => {
-			'SEMICOLON' => 64,
-			'IDENT' => 37,
-			'STRING' => 46
+			'SEMICOLON' => 63,
+			'IDENT' => 34,
+			'STRING' => 36
 		},
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 65,
-			'ID' => 45
+			'symbol' => 62,
+			'string_as_id' => 37,
+			'ID' => 38
 		}
+	},
+	{#State 45
+		DEFAULT => -42
+	},
+	{#State 46
+		ACTIONS => {
+			'ID_COLON' => 47,
+			'ERROR' => 44,
+			'SEMICOLON' => 49,
+			"%%" => 65
+		},
+		DEFAULT => -62,
+		GOTOS => {
+			'rules' => 48,
+			'rules_or_grammar_declaration' => 66,
+			'epilogue_opt' => 64
+		}
+	},
+	{#State 47
+		DEFAULT => -51,
+		GOTOS => {
+			'rhs' => 68,
+			'rhses_1' => 67
+		}
+	},
+	{#State 48
+		DEFAULT => -44
 	},
 	{#State 49
 		DEFAULT => -47
 	},
 	{#State 50
-		DEFAULT => -44
+		ACTIONS => {
+			'STRING' => 60
+		},
+		GOTOS => {
+			'string_content' => 69
+		}
 	},
 	{#State 51
-		DEFAULT => -42
+		DEFAULT => -33
 	},
 	{#State 52
 		ACTIONS => {
-			'SEMICOLON' => 49,
-			'ID_COLON' => 53,
-			"%%" => 68,
-			'ERROR' => 48
+			'IDENT' => 34,
+			'STRING' => 36
 		},
-		DEFAULT => -62,
 		GOTOS => {
-			'rules' => 50,
-			'epilogue_opt' => 66,
-			'rules_or_grammar_declaration' => 67
+			'symbols_1' => 70,
+			'symbol' => 54,
+			'string_as_id' => 37,
+			'ID' => 38
 		}
 	},
 	{#State 53
-		DEFAULT => -51,
-		GOTOS => {
-			'rhses_1' => 69,
-			'rhs' => 70
-		}
+		DEFAULT => -24
 	},
 	{#State 54
-		DEFAULT => -61
-	},
-	{#State 55
-		DEFAULT => -10
-	},
-	{#State 56
-		DEFAULT => -38
-	},
-	{#State 57
-		ACTIONS => {
-			'STRING' => 46
-		},
-		DEFAULT => -37,
-		GOTOS => {
-			'string_as_id' => 71
-		}
-	},
-	{#State 58
-		DEFAULT => -41
-	},
-	{#State 59
-		ACTIONS => {
-			'IDENT' => 37
-		},
-		DEFAULT => -26,
-		GOTOS => {
-			'symbol_def' => 58,
-			'ID' => 35
-		}
-	},
-	{#State 60
-		DEFAULT => -12
-	},
-	{#State 61
 		DEFAULT => -34
 	},
-	{#State 62
+	{#State 55
 		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
-		},
-		DEFAULT => -28,
-		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 72,
-			'ID' => 45
-		}
-	},
-	{#State 63
-		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
+			'IDENT' => 34,
+			'STRING' => 36
 		},
 		DEFAULT => -27,
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 72,
-			'ID' => 45
+			'symbol' => 71,
+			'string_as_id' => 37,
+			'ID' => 38
 		}
 	},
-	{#State 64
-		DEFAULT => -46
+	{#State 56
+		ACTIONS => {
+			'IDENT' => 34
+		},
+		DEFAULT => -26,
+		GOTOS => {
+			'symbol_def' => 57,
+			'ID' => 42
+		}
 	},
-	{#State 65
+	{#State 57
+		DEFAULT => -41
+	},
+	{#State 58
+		ACTIONS => {
+			'STRING' => 36
+		},
+		DEFAULT => -37,
+		GOTOS => {
+			'string_as_id' => 72
+		}
+	},
+	{#State 59
+		DEFAULT => -38
+	},
+	{#State 60
+		DEFAULT => -61
+	},
+	{#State 61
+		DEFAULT => -12
+	},
+	{#State 62
 		ACTIONS => {
 			'SEMICOLON' => 73
 		}
 	},
-	{#State 66
+	{#State 63
+		DEFAULT => -46
+	},
+	{#State 64
 		DEFAULT => -1
 	},
-	{#State 67
-		DEFAULT => -43
-	},
-	{#State 68
+	{#State 65
 		ACTIONS => {
 			'EPILOGUE' => 74
 		}
 	},
-	{#State 69
+	{#State 66
+		DEFAULT => -43
+	},
+	{#State 67
 		ACTIONS => {
 			'PIPE' => 75
 		},
 		DEFAULT => -48
 	},
-	{#State 70
+	{#State 68
 		ACTIONS => {
-			'PERCENT_PREC' => 76,
+			'IDENT' => 34,
+			'STRING' => 36,
+			'PERCENT_PREC' => 78,
 			'BRACED_CODE' => -57,
-			'STRING' => 46,
-			'IDENT' => 37,
-			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 78
+			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 79
 		},
 		DEFAULT => -49,
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 79,
-			'ID' => 45,
-			'action_opt' => 77
+			'symbol' => 76,
+			'string_as_id' => 37,
+			'action_opt' => 77,
+			'ID' => 38
+		}
+	},
+	{#State 69
+		DEFAULT => -10
+	},
+	{#State 70
+		ACTIONS => {
+			'IDENT' => 34,
+			'STRING' => 36
+		},
+		DEFAULT => -28,
+		GOTOS => {
+			'symbol' => 71,
+			'string_as_id' => 37,
+			'ID' => 38
 		}
 	},
 	{#State 71
-		DEFAULT => -39
+		DEFAULT => -35
 	},
 	{#State 72
-		DEFAULT => -35
+		DEFAULT => -39
 	},
 	{#State 73
 		DEFAULT => -45
@@ -486,54 +486,54 @@ sub new {
 		}
 	},
 	{#State 76
-		ACTIONS => {
-			'IDENT' => 37,
-			'STRING' => 46
-		},
-		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 81,
-			'ID' => 45
-		}
+		DEFAULT => -52
 	},
 	{#State 77
 		ACTIONS => {
-			'BRACED_CODE' => 82
+			'BRACED_CODE' => 81
 		},
 		GOTOS => {
-			'action' => 83
+			'action' => 82
 		}
 	},
 	{#State 78
-		DEFAULT => -58
+		ACTIONS => {
+			'IDENT' => 34,
+			'STRING' => 36
+		},
+		GOTOS => {
+			'symbol' => 83,
+			'string_as_id' => 37,
+			'ID' => 38
+		}
 	},
 	{#State 79
-		DEFAULT => -52
+		DEFAULT => -58
 	},
 	{#State 80
 		ACTIONS => {
-			'PERCENT_PREC' => 76,
+			'IDENT' => 34,
+			'STRING' => 36,
+			'PERCENT_PREC' => 78,
 			'BRACED_CODE' => -57,
-			'STRING' => 46,
-			'IDENT' => 37,
-			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 78
+			'BRACED_CODE_WITH_BRACED_CODE_FOLLOWING' => 79
 		},
 		DEFAULT => -50,
 		GOTOS => {
-			'string_as_id' => 44,
-			'symbol' => 79,
-			'ID' => 45,
-			'action_opt' => 77
+			'symbol' => 76,
+			'string_as_id' => 37,
+			'action_opt' => 77,
+			'ID' => 38
 		}
 	},
 	{#State 81
-		DEFAULT => -54
-	},
-	{#State 82
 		DEFAULT => -59
 	},
-	{#State 83
+	{#State 82
 		DEFAULT => -53
+	},
+	{#State 83
+		DEFAULT => -54
 	}
 ],
                                   yyrules  =>

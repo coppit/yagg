@@ -28,8 +28,6 @@
 \.tar\.gz$
 temp/
 output/
-lib/yagg/NonterminalParser.pm
-lib/yagg/TerminalParser.pm
 
 # yagg extra files
 ^misc/

@@ -60,7 +60,7 @@ sub TestIt
   if ($?)
   {
     ok(0, "Encountered an error executing the test.\n" .
-      "See $test_stdout and $test_stderr.\n\n");
+      "See $test_stdout and\n$test_stderr.\n\n");
   }
   else
   {
@@ -87,7 +87,8 @@ sub TestIt
     @generated = sort @generated;
 
     is_deeply(\@generated, \@actual,
-      "Generated files for logical_expressions_simple differ.\n" .
-      "See t/temp/output/ and t/logical_expressions_simple\n");
+      "Comparing files generated for logical_expressions_simple,\n" .
+      " in t/temp/output/ and t/logical_expressions_simple\n");
+
   }
 }

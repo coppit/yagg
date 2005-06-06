@@ -1,5 +1,35 @@
 Generator TODOs:
 
+- Detect ambiguous grammars, either during generation or at runtime. This is
+  important in order to avoid generating the same string twice.
+- Handle precedence
+  %union {
+    double number;
+  }
+
+  %type  <number> exp
+  %type  <number> number
+  %left           "+" "-"
+  %left           "*" "/"
+
+  %%
+
+  exp :
+    exp "+" exp { $$ = $1 + $3; } |
+    exp "-" exp { $$ = $1 - $3; } |
+    exp "*" exp { $$ = $1 * $3; } |
+    exp "/" exp {
+      if ( $3 == 0 ) {
+        yyerror("Can't divide by zero");
+        $$ = $1;
+      } else
+        $$ = $1 / $3;
+    } |
+    number ;
+
+  number :
+    "3" { $$ = 3; } |
+    "1" { $$ = 1; } ;
 - Update the language grammar so that it supports equivalences, so that the
   terminal input file is not necessary in this case either.
 - Change the directory mirroring so that it removes additional files from
@@ -44,6 +74,13 @@ Generator TODOs:
 - Make sure the default rule $$ = $1 is implemented, and that it doesn't
   prevent the caching nonterminal rule template from being used.
 - During installation, ask for default make arguments like "-j4"
+- Add support for yyerror in the grammar file
+- Add support for yyerror(char*) or yyerror(string)
+- Construct a call graph to determine if an action block can actually call
+  yyerror. If not, we can do caching for that nonterminal, instead of just
+  assuming that it will, as we do now.
+- Check into the feasibility of creating subclasses of Terminal_Rule for each
+  of the 4 kinds of terminals, and simplify the generation code.
 
 -----------------------------------------------------------------------------
 

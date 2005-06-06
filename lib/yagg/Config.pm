@@ -25,7 +25,7 @@ $VERSION = 0.01;
     'mv' => '/sw/bin/mv',
     'perl' => '/usr/bin/perl',
     'rm' => '/bin/rm',
-    'rsync' => '/usr/local/bin/rsync',
+    'rsync' => '/usr/bin/rsync',
     'ssh' => '/sw/bin/ssh',
     'yapp' => '/usr/bin/yapp',
   },

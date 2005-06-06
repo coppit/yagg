@@ -395,10 +395,8 @@ pands_list_opt :
 
 pand_gate :
   IDENTIFIER PAND identifier_list SEMICOLON {
-    if (!Ensure_Input_Order(*$3))
-      fault_tree_textual_parser_error("Inputs to " + *$1 + " must be sorted");
     // Check for duplicate definition
-    else if (declarations.find(*$1) != declarations.end())
+    if (declarations.find(*$1) != declarations.end())
     {
       string error = "\"" + *$1 +
         "\" has already been defined. This definition will be ignored.";
@@ -845,7 +843,18 @@ basic_events_list :
   } |
   basic_events_list basic_event {
     $$ = $1;
-    $$->push_back(*$2);
+
+    // Check for out-of-order definition.
+    if ($1->size() > 0 && *$2 < $1->back())
+    {
+      string error = "\"" + *$2 +
+        "\" is not sorted correctly. This definition will be ignored.";
+      fault_tree_textual_parser_error(error);
+    }
+    else
+    {
+      $$->push_back(*$2);
+    }
 
     delete $2;
   };

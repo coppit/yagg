@@ -45,7 +45,7 @@ Checklist for a release:
   http://sourceforge.net/news/submit.php?group_id=126089
 - Announce on freshmeat:
   http://freshmeat.net/login/
-  [search for yagg, select add release]
+  http://freshmeat.net/projects/yagg/
 - Announce it to yagg-announce@sourceforge.net and to
   comp.lang.perl.announce.
 - Check in code:
@@ -53,4 +53,4 @@ Checklist for a release:
 - Tag the release for easy retrieval later
   $ cvs tag "v1_2100"
 - Make a backup in old
-  $ cvs -z3 -d:ext:coppit@cvs.sourceforge.net:/cvsroot/yagg export -d old -r v5_20_0 devel
+  $ rm -rf old; rsync -r --cvs-exclude * old

@@ -18,7 +18,7 @@ use File::Path;
 
 use vars qw( $VERSION );
 
-$VERSION = sprintf "%d.%02d%02d", q/1.30.0/ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d%02d", q/1.30.1/ =~ /(\d+)/g;
 
 # Make unbuffered
 $| = 1;
@@ -894,6 +894,9 @@ sub Mirror_Directory
   my $in_dir = shift;
   my $out_dir = shift;
 
+  $in_dir =~ s/ /\\ /g;
+  $out_dir =~ s/ /\\ /g;
+
   my @exclusions;
   @exclusions = @{ shift @_ } if defined $_[0];
 
@@ -1320,7 +1323,8 @@ EOF
       # Make a copy for any code that needs the raw pointer
       $code =~ s/\*\s+\$$i\b/\*\$$i/g;
       $code =~ s/\$$i\s+->/\$$i->/g;
-      $code =~ s/(?<!\*)\$$i\b(?!->)/new $nonpointer_return_type(*\$$i)/g;
+      $code =~ s/(?<!\*)\$$i\b(?!->)/new $nonpointer_return_type(*\$$i)/g
+        if defined $nonpointer_return_type;
 
       $code =~ s/\$$i\b/dollar_$i/g;
 

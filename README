@@ -21,19 +21,10 @@ outcomes for certain play situations in baseball.
 
 NEW IN THIS VERSION
 
-Version 1.3000:
-- Removed unnecessary copy constructors, operator= functions, Clone functions
-- Optimization for 2X speedup
-  - $1 values are now only copied when needed
-  - Rule lists in nonterminals are now not deleted and recreated
-  - More values are passed by reference
-- Added -M option to allow the user to provide additional make arguments
-- Changed the syntax for alternation in the terminal file from "a|b" to
-  "(a|b)"
-- Paths are removed from the makefile when compiling remotely
-- Generator program can now generate any rule in the grammar
-- Modified setup to automatically use g++ for LD, since the LD given by Perl
-  is the C compiler, not the C++ compiler
+Version 1.3001: Mon Jun 6 2005
+- Fixed a bug generating code for nonpointer rule types
+- Fixed an rsync bug involving paths with spaces in them
+
 
 MODULE DEPENDENCIES
 

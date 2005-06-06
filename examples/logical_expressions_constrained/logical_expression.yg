@@ -15,7 +15,6 @@ bool error_mode = false;
 %union {
   string*       text;
   list<string>* text_list;
-  float*        number;
 }
 
 %type     <text_list>            wfe

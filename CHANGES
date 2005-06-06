@@ -1,3 +1,7 @@
+Version 1.3001: Mon Jun 6 2005
+- Fixed a bug generating code for nonpointer rule types
+- Fixed an rsync bug involving paths with spaces in them
+
 Version 1.3000: Mon Mar 21 2005
 - Removed unnecessary copy constructors, operator= functions, Clone functions
 - Optimization for 2X speedup

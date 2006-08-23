@@ -169,7 +169,7 @@ const bool Rule_List::Check_For_String()
   if (!m_first_string)
   {
 #ifdef ACTION_TRACE
-    cerr << "ACT'N: Calling " << Utility::indent <<
+    cerr << "ACT'N: " << Utility::indent << "Calling " <<
       Utility::readable_type_name(typeid(*this)) << "::Undo_Action\n";
 #endif // ACTION_TRACE
     Undo_Action();
@@ -294,7 +294,7 @@ const bool Rule_List::Check_Action()
   CURRENTLY_ACTIVE_RULE_LIST = this;
 
 #ifdef ACTION_TRACE
-  cerr << "ACT'N: Calling " << Utility::indent <<
+  cerr << "ACT'N: " << Utility::indent << "Calling " <<
     Utility::readable_type_name(typeid(*this)) << "::Do_Action\n";
 #endif // ACTION_TRACE
   Do_Action();
@@ -303,7 +303,7 @@ const bool Rule_List::Check_Action()
     return true;
 
 #ifdef ACTION_TRACE
-  cerr << "ACT'N: Calling " << Utility::indent << 
+  cerr << "ACT'N: " << Utility::indent <<  "Calling " <<
     Utility::readable_type_name(typeid(*this)) << "::Undo_Action\n";
 #endif // ACTION_TRACE
   Undo_Action();

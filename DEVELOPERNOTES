@@ -3,7 +3,7 @@ developers readying a set of files for distribution.
 
 CVS CHECKOUT:
 $ export CVS_RSH=ssh
-$ cvs -z3 -d:ext:coppit@cvs.sourceforge.net:/cvsroot/yagg co devel
+$ cvs -z3 -d:ext:coppit@yagg.cvs.sourceforge.net:/cvsroot/yagg co devel
 
 Checklist for a release:
 - Be sure to add new test cases for new features

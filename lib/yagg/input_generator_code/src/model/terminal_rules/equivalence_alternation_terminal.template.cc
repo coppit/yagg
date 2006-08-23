@@ -31,7 +31,7 @@ const bool [[[$terminal]]]::Check_For_String()
 
   m_string_count++;
 
-  if (m_string_count <= counts.size() + 1 && m_string_count > [[[$size]]])
+  if (m_string_count > counts.size() + 1 || m_string_count > [[[$size]]])
     return false;
 
   counts[m_string_count]++;

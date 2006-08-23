@@ -1,8 +1,9 @@
  => Read this first
 README
 
- => The main program
+ => Programs
 yagg
+random_generator
 
  => Manifest files
 MANIFEST
@@ -286,6 +287,7 @@ inc/Module/Install/WriteAll.pm
 inc/Scalar/Util.pm
 inc/Sort/Versions.pm
 inc/Test/Builder.pm
+inc/Test/Builder/Module.pm
 inc/Test/More.pm
 
 META.yml                                Module meta-data (added by MakeMaker)

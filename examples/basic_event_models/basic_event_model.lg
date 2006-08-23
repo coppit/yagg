@@ -81,7 +81,7 @@ void basic_event_model_textual_parser_error (string s);
   return NATURAL;
 }
 
-0 | 0.01 | 0.98 | 0.02 | 0.97 | 0.93 | 0.25 | 0.75 | 0.5 {
+( 0 | 0.01 | 0.98 | 0.02 | 0.97 | 0.93 | 0.25 | 0.75 | 0.5 ) {
   return REAL;
 }
 

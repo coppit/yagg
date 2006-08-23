@@ -1,5 +1,7 @@
 Generator TODOs:
 
+- Mark Morgan suggested using fork() to checkpoint state, so that unaction
+  blocks are not necessary. Performance penalty?
 - Detect ambiguous grammars, either during generation or at runtime. This is
   important in order to avoid generating the same string twice.
 - Handle precedence

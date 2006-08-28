@@ -1,15 +1,13 @@
 This file is not distributed with the program. It outlines some notes for
 developers readying a set of files for distribution.
 
-CVS CHECKOUT:
-$ export CVS_RSH=ssh
-$ cvs -z3 -d:ext:coppit@yagg.cvs.sourceforge.net:/cvsroot/yagg co devel
+Subversion CHECKOUT:
+$ svn co https://coppit@svn.sourceforge.net/svnroot/yagg/trunk yagg
 
 Checklist for a release:
 - Be sure to add new test cases for new features
 - Make sure version number increases.
-- Add version changes to README and CHANGES, anonymizing the notes in the
-  README.
+- Add version changes to README and CHANGES, anonymizing the notes in the README.
 - Add new module dependencies to Makefile.PL, and update README
 - Update MANIFEST and MANIFEST.SKIP if necessary.
   $ make distcheck
@@ -49,8 +47,8 @@ Checklist for a release:
 - Announce it to yagg-announce@sourceforge.net and to
   comp.lang.perl.announce.
 - Check in code:
-  $ cvs ci
+  $ svn commit
 - Tag the release for easy retrieval later
-  $ cvs tag "v1_2100"
+  $ svn cp https://coppit@svn.sourceforge.net/svnroot/yagg/trunk https://coppit@svn.sourceforge.net/svnroot/yagg/tags/v1.2100" 
 - Make a backup in old
-  $ rm -rf old; rsync -r --cvs-exclude * old
+  $ rm -rf old; rsync -r --cvs-exclude --exclude=.svn * old

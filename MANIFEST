@@ -85,6 +85,7 @@ lib/yagg/input_generator_code/src/tests/generator/terminal_rules/finite_terminal
 lib/yagg/input_generator_code/src/tests/generator/terminal_rules/independent_terminal.cc
 lib/yagg/input_generator_code/util/basedir
 lib/yagg/input_generator_code/util/colors
+lib/yagg/input_generator_code/util/compute_coverage.pl
 lib/yagg/input_generator_code/util/ensure_progress
 lib/yagg/input_generator_code/util/makedependgcc
 lib/yagg/input_generator_code/util/mkdirhier.pl
@@ -143,6 +144,7 @@ t/logical_expressions_simple/src/tests/generator/terminal_rules/finite_terminal.
 t/logical_expressions_simple/src/tests/generator/terminal_rules/independent_terminal.cc
 t/logical_expressions_simple/util/basedir
 t/logical_expressions_simple/util/colors
+t/logical_expressions_simple/util/compute_coverage.pl
 t/logical_expressions_simple/util/ensure_progress
 t/logical_expressions_simple/util/makedependgcc
 t/logical_expressions_simple/util/mkdirhier.pl
@@ -264,6 +266,25 @@ examples/logical_expressions_constrained/logical_expression_parser/util/mkdirhie
 examples/logical_expressions_simple/README
 examples/logical_expressions_simple/logical_expression.yg
 examples/logical_expressions_simple/logical_expression.lg
+
+ => Example input code for the reliability block diagram generator
+examples/reliability_block_diagrams/rbd.lg
+examples/reliability_block_diagrams/rbd.yg
+examples/reliability_block_diagrams/user_code/src/model/basic_types/bijection.h
+examples/reliability_block_diagrams/user_code/src/model/basic_types/event.cc
+examples/reliability_block_diagrams/user_code/src/model/basic_types/event.h
+examples/reliability_block_diagrams/user_code/src/model/basic_types/function.h
+examples/reliability_block_diagrams/user_code/src/model/basic_types/searchable_list
+examples/reliability_block_diagrams/user_code/src/model/rbd/block.cc
+examples/reliability_block_diagrams/user_code/src/model/rbd/block.h
+examples/reliability_block_diagrams/user_code/src/model/rbd/block_set.cc
+examples/reliability_block_diagrams/user_code/src/model/rbd/block_set.h
+examples/reliability_block_diagrams/user_code/src/model/rbd/component.h
+examples/reliability_block_diagrams/user_code/src/model/rbd/dests_map.h
+examples/reliability_block_diagrams/user_code/src/model/rbd/phys_to_log_map.h
+examples/reliability_block_diagrams/user_code/src/model/rbd/rbd.cc
+examples/reliability_block_diagrams/user_code/src/model/rbd/rbd.h
+examples/reliability_block_diagrams/user_code/src/model/rbd_textual_parser/rbd_textual_parser_includes.h
 
  => Module::Install files
 inc/ExtUtils/AutoInstall.pm

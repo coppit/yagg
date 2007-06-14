@@ -81,7 +81,7 @@ sub TestIt
     my @actual = $actual =~ /^(.*\n)/mg;
     my @generated = $generated =~ /^(.*\n)/mg;
 
-    @actual = grep { !/\.std(out|err)/ } @actual;
+    @actual = grep { !/(\.std(out|err)|\.svn)/ } @actual;
 
     @actual = sort @actual;
     @generated = sort @generated;

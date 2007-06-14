@@ -8,38 +8,75 @@ using namespace std;
 #include "generator/rule_list/rule_list.h"
 #include "generator/rule/terminal_rule.h"
 
-// ---------------------------------------------------------------------------
-
 class NATURAL : public Terminal_Rule
 {
 public:
-  virtual const bool Check_For_String()
-  {
-    if (!Is_Valid())
-      return false;
+  virtual const bool Check_For_String();
+  virtual const list<string>& Get_String() const;
+  virtual const unsigned long int& Get_Value() const;
 
-    m_string_count++;
-
-    return (m_string_count <= 3);
-  }
-
-  virtual const list<string> Get_String() const
-  {
-    assert(m_string_count <= 3);
-
-    list<string> strings;
-
-    if (m_string_count == 1)
-      strings.push_back("1");
-    else if (m_string_count == 2)
-      strings.push_back("15");
-    else
-      strings.push_back("20");
-
-    return strings;
-
-  }
+protected:
+  list<string> strings;
+  unsigned long int return_value;
 };
+
+// ---------------------------------------------------------------------------
+
+const bool NATURAL::Check_For_String()
+{
+  if (!Is_Valid())
+    return false;
+
+  m_string_count++;
+
+  if (m_string_count > 3)
+    return false;
+
+  switch (m_string_count)
+  {
+    case 1 :
+    {
+      return_value = 1;
+      break;
+    }
+    case 2 :
+    {
+      return_value = 15;
+      break;
+    }
+    case 3 :
+    {
+      return_value = 20;
+      break;
+    }
+
+  }
+
+  strings.clear();
+
+  stringstream temp_stream;
+  temp_stream << return_value;
+
+  strings.push_back(temp_stream.str());
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& NATURAL::Get_String() const
+{
+  assert(m_string_count <= 3);
+
+  return strings;
+}
+
+// ---------------------------------------------------------------------------
+
+const unsigned long int& NATURAL::Get_Value() const
+{
+  return return_value;
+}
 
 // ---------------------------------------------------------------------------
 

@@ -7,48 +7,67 @@ using namespace std;
 #include "generator/rule_list/rule_list.h"
 #include "generator/rule/terminal_rule.h"
 
-// ---------------------------------------------------------------------------
-
 class IDENTIFIER : public Terminal_Rule
 {
 public:
-  virtual const bool Check_For_String()
-  {
-    if (!Is_Valid())
-      return false;
+  virtual const bool Check_For_String();
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value() const;
 
-    static map<unsigned int, unsigned int> counts;
-
-    if (counts.find(m_string_count) != counts.end())
-    {
-      if (counts[m_string_count] == 1)
-        counts.erase(m_string_count);
-      else
-        counts[m_string_count]--;
-    }
-
-    m_string_count++;
-
-    if (m_string_count <= counts.size() + 1)
-    {
-      counts[m_string_count]++;
-      return true;
-    }
-    else
-      return false;
-  }
-
-  virtual const list<string> Get_String() const
-  {
-    stringstream temp_stream;
-
-    temp_stream << "id_" << m_string_count;
-
-    list<string> strings;
-    strings.push_back(temp_stream.str());
-    return strings;
-  }
+protected:
+  list<string> strings;
+  string return_value;
 };
+
+// ---------------------------------------------------------------------------
+
+const bool IDENTIFIER::Check_For_String()
+{
+  if (!Is_Valid())
+    return false;
+
+  static map<unsigned int, unsigned int> counts;
+
+  if (counts.find(m_string_count) != counts.end())
+  {
+    if (counts[m_string_count] == 1)
+      counts.erase(m_string_count);
+    else
+      counts[m_string_count]--;
+  }
+
+  m_string_count++;
+
+  if (m_string_count > counts.size() + 1)
+    return false;
+
+  counts[m_string_count]++;
+
+  stringstream temp_stream;
+
+  temp_stream << "id_" << m_string_count;
+  return_value = temp_stream.str();
+
+  strings.clear();
+
+  strings.push_back(return_value);
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& IDENTIFIER::Get_String() const
+{
+  return strings;
+}
+
+// ---------------------------------------------------------------------------
+
+const string& IDENTIFIER::Get_Value() const
+{
+  return return_value;
+}
 
 // ---------------------------------------------------------------------------
 

@@ -12,9 +12,6 @@ yagg::Tutorial - Tutorial for yagg
 
 =head1 SYNOPSIS
 
-  # To display this tutorial
-  perldoc yagg::Tutorial
-
   # To use the generator
   ./yagg -m nonterminals.yg terminals.lg
   ./output/progs/generate 5
@@ -37,7 +34,8 @@ generators like YACC and Bison.
 
 Let's say that we want to create a logical expression generator that generates
 expressions containing binary operators, parentheses, negation, and atomic
-propositions. Examples might be I<-(p or q)>, I<p => -q>, and I<p and (q or r)>.
+propositions. Examples might be I<-(p or q)>, I<p =E<gt> -q>, and
+I<p and (q or r)>.
 
 Here is a simple grammar that would create such expressions:
 
@@ -467,6 +465,19 @@ F<ab_parser> subdirectory.
 For a more realistic example of limiting the generated strings, compare the
 F<fault_trees> and F<fault_trees_constrained> examples in the F<examples>
 directory of the distribution.
+
+=head1 CONTROLLING OUTPUT FORMATTING
+
+To control output, first create a F<user_code/src/progs/> directory. Run yagg
+once so that it creates the F<output/> directory. Copy
+F<output/src/progs/generate.cc> to F<user_code/src/progs/>. Modify the
+C<Print_Strings> function, which inserts a space by default between strings
+and adds a newline at the end.
+
+Now, when you run yagg, add the B<-u user_code> option so that your modified
+F<generate.cc> will override the normal generated one.  If you want more
+control, you can remove the whitespace insertion in C<Print_Strings>, then
+make whitespace an explicit part of your grammar.
 
 =head1 AUTHOR
 

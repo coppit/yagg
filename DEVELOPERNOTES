@@ -49,6 +49,6 @@ Checklist for a release:
 - Check in code:
   $ svn commit
 - Tag the release for easy retrieval later
-  $ svn cp https://coppit@svn.sourceforge.net/svnroot/yagg/trunk https://coppit@svn.sourceforge.net/svnroot/yagg/tags/v1.2100" 
+  $ svn cp https://coppit@svn.sourceforge.net/svnroot/yagg/trunk https://coppit@svn.sourceforge.net/svnroot/yagg/tags/v1.2100
 - Make a backup in old
   $ rm -rf old; rsync -r --cvs-exclude --exclude=.svn * old

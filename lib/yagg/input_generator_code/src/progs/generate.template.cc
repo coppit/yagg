@@ -17,6 +17,9 @@ chomp $OUT;
 
 using namespace std;
 
+string chosen_rule;
+map<string, Rule*> name_to_rule;
+
 // ---------------------------------------------------------------------------
 
 void Print_Strings(ostream &in_stream, Rule* in_rule)
@@ -55,7 +58,6 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  map<string, Rule*> name_to_rule;
 [[[
 foreach my $rule (@{$grammar->{'NONTERMINALS'}})
 {
@@ -77,7 +79,6 @@ foreach my $rule (@{$grammar->{'TERMINALS'}})
   $OUT .= qq{  name_to_minimum_length["$rule"] = 1;\n};
 }
 ]]]
-  string chosen_rule;
   unsigned int allowed_length;
 
   if (argc == 2)

@@ -1,3 +1,18 @@
+Version 1.4001: Sun Apr 1 2007
+- Added a section to the tutorial on controlling output formatting. (Thanks to
+	Casiano Rodriguez Leon <casiano@ull.es> for the question.)
+- Fixed a misspelling in the hexadecimal example's README.
+- Updated the makefile version
+- Fixed an assert failure that would occur if (1) a rule list has more than
+	one nonterminal, (2) some nonterminal in the list except the last one had no
+	strings for a given allocation, and (3) the last nonterminal had strings for
+	the given allocation.
+- Updated the Makefiles
+- Updated the test cases for the pass-by-reference updates in 1.3000.
+- Make it possible to call Print_Strings from anywhere in the program for
+	debugging. Maybe I'll add a flag for it later.
+- Added RBD example
+
 Version 1.4000: Tue Aug 22 2006
 - Added a program to generate random strings
 - Fixed a bug where yagg would be unable to generate a double quote character.

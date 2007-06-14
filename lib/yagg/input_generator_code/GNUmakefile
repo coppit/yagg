@@ -43,6 +43,11 @@ LIB_FLAGS :=
 # extensions
 MAKEFILE_NAME := GNUmakefile
 
+# Add additional -d <module name> <source dir> <object dir> <build dir> for
+# any libraries that have also been instrumented that you wish to include in
+# coverage reporting.
+COVERAGE_DIRECTORIES = -d $(PROJECTNAME) $(SRCDIR) $(BUILDDIR) .
+
 # -----------------------------------------------------------------------------
 
 # Programs
@@ -116,7 +121,7 @@ STORAGE_DIRECTORY = /tmp/$(USER)/$(PROJECTNAME)
 
 ###############################################################################
 
-all : progs
+all : progs compiled_tests noncompiled_tests
 
 # Custom dependencies, if any, go here
 
@@ -126,6 +131,7 @@ all : progs
 # Directories
 SRCDIR = src
 TESTDIR = tests
+COVERAGEDIR = coverage
 PROGDIR = progs
 BUILDDIR = build
 LIBDIR = lib
@@ -178,19 +184,19 @@ SRC_DIRS_PATTERN = $(call make_pattern,$(call compute_subdirs_with_sources))
 # Some subroutines to find source files and compute their corresponding object
 # files
 find_source_files = \
-  $(shell $(FIND)                                     $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND)           $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
 
 find_shell_scripts = \
-  $(shell $(FIND)                                     $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
+  $(shell $(FIND)           $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
 
 # In case we need this later
 #find_nonsource_files = \
 #  $(filter-out \
-#    $(shell $(FIND)                                     $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
-#    $(shell $(FIND)                                     $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
+#    $(shell $(FIND)           $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
+#    $(shell $(FIND)           $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
 
 find_gen_source_files = \
-  $(shell $(FIND)                                     $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND)           $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
 
 compute_subdirs_with_sources = $(filter-out progs tests progs/% tests/%, \
   $(sort $(subst $(SRCDIR)/,, \
@@ -219,6 +225,18 @@ NONCOMPILED_TESTS = $(patsubst $(SRCDIR)/tests/%,$(TESTDIR)/%, \
   $(call find_shell_scripts,tests))
 
 TESTS = $(COMPILED_TESTS) $(NONCOMPILED_TESTS)
+
+ifneq ($(filter coverage%, $(MAKECMDGOALS)),)
+ifeq ($(filter -fprofile-arcs, $(CFLAGS)),)
+$(warning Be sure to compile with -fprofile-arcs for coverage measurements)
+endif
+ifeq ($(filter -ftest-coverage, $(CFLAGS)),)
+$(warning Be sure to compile with -ftest-coverage for coverage measurements)
+endif
+ifneq ($(filter -O%, $(CFLAGS) $(FFLAGS)),)
+$(warning Be sure to compile with -g rather than -O for coverage measurements)
+endif
+endif
 
 # Programs
 PROGS = $(patsubst $(SRCDIR)/progs/%,$(PROGDIR)/%, \
@@ -249,7 +267,7 @@ lib : lib_message $(LIBDIR)/lib$(LIBRARY_NAME).a
 check : check_message check_programs check_colors
 
 # Run tests
-test : compiled_tests noncompiled_tests
+test : run_compiled_tests run_noncompiled_tests
 	@$(call main_step_msg,Tests completed)
 	@echo '   Compiled' tests: `cat $(TESTDIR)/COMPILED_TESTS_PASS` passed, `cat $(TESTDIR)/COMPILED_TESTS_FAIL` failed
 	@echo Noncompiled tests: `cat $(TESTDIR)/NONCOMPILED_TESTS_PASS` passed, `cat $(TESTDIR)/NONCOMPILED_TESTS_FAIL` failed
@@ -284,6 +302,15 @@ windist : windist_message windistdir
 	$(ZIP) $(DISTFILE)-win.zip $(DISTFILE)/*
 	$(RM) -rf $(DISTFILE)
 
+coverage : coverage_message $(COVERAGEDIR)/all
+	@$(call main_step_msg,Coverage completed)
+
+coverage_individual : coverage_message $(addprefix $(COVERAGEDIR)/individual/,$(subst /,\#,$(TESTS)))
+	@$(call main_step_msg,Coverage completed)
+
+coverage_manual : coverage_message $(COVERAGEDIR)/manual
+	@$(call main_step_msg,Coverage completed)
+
 ################################### MESSAGES ##################################
 ###############################################################################
 
@@ -304,6 +331,9 @@ check_message :
 
 progs_message :
 	@$(call main_step_msg,Making programs)
+
+coverage_message :
+	@$(call main_step_msg,Computing coverage)
 
 clean_message :
 	@$(call main_step_msg,Making clean)
@@ -383,7 +413,7 @@ error_msg = \
 check_programs : check_programs_message $(patsubst %,%.checkprogram,$(PROGRAMS))
 
 %.checkprogram:
-	@if !($* --help 2>&1 | grep -i '\(usage\|option\|invalid\)' > /dev/null); then \
+	@if !($* --help 2>&1 | $(GREP) -i '\(usage\|option\|invalid\)' > /dev/null); then \
 	  $(call warning_msg,Could not find program $*. You may not need it--check the makefile.); \
 	fi
 
@@ -468,7 +498,7 @@ $(BUILDDIR)/%.$(CCFILEEXT).d : $(SRCDIR)/%.$(YACCFILEEXT)
 # so that you can always run "make clean" without having to worry about
 # generating dependencies
 
-ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
 -include $(addsuffix .d,$(GENERATED_SRC_FILES)) \
         $(BUILDDIR)/$(LIBDIR)/lib$(LIBRARY_NAME).a.d \
         $(addsuffix .d,$(OBJFILES))
@@ -502,9 +532,9 @@ windistdir: $(patsubst $(SRCDIR)/%.$(YACCFILEEXT),$(BUILDDIR)/%.$(CCFILEEXT),$(w
 ############################## TESTING TARGETS ################################
 ###############################################################################
 
-# -----------------------------------------------------------------------------
-
 compiled_tests : lib compiled_tests_message $(COMPILED_TESTS) 
+
+run_compiled_tests : compiled_tests
 	@$(call main_step_msg,Running compiled tests)
 	@export COMPILED_TESTS_PASS="0"; \
 	 export COMPILED_TESTS_FAIL="0"; \
@@ -522,7 +552,9 @@ compiled_tests : lib compiled_tests_message $(COMPILED_TESTS)
          echo $$COMPILED_TESTS_PASS > $(TESTDIR)/COMPILED_TESTS_PASS; \
          echo $$COMPILED_TESTS_FAIL > $(TESTDIR)/COMPILED_TESTS_FAIL
 
-noncompiled_tests : $(PROGS) noncompiled_tests_message $(NONCOMPILED_TESTS)
+noncompiled_tests : progs noncompiled_tests_message $(NONCOMPILED_TESTS)
+
+run_noncompiled_tests : noncompiled_tests
 	@$(call main_step_msg,Running noncompiled tests)
 	@export NONCOMPILED_TESTS_PASS="0"; \
 	 export NONCOMPILED_TESTS_FAIL="0"; \
@@ -592,6 +624,20 @@ $(TESTDIR)/%.$(SCRIPTFILEEXT) : $(PROGS) $(SRCDIR)/$(TESTDIR)/%.$(SCRIPTFILEEXT)
 	@$(call sub_step_msg,Copying test case $@)
 	$(CP) $(SRCDIR)/$(TESTDIR)/$*.$(SCRIPTFILEEXT) $@
 	@$(CHMOD) a+x $@
+
+# Rule to run all coverage tests
+$(COVERAGEDIR)/all : $(TESTS)
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@ $(TESTS)
+
+# Rule to run manual coverage tests
+$(COVERAGEDIR)/manual :
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@
+
+# Rule to run individual coverage tests. Really this should depend on
+# $(subst #,/,%) but make doesn't allow functions in the dependency list.
+# Instead I depend on all $(TESTS)
+$(COVERAGEDIR)/individual/% : $(TESTS)
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@ $(subst #,/,$(subst $(COVERAGEDIR)/individual/,,$@))
 
 # Rule to compile non-test binaries
 $(PROGDIR)/% : $(LIBDIR)/lib$(LIBRARY_NAME).a $(BUILDDIR)/progs/%.o

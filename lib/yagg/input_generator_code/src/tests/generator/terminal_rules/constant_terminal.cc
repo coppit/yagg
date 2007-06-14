@@ -12,13 +12,40 @@ using namespace std;
 class ZERO : public Terminal_Rule
 {
 public:
-  virtual const list<string> Get_String() const
-  {
-    list<string> strings;
-    strings.push_back("zero");
-    return strings;
-  }
+  ZERO();
+
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value() const;
+
+protected:
+  list<string> strings;
+  string return_value;
 };
+
+// ---------------------------------------------------------------------------
+
+ZERO::ZERO()
+{
+  return_value = "zero";
+
+  strings.clear();
+
+  strings.push_back(return_value);
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& ZERO::Get_String() const
+{
+  return strings;
+}
+
+// ---------------------------------------------------------------------------
+
+const string& ZERO::Get_Value() const
+{
+  return return_value;
+}
 
 // ---------------------------------------------------------------------------
 
@@ -32,9 +59,7 @@ int main(int argc, char *argv[])
     start.Initialize(1);
 
     while(start.Check_For_String())
-    {
       results.push_back( start.Get_String() );
-    }
   }
 
   bool error = false;

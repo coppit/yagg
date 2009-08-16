@@ -234,50 +234,92 @@ const bool Rule_List::Check_For_String_Without_Incrementing(const iterator in_st
 
   iterator a_rule = in_start_rule;
 
+//  bool failed = false;
+
   while (1)
   {
+//if (failed)
+//cerr << "Checking for string: " <<
+//Utility::readable_type_name(typeid(**a_rule)) << endl;
+
     if ((*a_rule)->Check_For_String())
     {
       a_rule++;
 
-      if (a_rule == end())
+      if (a_rule != end())
       {
-        if (Check_Action())
-        {
-      #ifdef SHORT_RULE_TRACE
-          cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
-            " -> Valid string exists" << endl;
-
-          Utility::Unindent();
-      #endif // SHORT_RULE_TRACE
-
-          return true;
-        }
-        else
-          a_rule--;
+        // TODO: Can we avoid extra calls to Reset_String by resetting before
+        // entering the loop?
+//if (failed)
+//cerr << "Resetting rule: " <<
+//Utility::readable_type_name(typeid(**a_rule)) << endl;
+        (*a_rule)->Reset_String();
 
         continue;
       }
 
-      // TODO: Can we avoid extra calls to Reset_String by resetting before
-      // entering the loop?
-      (*a_rule)->Reset_String();
-    }
-    else
-    {
-      if (a_rule == begin())
+      if (Check_Action())
       {
 #ifdef SHORT_RULE_TRACE
         cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
-          " -> No valid string in rules" << endl;
+          " -> Valid string exists" << endl;
+
         Utility::Unindent();
 #endif // SHORT_RULE_TRACE
 
-        return false;
+        return true;
       }
 
-      a_rule--;
+/*
+{
+cerr << "Failed semantic check:";
+if (failed)
+cerr << " (again)";
+cerr << "\n<";
+
+Rule_List::const_iterator a_rule;
+for (a_rule = begin(); a_rule != end(); a_rule++)
+{
+if (a_rule != begin())
+cerr << ',';
+cerr << Utility::readable_type_name(typeid(**a_rule)) << "(" <<
+(*a_rule)->Get_Accessed() << ")";
+}
+
+cerr << ">\n";
+failed = true;
+}
+*/
     }
+
+    if (a_rule == begin())
+    {
+#ifdef SHORT_RULE_TRACE
+      cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
+        " -> No valid string in rules" << endl;
+      Utility::Unindent();
+#endif // SHORT_RULE_TRACE
+
+      return false;
+    }
+
+    a_rule--;
+
+#ifndef DISABLE_SKIP_TO_TOUCHED_VARIABLE_OPTIMIZATION
+    iterator original_rule = a_rule;
+
+    while (a_rule != begin() && !(*a_rule)->Get_Accessed())
+      a_rule--;
+
+    // In case the action failed due to checking some external state,
+    // rather than touching the rules in our rule list
+    if (!(*a_rule)->Get_Accessed()) {
+      a_rule = original_rule;
+    } else {
+      (*a_rule)->Set_Accessed(false);
+    }
+//a_rule = original_rule;
+#endif // DISABLE_SKIP_TO_TOUCHED_VARIABLE_OPTIMIZATION
   }
 
   assert(false);

@@ -94,6 +94,8 @@ Generator TODOs:
 	http://www.lri.fr/~genrgens/manual/GRGs-manual-html/node5.html#SECTION00520000000000000000
 - Add support for random generation of integer/floating point values in a
 	range. (Casiano Rodriguez Leon <casiano@ull.es> asked for it.)
+- Do structure-coverage testing, where you generate only one random instance
+	of any given structure.
 
 -----------------------------------------------------------------------------
 

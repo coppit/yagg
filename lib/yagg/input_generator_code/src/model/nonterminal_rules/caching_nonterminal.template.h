@@ -27,7 +27,7 @@ public:
 [[[
 if (defined $return_type)
 {
-  $OUT .= "\n  virtual const $return_type Get_Value() const;\n";
+  $OUT .= "\n  virtual const $return_type Get_Value();\n";
 }
 ]]]
   virtual void Reset_String();

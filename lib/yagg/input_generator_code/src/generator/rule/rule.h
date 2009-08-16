@@ -31,6 +31,9 @@ public:
 
   virtual const Rule* operator[](const unsigned int in_index) const = 0;
 
+  virtual const bool Get_Accessed() const;
+  virtual void Set_Accessed(const bool accessed);
+
 protected:
   Rule();
 
@@ -42,6 +45,7 @@ protected:
   unsigned int m_allowed_length;
   bool m_is_valid;
   bool m_needs_reset;
+  bool m_accessed;
 };
 
 ostream& operator<< (ostream& in_ostream,

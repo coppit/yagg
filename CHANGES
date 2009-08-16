@@ -1,3 +1,11 @@
+Version 1.4002: Sun Aug 16 2009
+- Updated to the latest version of Module::Install
+- Fixed missing File::HomeDir files
+- Cleaned up spurious spaces added to makefiles during installation
+- Moved hosting to Google Code
+- Implemented an optimization where the generator will skip over variables
+	that were not accessed during constraint checking
+
 Version 1.4001: Sun Apr 1 2007
 - Added a section to the tutorial on controlling output formatting. (Thanks to
 	Casiano Rodriguez Leon <casiano@ull.es> for the question.)

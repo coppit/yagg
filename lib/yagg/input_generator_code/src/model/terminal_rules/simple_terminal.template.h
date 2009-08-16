@@ -14,11 +14,11 @@ public:
 [[[
 if (defined $nonpointer_return_type)
 {
-  $OUT .= "  virtual const $return_type Get_Value() const;";
+  $OUT .= "  virtual const $return_type Get_Value();";
 }
 else
 {
-  $OUT .= "  virtual const $return_type& Get_Value() const;";
+  $OUT .= "  virtual const $return_type& Get_Value();";
 }
 ]]]
 

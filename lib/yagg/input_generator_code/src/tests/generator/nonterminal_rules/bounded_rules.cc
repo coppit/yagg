@@ -15,7 +15,7 @@ class IDENTIFIER : public Terminal_Rule
 public:
   virtual const bool Check_For_String();
   virtual const list<string>& Get_String() const;
-  virtual const string* Get_Value() const;
+  virtual const string* Get_Value();
 
 protected:
   list<string> strings;
@@ -67,8 +67,10 @@ const list<string>& IDENTIFIER::Get_String() const
 
 // ---------------------------------------------------------------------------
 
-const string* IDENTIFIER::Get_Value() const
+const string* IDENTIFIER::Get_Value()
 {
+  Set_Accessed(true);
+
   return &return_value;
 }
 

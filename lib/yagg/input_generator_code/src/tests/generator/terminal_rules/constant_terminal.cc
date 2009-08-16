@@ -15,7 +15,7 @@ public:
   ZERO();
 
   virtual const list<string>& Get_String() const;
-  virtual const string& Get_Value() const;
+  virtual const string& Get_Value();
 
 protected:
   list<string> strings;
@@ -42,8 +42,10 @@ const list<string>& ZERO::Get_String() const
 
 // ---------------------------------------------------------------------------
 
-const string& ZERO::Get_Value() const
+const string& ZERO::Get_Value()
 {
+  Set_Accessed(true);
+
   return return_value;
 }
 

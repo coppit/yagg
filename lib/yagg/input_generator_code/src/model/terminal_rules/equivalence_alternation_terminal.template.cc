@@ -90,8 +90,10 @@ const list<string>& [[[$terminal]]]::Get_String() const
 if (defined $nonpointer_return_type)
 {
   $OUT .= <<EOF;
-const $return_type ${terminal}::Get_Value() const
+const $return_type ${terminal}::Get_Value()
 {
+  Set_Accessed(true);
+
   return &return_value;
 }
 EOF
@@ -99,8 +101,10 @@ EOF
 else
 {
   $OUT .= <<EOF;
-const $return_type& ${terminal}::Get_Value() const
+const $return_type& ${terminal}::Get_Value()
 {
+  Set_Accessed(true);
+
   return return_value;
 }
 EOF

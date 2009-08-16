@@ -47,10 +47,10 @@ MAKEFILE_NAME := GNUmakefile
 # Programs
 LN          = '/sw/bin/ln'
 CP          = '/sw/bin/cp'
-RM          = '/bin/rm'
+RM          = '/sw/bin/rm'
 MV          = '/sw/bin/mv'
 BASH        = bash
-FIND        = '/sw/bin/find'
+FIND        = '/usr/bin/find'
 GREP        = '/usr/bin/grep'
 CHMOD	    = '/sw/bin/chmod'
 CC          = gcc
@@ -67,13 +67,13 @@ GZIP        = gzip
 ZIP         = zip
 DIFF        = diff
 MKDIRHIER   = $(PERL) $(UTILSDIR)/mkdirhier.pl
-DATE        = '/bin/date'
+DATE        = '/sw/bin/date'
 PERL        = '/usr/bin/perl'
 MAKEDEPEND  = $(PERL) $(UTILSDIR)/makedependgcc
 COLORS      = $(PERL) $(UTILSDIR)/colors
 BASEDIR     = $(PERL) $(UTILSDIR)/basedir
-DIRNAME     = '/usr/bin/dirname'
-EXPR        = '/bin/expr'
+DIRNAME     = '/sw/bin/dirname'
+EXPR        = '/sw/bin/expr'
 
 # -----------------------------------------------------------------------------
 
@@ -158,7 +158,7 @@ LIB_FLAGS := -l$(LIBRARY_NAME) $(LIB_FLAGS)
 EMPTY =
 SPACE = $(EMPTY) $(EMPTY)
 COMMA = ,
-make_pattern = \($(subst $(SPACE),\|,$(1))\)
+make_pattern = ($(subst $(SPACE),|,$(1)))
 
 SRC_FILE_EXTS = \
   $(CFILEEXT) $(CCFILEEXT) $(FFILEEXT) $(LEXFILEEXT) $(YACCFILEEXT)
@@ -177,19 +177,19 @@ SRC_DIRS_PATTERN = $(call make_pattern,$(call compute_subdirs_with_sources))
 # Some subroutines to find source files and compute their corresponding object
 # files
 find_source_files = \
-  $(shell $(FIND)                                                $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
 
 find_shell_scripts = \
-  $(shell $(FIND)                                                $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
+  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
 
 # In case we need this later
 #find_nonsource_files = \
 #  $(filter-out \
-#    $(shell $(FIND)                                                $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
-#    $(shell $(FIND)                                                $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
+#    $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
+#    $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
 
 find_gen_source_files = \
-  $(shell $(FIND)                                                $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
 
 compute_subdirs_with_sources = $(filter-out progs tests progs/% tests/%, \
   $(sort $(subst $(SRCDIR)/,, \

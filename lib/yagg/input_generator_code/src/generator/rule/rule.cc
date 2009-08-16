@@ -7,6 +7,7 @@ Rule::Rule()
 {
   m_is_valid = true;
   m_needs_reset = true;
+  m_accessed = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -22,6 +23,7 @@ void Rule::Initialize(const unsigned int in_allowed_length, const Rule *in_previ
   m_allowed_length = in_allowed_length;
   m_previous_rule = in_previous_rule;
   m_needs_reset = true;
+  m_accessed = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -44,6 +46,7 @@ void Rule::Reset_String()
 {
   m_is_valid = true;
   m_needs_reset = false;
+  m_accessed = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -81,6 +84,20 @@ const bool Rule::Is_Valid()
 const bool Rule::Needs_Reset() const
 {
   return m_needs_reset;
+}
+
+// ---------------------------------------------------------------------------
+
+const bool Rule::Get_Accessed() const
+{
+  return m_accessed;
+}
+
+// ---------------------------------------------------------------------------
+
+void Rule::Set_Accessed(const bool accessed)
+{
+  m_accessed = accessed;
 }
 
 // ---------------------------------------------------------------------------

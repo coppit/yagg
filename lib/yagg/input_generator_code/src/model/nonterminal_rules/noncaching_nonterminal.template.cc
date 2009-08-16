@@ -197,9 +197,14 @@ EOF
 
 // ---------------------------------------------------------------------------
 
-const $return_type ${nonterminal}::Get_Value() const
+const $return_type ${nonterminal}::Get_Value()
 EOF
     $OUT .= "{\n";
+    $OUT .=<<EOF;
+  Set_Accessed(true);
+
+EOF
+
 
     foreach my $i (1..$#productions+1)
     {

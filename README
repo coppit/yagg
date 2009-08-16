@@ -19,25 +19,9 @@ is using yagg along with sports data to compute the likelihood of all possible
 outcomes for certain play situations in baseball.
 
 
-NEW IN THIS VERSION
-
-Version 1.4001: Sun Apr 1 2007
-- Added a section to the tutorial on controlling output formatting. (Thanks to
-	Casiano Rodriguez Leon for the question.)
-- Fixed a misspelling in the hexadecimal example's README.
-- Updated the makefile version
-- Fixed an assert failure that would occur if (1) a rule list has more than
-	one nonterminal, (2) some nonterminal in the list except the last one had no
-	strings for a given allocation, and (3) the last nonterminal had strings for
-	the given allocation.
-- Updated the Makefiles
-- Updated the test cases for the pass-by-reference updates in 1.3000.
-- Make it possible to call Print_Strings from anywhere in the program for
-	debugging. Maybe I'll add a flag for it later.
-- Added RBD example
-
-
 MODULE DEPENDENCIES
+
+To use this module, you will need to install:
 
 - File::Temp
 - File::Find
@@ -52,8 +36,9 @@ MODULE DEPENDENCIES
 File::Temp, File::Find, File::Spec, Storable, and Getopt::Std are part of the
 standard Perl distribution. 
 
-You should be prompted to install missing modules automatically when you run
-"perl Makefile.PL".
+To test this module, you will need to install:
+
+- Test::More
 
 
 INSTALLATION
@@ -105,13 +90,16 @@ yagg".
 
 HOMEPAGE
 
-Visit http://yagg.sourceforge.net/ for the latest version, CVS access, and
-more.
+The CPAN Page:
+http://search.cpan.org/dist/yagg/
+
+The Google Code page:
+http://code.google.com/p/yagg/
 
 
 REPORTING BUGS
 
-You can report bugs at http://sourceforge.net/tracker/?group_id=126089.
+http://code.google.com/p/yagg/issues/entry
 
 
 COPYRIGHT
@@ -121,8 +109,9 @@ Copyright (c) 2004 David Coppit. All rights reserved, save those granted by the 
 
 LICENSE
 
-This code is distributed under the GNU General Public License (GPL).  See
-the file LICENSE included in the distribution.
+This code is distributed under the GNU General Public License (GPL). See the
+file LICENSE in the distribution, http://www.opensource.org/gpl-license.html,
+and http://www.opensource.org/.
 
 
 AUTHOR

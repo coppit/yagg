@@ -287,13 +287,12 @@ examples/reliability_block_diagrams/user_code/src/model/rbd/rbd.h
 examples/reliability_block_diagrams/user_code/src/model/rbd_textual_parser/rbd_textual_parser_includes.h
 
  => Module::Install files
-inc/ExtUtils/AutoInstall.pm
 inc/File/HomeDir.pm
-inc/File/Spec.pm
-inc/File/Spec/Functions.pm
-inc/File/Spec/Unix.pm
+inc/File/HomeDir/Darwin.pm
+inc/File/HomeDir/MacOS9.pm
+inc/File/HomeDir/Unix.pm
+inc/File/HomeDir/Windows.pm
 inc/Module/Install.pm
-inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/CustomInstallationPath.pm
@@ -305,10 +304,6 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Scripts.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
-inc/Scalar/Util.pm
 inc/Sort/Versions.pm
-inc/Test/Builder.pm
-inc/Test/Builder/Module.pm
-inc/Test/More.pm
 
 META.yml                                Module meta-data (added by MakeMaker)

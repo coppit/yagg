@@ -4,6 +4,8 @@
 use strict;
 use warnings;
 
+use 5.005;
+
 use yagg::Grammar;
 use yagg::TerminalParser;
 use yagg::Config;
@@ -18,7 +20,7 @@ use File::Path;
 
 use vars qw( $VERSION );
 
-$VERSION = sprintf "%d.%02d%02d", q/1.40.1/ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d%02d", q/1.40.2/ =~ /(\d+)/g;
 
 # Make unbuffered
 $| = 1;
@@ -1293,8 +1295,6 @@ EOF
   $code =
     Escape_Macros($code, \@terminals, $terminal_data->{'OPTIONS'}{'prefix'});
 
-  my $first = 1;
-
   $code =~ s/\$\$/dollar_dollar/g;
   $code =~ s/^\n+//s;
   $code =~ s/\s+$//s;
@@ -1326,16 +1326,9 @@ EOF
       $code =~ s/(?<!\*)\$$i\b(?!->)/new $nonpointer_return_type(*\$$i)/g
         if defined $nonpointer_return_type;
 
-      $code =~ s/\$$i\b/dollar_$i/g;
-
-      if ($first)
-      {
-        $code = "\n$code";
-        $first = 0;
-      }
-
       my $i_minus_1 = $i - 1;
-      $code = "    const $return_type dollar_$i = (($rules[$i-1]*)(*this)[$i_minus_1])->Get_Value();\n$code";
+
+      $code =~ s/\$$i\b/(($rules[$i-1]*)(*this)[$i_minus_1])->Get_Value()/g;
     }
   }
 
@@ -2346,9 +2339,15 @@ See the TODO file.
 
 =back
 
+=head1 LICENSE
+
+This code is distributed under the GNU General Public License (GPL). See the
+file LICENSE in the distribution, http://www.opensource.org/gpl-license.html,
+and http://www.opensource.org/.
+
 =head1 AUTHOR
 
-David Coppit, <david@coppit.org>, http://coppit.org/
+David Coppit E<lt>david@coppit.orgE<gt>
 
 =head1 SEE ALSO
 

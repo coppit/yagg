@@ -13,7 +13,7 @@ class NATURAL : public Terminal_Rule
 public:
   virtual const bool Check_For_String();
   virtual const list<string>& Get_String() const;
-  virtual const unsigned long int& Get_Value() const;
+  virtual const unsigned long int& Get_Value();
 
 protected:
   list<string> strings;
@@ -73,8 +73,10 @@ const list<string>& NATURAL::Get_String() const
 
 // ---------------------------------------------------------------------------
 
-const unsigned long int& NATURAL::Get_Value() const
+const unsigned long int& NATURAL::Get_Value()
 {
+  Set_Accessed(true);
+
   return return_value;
 }
 

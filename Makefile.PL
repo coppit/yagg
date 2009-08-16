@@ -5,25 +5,26 @@ use inc::Module::Install;
 
 my %LOCATIONS;
 
-Check_Custom_Installation();
-
 print "\n", '-'x78, "\n\n";
 
+# Do all_from first to get the required perl version before
+# check_custom_installation runs
 name            ('yagg');
-author          ('David Coppit <david@coppit.org>');
-abstract_from   ('yagg');
-version_from    ('yagg');
-license         ('gpl');
+all_from        ('yagg');
+
+check_custom_installation();
 
 install_script  ('yagg');
-  
+
 build_requires  (
                   'Test::More' => 0,
                   'File::Find' => 0,
                   'File::Spec::Functions' => 0,
                   'Cwd' => 0,
                 );
-requires        ( 
+
+requires        (
+                  'perl' => '5.005',
                   'Carp' => 0,
                   'URI' => 0,
                   'Data::Dumper' => 0,
@@ -35,8 +36,8 @@ requires        (
                   'Text::Template' => 0,
                   'Parse::Yapp::Driver' => 1.05,
                 );
-  
-include         ('ExtUtils/AutoInstall.pm');
+
+#include         ('ExtUtils/AutoInstall.pm');
 
 clean_files     ('output','t/temp');
 
@@ -44,8 +45,6 @@ Configure_Programs();
 
 print "\n", '-'x78, "\n\n";
 
-auto_include_deps ( );
-auto_install    ( );
 WriteAll();
 
 print "\n", '-'x78, "\n\n";
@@ -102,7 +101,7 @@ EOF
       'rsync'     => { default => 'rsync', argname => 'RSYNC' },
       'g++'       => { default => 'g++', argname => 'CXX',
                        types    => {
-                          'GNU' => { fetch => \&Get_GNU_Version,
+                          'GNU' => { fetch => \&get_gnu_version,
                                      numbers => '[3.0,)', },
                        },
                      },
@@ -114,7 +113,7 @@ EOF
       'expr'      => { default => 'expr', argname => 'EXPR' },
       'make'      => { default => 'make', argname => 'MAKE',
                        types    => {
-                          'GNU' => { fetch => \&Get_GNU_Version,
+                          'GNU' => { fetch => \&get_gnu_version,
                                      numbers => '[1.0,)', },
                        },
                      },
@@ -123,14 +122,14 @@ EOF
                        types    => {
                           'Non-GNU' => { fetch => \&Get_NonGNU_Find_Version,
                                      numbers => '[0,)', },
-                          'GNU' => { fetch => \&Get_GNU_Version,
+                          'GNU' => { fetch => \&get_gnu_version,
                                      numbers => '[1.0,)', },
                        },
                      },
       'ssh'       => { default => 'ssh', argname => 'SSH' },
   );
 
-  %LOCATIONS = Get_Program_Locations(\%info);
+  %LOCATIONS = get_program_locations(\%info);
 
   die "Can't create parsers without \"yapp\"\n" 
     unless defined $LOCATIONS{'yapp'}{'path'};
@@ -298,9 +297,9 @@ sub _Update_Makefile_Find_Code
     my $value = "$prefix$flag$suffix";
 
     my $old_pos = pos $code;
-    my $new_value = "$prefix -E $suffix";
+    my $new_value = $value;
 
-    $new_value = "$prefix $suffix"
+    $new_value = "$prefix$suffix"
       if defined $find_info{'type'} && $find_info{'type'} eq 'GNU';
 
     substr( $code, pos($code) - length($value), length($value)) = $new_value;

@@ -94,6 +94,7 @@ lib/yagg/input_generator_code/util/mkdirhier.pl
 t/Test/Utils.pm
 t/compile.t
 t/generate.t
+t/pod.t
 t/run.t
 
  => Test input files
@@ -288,6 +289,7 @@ examples/reliability_block_diagrams/user_code/src/model/rbd_textual_parser/rbd_t
 
  => Module::Install files
 inc/File/HomeDir.pm
+inc/File/HomeDir/Driver.pm
 inc/File/HomeDir/Darwin.pm
 inc/File/HomeDir/MacOS9.pm
 inc/File/HomeDir/Unix.pm

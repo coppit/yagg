@@ -7,11 +7,13 @@
 class ATOMIC : public Terminal_Rule
 {
 public:
-  virtual ATOMIC* Clone() const;
-
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const;
-  virtual string Get_Value() const;
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value();
+
+protected:
+  list<string> strings;
+  string return_value;
 };
 
 #endif // ATOMIC_h

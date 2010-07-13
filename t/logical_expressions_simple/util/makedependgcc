@@ -68,16 +68,17 @@ sub Get_Dependencies
   my @commands = @_;
 
   my $dependencies = `@commands`;
-  exit 1 if $?;
 
-  my ($output_filename) = "@commands" =~ /-o (\S+)/;
+  exit 1 if $?;
 
   # New versions of g++ are buggy. They write the output to the file
   # specified by the -o flag instead of dumping to the screen. Plus the -o
   # target does not have directories--i.e. -o build/foo.o ends up as "foo.o:"
   # instead of "build/foo.o:"
-  if ($dependencies !~ /\b\Q$output_filename\E\s*:/)
+  if ($dependencies !~ /^.*:/)
   {
+    my ($output_filename) = "@commands" =~ /-o (\S+)/;
+
     open OUTPUT, $output_filename
       or die "Can't read dependencies from $output_filename: $!";
     local $/ = undef;
@@ -86,7 +87,6 @@ sub Get_Dependencies
 
     unlink $output_filename;
 
-    # The first dependency should have the incorrect target
     $dependencies =~ s/(.*?)(\s*:)/$output_filename$2/;
   }
 

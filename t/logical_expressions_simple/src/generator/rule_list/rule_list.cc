@@ -31,20 +31,6 @@ Rule_List::Rule_List()
 
 // ---------------------------------------------------------------------------
 
-Rule_List::Rule_List(const Rule_List& in_rule_list)
-{
-  *this = in_rule_list;
-}
-
-// ---------------------------------------------------------------------------
-
-Rule_List* Rule_List::Clone() const
-{
-  return new Rule_List(*this);
-}
-
-// ---------------------------------------------------------------------------
-
 Rule_List::~Rule_List()
 {
   const_iterator a_rule;
@@ -52,26 +38,6 @@ Rule_List::~Rule_List()
   {
     delete *a_rule;
   }
-}
-
-// ---------------------------------------------------------------------------
-
-const Rule_List& Rule_List::operator= (const Rule_List &in_rule_list)
-{
-  const_iterator a_rule;
-  for(a_rule = in_rule_list.begin();
-      a_rule != in_rule_list.end();
-      a_rule++)
-  {
-    push_back( (*a_rule)->Clone() );
-  }
-
-  m_allowed_length = in_rule_list.m_allowed_length;
-  m_is_valid = in_rule_list.m_is_valid;
-  m_first_string = in_rule_list.m_first_string;
-  m_needs_reset = in_rule_list.m_needs_reset;
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------
@@ -203,7 +169,7 @@ const bool Rule_List::Check_For_String()
   if (!m_first_string)
   {
 #ifdef ACTION_TRACE
-    cerr << "ACT'N: Calling " << Utility::indent <<
+    cerr << "ACT'N: " << Utility::indent << "Calling " <<
       Utility::readable_type_name(typeid(*this)) << "::Undo_Action\n";
 #endif // ACTION_TRACE
     Undo_Action();
@@ -221,8 +187,8 @@ const bool Rule_List::Check_For_String()
   }
   else
   {
-    if (m_first_string && Check_For_String_Without_Incrementing(begin()) ||
-        Check_For_String_In_Current_Allocation() ||
+    if ((m_first_string && Check_For_String_Without_Incrementing(begin())) ||
+        (!m_first_string && Check_For_String_In_Current_Allocation()) ||
         Check_For_String_In_Incremented_Allocation())
     {
       m_first_string = false;
@@ -268,50 +234,92 @@ const bool Rule_List::Check_For_String_Without_Incrementing(const iterator in_st
 
   iterator a_rule = in_start_rule;
 
+//  bool failed = false;
+
   while (1)
   {
+//if (failed)
+//cerr << "Checking for string: " <<
+//Utility::readable_type_name(typeid(**a_rule)) << endl;
+
     if ((*a_rule)->Check_For_String())
     {
       a_rule++;
 
-      if (a_rule == end())
+      if (a_rule != end())
       {
-        if (Check_Action())
-        {
-      #ifdef SHORT_RULE_TRACE
-          cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
-            " -> Valid string exists" << endl;
-
-          Utility::Unindent();
-      #endif // SHORT_RULE_TRACE
-
-          return true;
-        }
-        else
-          a_rule--;
+        // TODO: Can we avoid extra calls to Reset_String by resetting before
+        // entering the loop?
+//if (failed)
+//cerr << "Resetting rule: " <<
+//Utility::readable_type_name(typeid(**a_rule)) << endl;
+        (*a_rule)->Reset_String();
 
         continue;
       }
 
-      // TODO: Can we avoid extra calls to Reset_String by resetting before
-      // entering the loop?
-      (*a_rule)->Reset_String();
-    }
-    else
-    {
-      if (a_rule == begin())
+      if (Check_Action())
       {
 #ifdef SHORT_RULE_TRACE
         cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
-          " -> No valid string in rules" << endl;
+          " -> Valid string exists" << endl;
+
         Utility::Unindent();
 #endif // SHORT_RULE_TRACE
 
-        return false;
+        return true;
       }
 
-      a_rule--;
+/*
+{
+cerr << "Failed semantic check:";
+if (failed)
+cerr << " (again)";
+cerr << "\n<";
+
+Rule_List::const_iterator a_rule;
+for (a_rule = begin(); a_rule != end(); a_rule++)
+{
+if (a_rule != begin())
+cerr << ',';
+cerr << Utility::readable_type_name(typeid(**a_rule)) << "(" <<
+(*a_rule)->Get_Accessed() << ")";
+}
+
+cerr << ">\n";
+failed = true;
+}
+*/
     }
+
+    if (a_rule == begin())
+    {
+#ifdef SHORT_RULE_TRACE
+      cerr << "CHECK: " << Utility::indent << "Rules: " << *this << 
+        " -> No valid string in rules" << endl;
+      Utility::Unindent();
+#endif // SHORT_RULE_TRACE
+
+      return false;
+    }
+
+    a_rule--;
+
+#ifndef DISABLE_SKIP_TO_TOUCHED_VARIABLE_OPTIMIZATION
+    iterator original_rule = a_rule;
+
+    while (a_rule != begin() && !(*a_rule)->Get_Accessed())
+      a_rule--;
+
+    // In case the action failed due to checking some external state,
+    // rather than touching the rules in our rule list
+    if (!(*a_rule)->Get_Accessed()) {
+      a_rule = original_rule;
+    } else {
+      (*a_rule)->Set_Accessed(false);
+    }
+//a_rule = original_rule;
+#endif // DISABLE_SKIP_TO_TOUCHED_VARIABLE_OPTIMIZATION
   }
 
   assert(false);
@@ -328,7 +336,7 @@ const bool Rule_List::Check_Action()
   CURRENTLY_ACTIVE_RULE_LIST = this;
 
 #ifdef ACTION_TRACE
-  cerr << "ACT'N: Calling " << Utility::indent <<
+  cerr << "ACT'N: " << Utility::indent << "Calling " <<
     Utility::readable_type_name(typeid(*this)) << "::Do_Action\n";
 #endif // ACTION_TRACE
   Do_Action();
@@ -337,7 +345,7 @@ const bool Rule_List::Check_Action()
     return true;
 
 #ifdef ACTION_TRACE
-  cerr << "ACT'N: Calling " << Utility::indent << 
+  cerr << "ACT'N: " << Utility::indent <<  "Calling " <<
     Utility::readable_type_name(typeid(*this)) << "::Undo_Action\n";
 #endif // ACTION_TRACE
   Undo_Action();
@@ -514,15 +522,14 @@ void Rule_List::Undo_Action()
 
 // ---------------------------------------------------------------------------
 
-const list<string> Rule_List::Get_String()
+const list<string>& Rule_List::Get_String()
 {
-  if (size() == 0)
-    return list<string>();
+  strings.clear();
 
+  if (size() == 0)
+    return strings;
 
   assert(Is_Valid());
-
-  list<string> strings;
 
   const_iterator a_rule;
   for(a_rule = begin(); a_rule != end(); a_rule++)
@@ -532,33 +539,6 @@ const list<string> Rule_List::Get_String()
   }
 
   return strings;
-}
-
-// ---------------------------------------------------------------------------
-
-const list<const Rule*> Rule_List::Get_Terminals() const
-{
-  if(size() == 0)
-    return list<const Rule*>();
-
-
-  list<const Rule*> terminals;
-
-  const_iterator a_rule;
-  for(a_rule = begin(); a_rule != end(); a_rule++)
-  {
-    list<const Rule*> temp_terminals = (*a_rule)->Get_Terminals();
-
-    list<const Rule*>::const_iterator a_terminal;
-    for(a_terminal = temp_terminals.begin();
-        a_terminal != temp_terminals.end();
-        a_terminal++)
-    {
-      terminals.push_back( *a_terminal );
-    }
-  }
-
-  return terminals;
 }
 
 // ---------------------------------------------------------------------------
@@ -616,6 +596,7 @@ const vector< unsigned int > Rule_List::Get_Allocations() const
 
   return allocations;
 }
+#endif // DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 // ---------------------------------------------------------------------------
 
@@ -632,7 +613,6 @@ void Rule_List::Set_Allocations(const vector< unsigned int > &in_allocations)
     (*a_rule)->Initialize(*an_allocation, previous_rule);
   }
 }
-#endif // DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 // ---------------------------------------------------------------------------
 

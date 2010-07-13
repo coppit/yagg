@@ -1,31 +1,47 @@
 #include "model/terminal_rules/LEFT_PAREN.h"
-#include <sstream>
+
+#include <list>
 
 using namespace std;
 
 // ---------------------------------------------------------------------------
 
-LEFT_PAREN* LEFT_PAREN::Clone() const
+LEFT_PAREN::LEFT_PAREN()
 {
-  return new LEFT_PAREN(*this);
+  return_value = "(";
+
+  strings.clear();
+
+  strings.push_back(return_value);
 }
 
 // ---------------------------------------------------------------------------
 
-const list<string> LEFT_PAREN::Get_String() const
+const bool LEFT_PAREN::Check_For_String()
 {
-  list<string> strings;
+  m_string_count++;
 
-  stringstream temp_stream;
-  temp_stream << Get_Value();
+  if (m_string_count > 1)
+    return false;
 
-  strings.push_back(temp_stream.str());
+  if (!Is_Valid())
+    return false;
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& LEFT_PAREN::Get_String() const
+{
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-string LEFT_PAREN::Get_Value() const
+const string& LEFT_PAREN::Get_Value()
 {
-  return string("(");
+  Set_Accessed(true);
+
+  return return_value;
 }

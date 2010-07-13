@@ -5,7 +5,7 @@ VERSION = 0.20
 # Installation prefix
 PREFIX = /usr
 
-LIBRARY_NAME = yagg
+LIBRARY_NAME = generator
 
 # Any other files you want to distribute when the tarball is created with
 # "make dist"

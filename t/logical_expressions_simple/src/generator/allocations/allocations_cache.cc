@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <typeinfo>
+
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 #include "generator/allocations/allocations_cache.h"
@@ -7,9 +10,9 @@
 #include "generator/utility/utility.h"
 #endif // CACHING_TRACE
 
-map< string, map< unsigned int, searchable_list< vector< unsigned int > > > >
+map< const char*, map< unsigned int, searchable_list< vector< unsigned int > > > >
   Allocations_Cache::m_cache;
-map< string, map< unsigned int, bool > > Allocations_Cache::m_finalized;
+map< const char*, map< unsigned int, bool > > Allocations_Cache::m_finalized;
 
 // ---------------------------------------------------------------------------
 

@@ -12,9 +12,16 @@ class wfe : public Nonterminal_Rule
   class match_4;
 
 public:
-  virtual wfe* Clone() const;
+  wfe();
+  virtual ~wfe();
 
   virtual void Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule = NULL);
+
+protected:
+  match_1 *m_1;
+  match_2 *m_2;
+  match_3 *m_3;
+  match_4 *m_4;
 };
 
 #endif // wfe_h

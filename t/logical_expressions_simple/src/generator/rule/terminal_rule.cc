@@ -13,31 +13,14 @@ using namespace std;
 Terminal_Rule::Terminal_Rule()
 {
   m_string_count = 0;
-}
 
-// ---------------------------------------------------------------------------
-
-Terminal_Rule::Terminal_Rule(const Terminal_Rule &in_terminal) :
-  Rule(in_terminal)
-{
-  *this = in_terminal;
+  m_terminals.push_back(this);
 }
 
 // ---------------------------------------------------------------------------
 
 Terminal_Rule::~Terminal_Rule()
 {
-}
-
-// ---------------------------------------------------------------------------
-
-const Terminal_Rule& Terminal_Rule::operator= (const Terminal_Rule &in_terminal)
-{
-  Rule::operator=(in_terminal);
-
-  m_string_count = in_terminal.m_string_count;
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------
@@ -140,17 +123,6 @@ const bool Terminal_Rule::Check_For_String()
 
     return true;
   }
-}
-
-// ---------------------------------------------------------------------------
-
-const list<const Rule*> Terminal_Rule::Get_Terminals() const
-{
-  list<const Rule*> return_list;
-
-  return_list.push_back(this);
-
-  return return_list;
 }
 
 // ---------------------------------------------------------------------------

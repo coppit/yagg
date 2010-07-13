@@ -23,43 +23,8 @@ Nonterminal_Rule::Nonterminal_Rule()
 
 // ---------------------------------------------------------------------------
 
-Nonterminal_Rule::Nonterminal_Rule(const Nonterminal_Rule& in_nonterminal) :
-  Rule(in_nonterminal)
-{
-  *this = in_nonterminal;
-}
-
-// ---------------------------------------------------------------------------
-
 Nonterminal_Rule::~Nonterminal_Rule()
 {
-  list<Rule_List*>::iterator a_rule_list;
-  for(a_rule_list = m_rule_lists.begin();
-      a_rule_list != m_rule_lists.end();
-      a_rule_list++)
-    delete *a_rule_list;
-}
-
-// ---------------------------------------------------------------------------
-
-const Nonterminal_Rule& Nonterminal_Rule::operator= (const Nonterminal_Rule &in_nonterminal)
-{
-  Rule::operator=(in_nonterminal);
-
-  m_current_rule_list = m_rule_lists.end();
-
-  list<Rule_List*>::const_iterator a_rule_list;
-  for(a_rule_list = in_nonterminal.m_rule_lists.begin();
-      a_rule_list != in_nonterminal.m_rule_lists.end();
-      a_rule_list++)
-  {
-    m_rule_lists.push_back( (*a_rule_list)->Clone() );
-
-    if (in_nonterminal.m_current_rule_list == a_rule_list)
-      m_current_rule_list--;
-  }
-
-  return *this;
 }
 
 // ---------------------------------------------------------------------------
@@ -265,20 +230,11 @@ const bool Nonterminal_Rule::Check_For_String()
 
 // ---------------------------------------------------------------------------
 
-const list<string> Nonterminal_Rule::Get_String() const
+const list<string>& Nonterminal_Rule::Get_String() const
 {
   assert(m_current_rule_list != m_rule_lists.end());
 
   return (*m_current_rule_list)->Get_String();
-}
-
-// ---------------------------------------------------------------------------
-
-const list<const Rule*> Nonterminal_Rule::Get_Terminals() const
-{
-  assert(m_current_rule_list != m_rule_lists.end());
-
-  return (*m_current_rule_list)->Get_Terminals();
 }
 
 // ---------------------------------------------------------------------------

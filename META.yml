@@ -1,14 +1,39 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         yagg
-version:      1.00
-version_from: yagg
-installdirs:  site
-requires:
-    File::Temp:                    0
-    Getopt::Std:                   0
-    Parse::Yapp::Driver:           1.05
-    Storable:                      0
-
+---
+abstract: 'generate a string generator from a grammar'
+author:
+  - 'David Coppit <david@coppit.org>'
+build_requires:
+  Cwd: 0
+  ExtUtils::MakeMaker: 6.42
+  File::Find: 0
+  File::Spec::Functions: 0
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.16
+generated_by: 'Module::Install version 0.91'
+license: gpl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: yagg
+no_index:
+  directory:
+    - examples
+    - inc
+    - t
+requires:
+  Carp: 0
+  Data::Dumper: 0
+  File::Path: 0
+  File::Temp: 0
+  FileHandle: 0
+  Getopt::Std: 0
+  IPC::Open3: 0
+  Parse::Yapp::Driver: 1.05
+  Text::Template: 0
+  URI: 0
+  perl: 5.005
+resources:
+  license: http://opensource.org/licenses/gpl-license.php
+version: 1.4003

@@ -70,42 +70,73 @@ class wfe::match_4 : public Rule_List
 
 // ---------------------------------------------------------------------------
 
-wfe* wfe::Clone() const
+wfe::wfe() : Nonterminal_Rule()
 {
-  return new wfe(*this);
+  m_1 = NULL;
+  m_2 = NULL;
+  m_3 = NULL;
+  m_4 = NULL;
+}
+
+// ---------------------------------------------------------------------------
+
+wfe::~wfe()
+{
+  if (m_1 != NULL)
+    delete m_1;
+  if (m_2 != NULL)
+    delete m_2;
+  if (m_3 != NULL)
+    delete m_3;
+  if (m_4 != NULL)
+    delete m_4;
 }
 
 // ---------------------------------------------------------------------------
 
 void wfe::Initialize(const unsigned int in_allowed_length, const Rule *in_previous_rule)
 {
-  list<Rule_List*>::iterator a_rule_list;
-  for(a_rule_list = m_rule_lists.begin();
-      a_rule_list != m_rule_lists.end();
-      a_rule_list++)
-    delete *a_rule_list;
-
   m_rule_lists.clear();
 
 #ifndef DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
   if (in_allowed_length >= 1)
 #endif // DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-    m_rule_lists.push_back(new match_1);
+  {
+    if (m_1 == NULL)
+      m_1 = new match_1;
+
+    m_rule_lists.push_back(m_1);
+  }
 
 #ifndef DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
   if (in_allowed_length >= 2)
 #endif // DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-    m_rule_lists.push_back(new match_2);
+  {
+    if (m_2 == NULL)
+      m_2 = new match_2;
+
+    m_rule_lists.push_back(m_2);
+  }
 
 #ifndef DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
   if (in_allowed_length >= 1)
 #endif // DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-    m_rule_lists.push_back(new match_3);
+  {
+    if (m_3 == NULL)
+      m_3 = new match_3;
+
+    m_rule_lists.push_back(m_3);
+  }
 
 #ifndef DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
   if (in_allowed_length == 1)
 #endif // DISABLE_PRODUCTION_LENGTH_OPTIMIZATION
-    m_rule_lists.push_back(new match_4);
+  {
+    if (m_4 == NULL)
+      m_4 = new match_4;
+
+    m_rule_lists.push_back(m_4);
+  }
 
   Nonterminal_Rule::Initialize(in_allowed_length, in_previous_rule);
 }

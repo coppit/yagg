@@ -7,11 +7,13 @@
 class BINARY_OPERATOR : public Terminal_Rule
 {
 public:
-  virtual BINARY_OPERATOR* Clone() const;
-
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const;
-  virtual string Get_Value() const;
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value();
+
+protected:
+  list<string> strings;
+  string return_value;
 };
 
 #endif // BINARY_OPERATOR_h

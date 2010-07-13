@@ -7,10 +7,15 @@
 class LEFT_PAREN : public Terminal_Rule
 {
 public:
-  virtual LEFT_PAREN* Clone() const;
+  LEFT_PAREN();
 
-  virtual const list<string> Get_String() const;
-  virtual string Get_Value() const;
+  virtual const bool Check_For_String();
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value();
+
+protected:
+  list<string> strings;
+  string return_value;
 };
 
 #endif // LEFT_PAREN_h

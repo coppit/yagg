@@ -14,8 +14,6 @@ class Rule
   friend class Rule_List;
 
 public:
-  virtual Rule* Clone() const = 0;
-
   virtual ~Rule();
 
   virtual void Initialize(const unsigned int in_allowed_length, const Rule* in_previous_rule = NULL);
@@ -27,24 +25,27 @@ public:
   virtual const bool Needs_Reset() const;
 
   virtual const bool Check_For_String();
-  virtual const list<string> Get_String() const = 0;
+  virtual const list<string>& Get_String() const = 0;
 
   virtual const Rule* Get_Previous_Rule() const;
-  virtual const list<const Rule*> Get_Terminals() const = 0;
 
   virtual const Rule* operator[](const unsigned int in_index) const = 0;
 
+  virtual const bool Get_Accessed() const;
+  virtual void Set_Accessed(const bool accessed);
+
 protected:
   Rule();
-  Rule(const Rule &in_rule);
 
-  virtual const Rule& operator= (const Rule &in_rule);
+private:
+  Rule(const Rule &in_rule);
 
 protected:
   const Rule* m_previous_rule;
   unsigned int m_allowed_length;
   bool m_is_valid;
   bool m_needs_reset;
+  bool m_accessed;
 };
 
 ostream& operator<< (ostream& in_ostream,

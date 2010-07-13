@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <typeinfo>
+
 #ifndef DISABLE_ALLOCATION_CACHING_OPTIMIZATION
 
 #include "generator/allocations/allocations_cache.h"

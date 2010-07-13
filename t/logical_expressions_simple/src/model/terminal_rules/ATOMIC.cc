@@ -1,16 +1,9 @@
 #include "model/terminal_rules/ATOMIC.h"
-#include <sstream>
+
 #include <cassert>
 #include <list>
 
 using namespace std;
-
-// ---------------------------------------------------------------------------
-
-ATOMIC* ATOMIC::Clone() const
-{
-  return new ATOMIC(*this);
-}
 
 // ---------------------------------------------------------------------------
 
@@ -21,48 +14,50 @@ const bool ATOMIC::Check_For_String()
 
   m_string_count++;
 
-  return (m_string_count <= 3);
-}
-
-// ---------------------------------------------------------------------------
-
-const list<string> ATOMIC::Get_String() const
-{
-  assert(m_string_count <= 3);
-
-  list<string> strings;
-
-  stringstream temp_stream;
-  temp_stream << Get_Value();
-
-  strings.push_back(temp_stream.str());
-  return strings;
-}
-
-// ---------------------------------------------------------------------------
-
-string ATOMIC::Get_Value() const
-{
-  assert(m_string_count <= 3);
+  if (m_string_count > 3)
+    return false;
 
   switch (m_string_count)
   {
     case 1 :
     {
-      return string("p");
+      return_value = "p";
       break;
     }
     case 2 :
     {
-      return string("q");
+      return_value = "q";
       break;
     }
     case 3 :
     {
-      return string("r");
+      return_value = "r";
       break;
     }
+
   }
 
-  return string();
+  strings.clear();
+
+  strings.push_back(return_value);
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& ATOMIC::Get_String() const
+{
+  assert(m_string_count <= 3);
+
+  return strings;
+}
+
+// ---------------------------------------------------------------------------
+
+const string& ATOMIC::Get_Value()
+{
+  Set_Accessed(true);
+
+  return return_value;
 }

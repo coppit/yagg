@@ -1,31 +1,47 @@
 #include "model/terminal_rules/RIGHT_PAREN.h"
-#include <sstream>
+
+#include <list>
 
 using namespace std;
 
 // ---------------------------------------------------------------------------
 
-RIGHT_PAREN* RIGHT_PAREN::Clone() const
+RIGHT_PAREN::RIGHT_PAREN()
 {
-  return new RIGHT_PAREN(*this);
+  return_value = ")";
+
+  strings.clear();
+
+  strings.push_back(return_value);
 }
 
 // ---------------------------------------------------------------------------
 
-const list<string> RIGHT_PAREN::Get_String() const
+const bool RIGHT_PAREN::Check_For_String()
 {
-  list<string> strings;
+  m_string_count++;
 
-  stringstream temp_stream;
-  temp_stream << Get_Value();
+  if (m_string_count > 1)
+    return false;
 
-  strings.push_back(temp_stream.str());
+  if (!Is_Valid())
+    return false;
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& RIGHT_PAREN::Get_String() const
+{
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-string RIGHT_PAREN::Get_Value() const
+const string& RIGHT_PAREN::Get_Value()
 {
-  return string(")");
+  Set_Accessed(true);
+
+  return return_value;
 }

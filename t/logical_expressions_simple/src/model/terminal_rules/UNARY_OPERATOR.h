@@ -7,10 +7,15 @@
 class UNARY_OPERATOR : public Terminal_Rule
 {
 public:
-  virtual UNARY_OPERATOR* Clone() const;
+  UNARY_OPERATOR();
 
-  virtual const list<string> Get_String() const;
-  virtual string Get_Value() const;
+  virtual const bool Check_For_String();
+  virtual const list<string>& Get_String() const;
+  virtual const string& Get_Value();
+
+protected:
+  list<string> strings;
+  string return_value;
 };
 
 #endif // UNARY_OPERATOR_h

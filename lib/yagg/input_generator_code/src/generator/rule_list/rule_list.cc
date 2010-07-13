@@ -187,8 +187,8 @@ const bool Rule_List::Check_For_String()
   }
   else
   {
-    if (m_first_string && Check_For_String_Without_Incrementing(begin()) ||
-        !m_first_string && Check_For_String_In_Current_Allocation() ||
+    if ((m_first_string && Check_For_String_Without_Incrementing(begin())) ||
+        (!m_first_string && Check_For_String_In_Current_Allocation()) ||
         Check_For_String_In_Incremented_Allocation())
     {
       m_first_string = false;

@@ -1,31 +1,47 @@
 #include "model/terminal_rules/UNARY_OPERATOR.h"
-#include <sstream>
+
+#include <list>
 
 using namespace std;
 
 // ---------------------------------------------------------------------------
 
-UNARY_OPERATOR* UNARY_OPERATOR::Clone() const
+UNARY_OPERATOR::UNARY_OPERATOR()
 {
-  return new UNARY_OPERATOR(*this);
+  return_value = "-";
+
+  strings.clear();
+
+  strings.push_back(return_value);
 }
 
 // ---------------------------------------------------------------------------
 
-const list<string> UNARY_OPERATOR::Get_String() const
+const bool UNARY_OPERATOR::Check_For_String()
 {
-  list<string> strings;
+  m_string_count++;
 
-  stringstream temp_stream;
-  temp_stream << Get_Value();
+  if (m_string_count > 1)
+    return false;
 
-  strings.push_back(temp_stream.str());
+  if (!Is_Valid())
+    return false;
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+const list<string>& UNARY_OPERATOR::Get_String() const
+{
   return strings;
 }
 
 // ---------------------------------------------------------------------------
 
-string UNARY_OPERATOR::Get_Value() const
+const string& UNARY_OPERATOR::Get_Value()
 {
-  return string("-");
+  Set_Accessed(true);
+
+  return return_value;
 }

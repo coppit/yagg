@@ -93,8 +93,8 @@ HOMEPAGE
 The CPAN Page:
 http://search.cpan.org/dist/yagg/
 
-The Google Code page:
-http://code.google.com/p/yagg/
+The GitHub page:
+https://github.com/coppit/yagg/
 
 
 REPORTING BUGS
@@ -104,7 +104,7 @@ http://code.google.com/p/yagg/issues/entry
 
 COPYRIGHT
 
-Copyright (c) 2004 David Coppit. All rights reserved, save those granted by the license.
+Copyright (c) 2004-2015 David Coppit. All rights reserved, save those granted by the license.
 
 
 LICENSE

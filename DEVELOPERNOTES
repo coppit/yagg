@@ -1,8 +1,12 @@
 This file is not distributed with the program. It outlines some notes for
 developers readying a set of files for distribution.
 
-Subversion CHECKOUT:
-$ svn co https://yagg.googlecode.com/svn/trunk yagg
+Check for any open issues:
+- https://rt.cpan.org/Dist/Display.html?Queue=yagg
+- https://code.google.com/p/yagg/issues/list
+
+git checkout:
+$ git clone https://github.com/coppit/yagg.git
 
 Checklist for a release:
 - Be sure to add new test cases for new features
@@ -23,10 +27,9 @@ Checklist for a release:
     http://pause.perl.org/pause/authenquery
   or
     cpan-upload yagg-X.XX.tar.gz
-- Announce it to comp.lang.perl.announce.
-- Check in code:
-  $ svn commit
 - Tag the release for easy retrieval later
-  $ svn cp https://yagg.googlecode.com/svn/trunk https://yagg.googlecode.com/svn/tags/1.4002
+  $ git tag -a v1.4002 -m 'Version 1.4002'
+- Push changes to github:
+  $ git push
 - Make a backup in old
-  $ rm -rf old; rsync -r --cvs-exclude --exclude=.svn * old
+  $ rm -rf old; rsync -r --cvs-exclude --exclude=.git * old

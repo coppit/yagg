@@ -3,6 +3,8 @@
 use strict;
 use inc::Module::Install;
 
+BEGIN { makemaker_args( NORECURS => 1 ) }
+
 my %LOCATIONS;
 
 print "\n", '-'x78, "\n\n";

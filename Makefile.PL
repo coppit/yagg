@@ -138,7 +138,7 @@ EOF
 
   {
     my @missing_programs;
-    foreach my $program qw(chmod perl rsync)
+    foreach my $program (qw(chmod perl rsync))
     {
       push @missing_programs, $program
         unless defined $LOCATIONS{$program}{'path'};
@@ -151,7 +151,7 @@ EOF
 
   {
     my @missing_programs;
-    foreach my $program qw(ar cp cpp chmod dirname find grep g++ make mkdir rm mv perl)
+    foreach my $program (qw(ar cp cpp chmod dirname find grep g++ make mkdir rm mv perl))
     {
       push @missing_programs, $program
         unless defined $LOCATIONS{$program}{'path'};

@@ -4,14 +4,15 @@ author:
   - 'David Coppit <david@coppit.org>'
 build_requires:
   Cwd: 0
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
   File::Find: 0
   File::Spec::Functions: 0
   Test::More: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.14'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -33,7 +34,7 @@ requires:
   Parse::Yapp::Driver: 1.05
   Text::Template: 0
   URI: 0
-  perl: 5.005
+  perl: '5.005'
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 1.4003
+version: '1.4004'

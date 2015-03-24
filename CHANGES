@@ -1,5 +1,9 @@
 Version 1.4004: Mon Mar 23 2015
 - Moved code to github
+- Updated code avoid use of deprecated foreach $x qw() syntax
+  https://rt.cpan.org/Ticket/Display.html?id=99170
+  Thanks to srezic@cpan.org for the bug report.
+- Fix code to avoid recursing into "old" subdir during makefile generation
 
 Version 1.4003: Sun Jul 11 2010
 - Added some missing #include to allow code to be compiled by gcc 4.3. (Thanks

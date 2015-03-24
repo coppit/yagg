@@ -52,35 +52,35 @@ COVERAGE_DIRECTORIES = -d $(PROJECTNAME) $(SRCDIR) $(BUILDDIR) .
 # -----------------------------------------------------------------------------
 
 # Programs
-LN          = '/sw/bin/ln'
-CP          = '/sw/bin/cp'
-RM          = '/sw/bin/rm'
-MV          = '/sw/bin/mv'
+LN          = '/usr/local/opt/coreutils/libexec/gnubin/ln'
+CP          = '/usr/local/opt/coreutils/libexec/gnubin/cp'
+RM          = '/usr/local/opt/coreutils/libexec/gnubin/rm'
+MV          = '/usr/local/opt/coreutils/libexec/gnubin/mv'
 BASH        = bash
 FIND        = '/usr/bin/find'
 GREP        = '/usr/bin/grep'
-CHMOD	    = '/sw/bin/chmod'
+CHMOD	    = '/usr/local/opt/coreutils/libexec/gnubin/chmod'
 CC          = gcc
-CXX         = '/usr/bin/g++'
+CXX         = '/usr/local/bin/g++-4.9'
 FC          = g77
-LD          = '/usr/bin/g++'
+LD          = '/usr/local/bin/g++-4.9'
 AR          = '/usr/bin/ar'
 LEX         = flex
 UNIX2DOS    = unix2dos
 YACC        = yacc
-MKDIR       = '/sw/bin/mkdir'
+MKDIR       = '/usr/local/opt/coreutils/libexec/gnubin/mkdir'
 TAR         = tar
 GZIP        = gzip
 ZIP         = zip
 DIFF        = diff
 MKDIRHIER   = $(PERL) $(UTILSDIR)/mkdirhier.pl
-DATE        = '/sw/bin/date'
+DATE        = '/usr/local/opt/coreutils/libexec/gnubin/date'
 PERL        = '/usr/bin/perl'
 MAKEDEPEND  = $(PERL) $(UTILSDIR)/makedependgcc
 COLORS      = $(PERL) $(UTILSDIR)/colors
 BASEDIR     = $(PERL) $(UTILSDIR)/basedir
-DIRNAME     = '/sw/bin/dirname'
-EXPR        = '/sw/bin/expr'
+DIRNAME     = '/usr/local/opt/coreutils/libexec/gnubin/dirname'
+EXPR        = '/usr/local/opt/coreutils/libexec/gnubin/expr'
 
 # -----------------------------------------------------------------------------
 

@@ -14,34 +14,41 @@ print "\n", '-'x78, "\n\n";
 name            ('yagg');
 all_from        ('yagg');
 
+provides(
+  'yagg' => {
+    file => 'yagg',
+    version => version(),
+  }
+);
+
 check_custom_installation();
 
-install_script  ('yagg');
+install_script('yagg');
 
-build_requires  (
-                  'Test::More' => 0,
-                  'File::Find' => 0,
-                  'File::Spec::Functions' => 0,
-                  'Cwd' => 0,
-                );
+requires(
+  'perl' => '5.005',
+  'Carp' => 0,
+  'URI' => 0,
+  'Data::Dumper' => 0,
+  'FileHandle' => 0,
+  'File::Temp' => 0,
+  'File::Path' => 0,
+  'Getopt::Std' => 0,
+  'IPC::Open3' => 0,
+  'Text::Template' => 0,
+  'Parse::Yapp::Driver' => 1.05,
+);
 
-requires        (
-                  'perl' => '5.005',
-                  'Carp' => 0,
-                  'URI' => 0,
-                  'Data::Dumper' => 0,
-                  'FileHandle' => 0,
-                  'File::Temp' => 0,
-                  'File::Path' => 0,
-                  'Getopt::Std' => 0,
-                  'IPC::Open3' => 0,
-                  'Text::Template' => 0,
-                  'Parse::Yapp::Driver' => 1.05,
-                );
+test_requires(
+  'Test::More' => 0,
+  'File::Find' => 0,
+  'File::Spec::Functions' => 0,
+  'Cwd' => 0,
+);
 
-#include         ('ExtUtils/AutoInstall.pm');
+#include('ExtUtils/AutoInstall.pm');
 
-clean_files     ('output','t/temp');
+clean_files('output','t/temp');
 
 Configure_Programs();
 

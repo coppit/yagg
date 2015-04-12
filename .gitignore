@@ -1,6 +1,7 @@
 /blib/
 inc/
 /Makefile
+/LICENSE
 /MYMETA.*
 /pm_to_blib
 /yagg-*.tar.gz

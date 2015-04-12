@@ -56,6 +56,9 @@ Configure_Programs();
 
 print "\n", '-'x78, "\n\n";
 
+license 'gpl2';
+auto_license(holder => 'David Coppit');
+
 WriteAll();
 
 print "\n", '-'x78, "\n\n";

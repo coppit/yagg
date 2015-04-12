@@ -3,6 +3,7 @@ inc/
 /Makefile
 /LICENSE
 /MYMETA.*
+/META.*
 /pm_to_blib
 /yagg-*.tar.gz
 /old/

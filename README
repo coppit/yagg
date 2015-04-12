@@ -88,7 +88,7 @@ Just "perldoc yagg". After installation on Unix systems, you can also do "man
 yagg".
 
 
-HOMEPAGE
+RESOURCES
 
 The CPAN Page:
 http://search.cpan.org/dist/yagg/
@@ -96,10 +96,8 @@ http://search.cpan.org/dist/yagg/
 The GitHub page:
 https://github.com/coppit/yagg/
 
-
-REPORTING BUGS
-
-https://github.com/coppit/yagg/issues
+Bug and feature tracking:
+http://rt.cpan.org/Public/Dist/Display.html?Name=yagg
 
 
 COPYRIGHT

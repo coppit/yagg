@@ -15,6 +15,7 @@ print "\n", '-'x78, "\n\n";
 name('yagg');
 all_from('yagg');
 
+auto_set_bugtracker;
 githubmeta;
 
 include(

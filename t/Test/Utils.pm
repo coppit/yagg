@@ -4,6 +4,7 @@ use strict;
 use Exporter;
 use Test::More;
 use FileHandle;
+use File::Slurp;
 
 use vars qw( @EXPORT @ISA );
 
@@ -46,22 +47,10 @@ sub Do_Diff
 
   local $Test::Builder::Level = 2;
 
-  my (@data1,@data2);
+  my @data1 = read_file($filename);
+  @data1 = grep { !/$exclude_pattern/ } @data1 if defined $exclude_pattern;
 
-  {
-    open IN, $filename;
-    @data1 = <IN>;
-    close IN;
-
-    @data1 = grep { !/$exclude_pattern/ } @data1
-      if defined $exclude_pattern;
-  }
-
-  {
-    open IN, $output_filename;
-    @data2 = <IN>;
-    close IN;
-  }
+  my @data2 = read_file($output_filename);
 
   is_deeply(\@data1,\@data2,"$filename compared to $output_filename");
 }
@@ -111,8 +100,7 @@ sub Broken_Pipe
 {
   mkdir 't/temp', 0700;
 
-  open F, ">t/temp/broken_pipe.pl";
-  print F<<EOF;
+  write_file("t/temp/broken_pipe.pl", <<EOF);
 unless (open B, '-|')
 {
   open(F, "|$^X -pe 'print' 2>/dev/null");
@@ -121,7 +109,6 @@ unless (open B, '-|')
   exit;
 }
 EOF
-  close F;
 
   my $result = `$^X t/temp/broken_pipe.pl 2>&1 1>/dev/null`;
 

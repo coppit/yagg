@@ -1,3 +1,6 @@
+Version 1.4005:
+- Enable verbose testing for CPAN-testers
+
 Version 1.4004: Mon Mar 23 2015
 - Moved code to github
 - Updated code avoid use of deprecated foreach $x qw() syntax

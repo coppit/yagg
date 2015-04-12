@@ -2,6 +2,7 @@
 
 use strict;
 use inc::Module::Install;
+use File::Slurp;
 
 BEGIN { makemaker_args( NORECURS => 1 ) }
 
@@ -15,6 +16,10 @@ name('yagg');
 all_from('yagg');
 
 githubmeta;
+
+include(
+  'File::Slurp' => 0,
+);
 
 provides(
   'yagg' => {
@@ -60,6 +65,12 @@ license 'gpl2';
 auto_license(holder => 'David Coppit');
 
 WriteAll();
+
+if (auto_tester) {
+  my $makefile = read_file('Makefile');
+  $makefile =~ s/TEST_VERBOSE\s*=\s*0/TEST_VERBOSE=1/ or die "Couldn't enable verbose mode in Makefile";
+  write_file('Makefile', $makefile);
+}
 
 print "\n", '-'x78, "\n\n";
 
@@ -190,7 +201,7 @@ sub Update_Config
   my $filename = shift;
   my %locations = %{ shift @_ };
 
-  my $code = _Read_Code($filename);
+  my $code = read_file($filename);
 
   foreach my $program (keys %locations)
   {
@@ -221,7 +232,7 @@ sub Update_Config
     die "Couldn't find programs hash in $filename";
   }
 
-  _Write_Code($filename, $code);
+  write_file($filename, $code);
 }
 
 # --------------------------------------------------------------------------
@@ -231,13 +242,13 @@ sub Update_Makefile
   my $filename = shift;
   my %locations = %{ shift @_ };
 
-  my $code = _Read_Code($filename);
+  my $code = read_file($filename);
 
   $code = _Update_Makefile_Program_Locations($code, \%locations);
 
   $code = _Update_Makefile_Find_Code($code, $locations{'find'});
 
-  _Write_Code($filename, $code);
+  write_file($filename, $code);
 }
 
 # --------------------------------------------------------------------------
@@ -343,35 +354,6 @@ sub _Update_Makefile_Find_Code
   }
 
   return $code;
-}
-
-# --------------------------------------------------------------------------
-
-sub _Read_Code
-{
-  my $filename = shift;
-
-  local $/ = undef;
-
-  open SOURCE, $filename
-    or die "Couldn't open file \"$filename\": $!";
-  my $code = <SOURCE>;
-  close SOURCE;
-
-  return $code;
-}
-
-# --------------------------------------------------------------------------
-
-sub _Write_Code
-{
-  my $filename = shift;
-  my $code = shift;
-
-  open SOURCE, ">$filename"
-    or die "Couldn't open file \"$filename\": $!";
-  print SOURCE $code;
-  close SOURCE;
 }
 
 # --------------------------------------------------------------------------

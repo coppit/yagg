@@ -11,8 +11,10 @@ print "\n", '-'x78, "\n\n";
 
 # Do all_from first to get the required perl version before
 # check_custom_installation runs
-name            ('yagg');
-all_from        ('yagg');
+name('yagg');
+all_from('yagg');
+
+githubmeta;
 
 provides(
   'yagg' => {

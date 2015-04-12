@@ -2,14 +2,14 @@
 
 use strict;
 
+use lib 't';
+use Test::Utils;
 use Test::More;
 use File::Find;
 use File::Spec::Functions qw( :ALL );
 
-mkdir 't/temp', 0700;
-
 my @tests = (
-  'yagg -f -o t/temp/output examples/logical_expressions_simple/logical_expression.yg examples/logical_expressions_simple/logical_expression.lg',
+  "yagg -f -o $TEMPDIR/output examples/logical_expressions_simple/logical_expression.yg examples/logical_expressions_simple/logical_expression.lg",
 );
 
 my %expected_errors = (
@@ -52,8 +52,8 @@ sub TestIt
     }
   }
 
-  my $test_stdout = catfile('t','temp',"${testname}.stdout");
-  my $test_stderr = catfile('t','temp',"${testname}.stderr");
+  my $test_stdout = catfile($TEMPDIR,"${testname}.stdout");
+  my $test_stderr = catfile($TEMPDIR,"${testname}.stderr");
 
   system "$test 1>$test_stdout 2>$test_stderr";
 
@@ -70,13 +70,13 @@ sub TestIt
          {
            $generated .= "$File::Find::name\n"
              unless $File::Find::name =~ /\b(CVS|build|lib|tests|progs)\b/
-         }, 't/temp/output');
+         }, "$TEMPDIR/output");
     find(sub
          { $actual .= "$File::Find::name\n"
              unless $File::Find::name =~ /\b(CVS|build|lib|tests|progs)\b/
          }, 't/logical_expressions_simple');
 
-    $actual =~ s/t\/logical_expressions_simple/t\/temp\/output/g;
+    $actual =~ s#t/logical_expressions_simple#$TEMPDIR/output#g;
 
     my @actual = $actual =~ /^(.*\n)/mg;
     my @generated = $generated =~ /^(.*\n)/mg;
@@ -88,7 +88,7 @@ sub TestIt
 
     is_deeply(\@generated, \@actual,
       "Comparing files generated for logical_expressions_simple,\n" .
-      " in t/temp/output/ and t/logical_expressions_simple\n");
+      " in $TEMPDIR/output/ and t/logical_expressions_simple\n");
 
   }
 }

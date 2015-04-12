@@ -4,17 +4,20 @@ use strict;
 use Exporter;
 use Test::More;
 use FileHandle;
+use File::Temp;
 use File::Slurp;
 
 use vars qw( @EXPORT @ISA );
 
 @ISA = qw( Exporter );
-@EXPORT = qw( Do_Diff Module_Installed %PROGRAMS
+@EXPORT = qw( Do_Diff Module_Installed %PROGRAMS $TEMPDIR
   Broken_Pipe No_such_file_or_directory $single_quote $command_separator
   $set_env
 );
 
-use vars qw( %PROGRAMS $single_quote $command_separator $set_env );
+use vars qw( $TEMPDIR %PROGRAMS $single_quote $command_separator $set_env );
+
+$TEMPDIR = File::Temp::tempdir();
 
 if ($^O eq 'MSWin32')
 {
@@ -30,7 +33,6 @@ else
 }
 
 %PROGRAMS = (
- 'tzip' => undef,
  'gzip' => '/usr/cs/contrib/bin/gzip',
  'compress' => '/usr/cs/contrib/bin/gzip',
  'bzip' => undef,
@@ -47,8 +49,11 @@ sub Do_Diff
 
   local $Test::Builder::Level = 2;
 
+  $exclude_pattern = '' unless defined $exclude_pattern;
+
   my @data1 = read_file($filename);
-  @data1 = grep { !/$exclude_pattern/ } @data1 if defined $exclude_pattern;
+  s/$exclude_pattern//g foreach @data1;
+  @data1 = grep { $_ ne '' } @data1;
 
   my @data2 = read_file($output_filename);
 
@@ -61,12 +66,12 @@ sub Module_Installed
 {
   my $module_name = shift;
 
-  $module_name =~ s/::/\//g;
+  $module_name =~ s#::#/#g;
   $module_name .= '.pm';
 
   foreach my $inc (@INC)
   {
-    return 1 if -e "$inc/$module_name";
+    return 1 if -e catfile($inc,$module_name);
   }
 
   return 0;
@@ -98,19 +103,20 @@ sub No_such_file_or_directory
 # doing this?
 sub Broken_Pipe
 {
-  mkdir 't/temp', 0700;
+  my $script_path = catfile($TEMPDIR,'broken_pipe.pl');
+  my $dev_null = devnull();
 
-  write_file("t/temp/broken_pipe.pl", <<EOF);
+  write_file($script_path, <<EOF);
 unless (open B, '-|')
 {
-  open(F, "|$^X -pe 'print' 2>/dev/null");
+  open(F, "|$^X -pe 'print' 2>$dev_null");
   print F 'x';
   close F;
   exit;
 }
 EOF
 
-  my $result = `$^X t/temp/broken_pipe.pl 2>&1 1>/dev/null`;
+  my $result = `$^X $script_path 2>&1 1>$dev_null`;
 
   $result = '' unless defined $result;
 

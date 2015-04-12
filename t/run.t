@@ -9,13 +9,10 @@ use File::Find;
 use File::Path;
 use File::Spec::Functions qw( :ALL );
 
-rmtree 't/temp';
-mkdir 't/temp', 0700;
-
 my %tests = (
-  'yagg -r 2 -o t/temp/output t/grammars/infinite_loop.yg' =>
+  "yagg -r 2 -o $TEMPDIR/output t/grammars/infinite_loop.yg" =>
     ['infinite_loop','none'],
-  'yagg -r 3 -o t/temp/output t/grammars/left_recursion.yg' =>
+  "yagg -r 3 -o $TEMPDIR/output t/grammars/left_recursion.yg" =>
     ['left_recursion','none'],
 );
 
@@ -70,8 +67,8 @@ sub TestIt
     }
   }
 
-  my $test_stdout = catfile('t','temp',"${testname}_$stdout_file.stdout");
-  my $test_stderr = catfile('t','temp',"${testname}_$stderr_file.stderr");
+  my $test_stdout = catfile($TEMPDIR,"${testname}_$stdout_file.stdout");
+  my $test_stderr = catfile($TEMPDIR,"${testname}_$stderr_file.stderr");
 
   system "$test 1>$test_stdout 2>$test_stderr";
 
@@ -97,8 +94,8 @@ sub TestIt
   my $real_stdout = catfile('t','results',$stdout_file);
   my $real_stderr = catfile('t','results',$stderr_file);
 
-  Do_Diff($test_stdout,$real_stdout);
-  Do_Diff($test_stderr,$real_stderr,'ranlib.*no symbols');
+  Do_Diff($test_stdout,$real_stdout,$TEMPDIR);
+  Do_Diff($test_stderr,$real_stderr,".*ranlib.*has no symbols\n");
 }
 
 # ---------------------------------------------------------------------------

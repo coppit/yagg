@@ -28,7 +28,6 @@
 ^announce.sample$
 ^old/
 \.tar\.gz$
-temp/
 output/
 ^MYMETA.(json|yml)
 

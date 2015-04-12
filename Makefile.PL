@@ -55,8 +55,6 @@ test_requires(
 
 #include('ExtUtils/AutoInstall.pm');
 
-clean_files('output','t/temp');
-
 Configure_Programs();
 
 print "\n", '-'x78, "\n\n";

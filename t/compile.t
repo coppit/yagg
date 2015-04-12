@@ -2,16 +2,13 @@
 
 use strict;
 
+use lib 't';
+use Test::Utils;
 use Test::More;
 use yagg::Config;
-use Cwd;
 use File::Spec::Functions qw( :ALL );
 
-mkdir 't/temp', 0700;
-
 plan tests => 3;
-
-my $cwd = getcwd;
 
 chdir 't/logical_expressions_simple';
 
@@ -20,8 +17,8 @@ diag "Running \"make\" on some C++ code. Please be patient...";
 my $testname = [splitdir($0)]->[-1];
 $testname =~ s#\.t##;
 
-my $test_stdout = catfile($cwd,'t','temp',"${testname}.stdout");
-my $test_stderr = catfile($cwd,'t','temp',"${testname}.stderr");
+my $test_stdout = catfile($TEMPDIR,"${testname}.stdout");
+my $test_stderr = catfile($TEMPDIR,"${testname}.stderr");
 
 #---------------------------------------------------------------------------
 

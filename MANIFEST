@@ -301,11 +301,14 @@ inc/File/HomeDir/Windows.pm
 inc/File/Temp.pm
 inc/File/Which.pm
 inc/Module/Install.pm
+inc/Module/Install/AutoLicense.pm
+inc/Module/Install/AutomatedTester.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/CustomInstallationPath.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/GetProgramLocations.pm
+inc/Module/Install/GithubMeta.pm
 inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm

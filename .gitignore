@@ -8,4 +8,5 @@ inc/
 /yagg-*.tar.gz
 /old/
 **/*.swp
+/lib/yagg/NonterminalParser.pm
 /lib/yagg/TerminalParser.pm

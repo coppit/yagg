@@ -616,7 +616,7 @@ sub _Lexer {
         return($1, [ $1, $lineno[0] ]);
     };
 
-        $$input=~/\G{/gc
+        $$input=~/\G\{/gc
     and do {
         my $code;
 
@@ -668,7 +668,7 @@ sub _Lexer {
         # Lookahead to resolve shift/reduce error
         {
           my $old_pos = pos $$input;
-          if ($$input =~ /\G\s*{/)
+          if ($$input =~ /\G\s*\{/)
           {
             pos $$input = $old_pos;
             return('BRACED_CODE_WITH_BRACED_CODE_FOLLOWING',[ $code, $lineno[0] ]);
@@ -692,7 +692,7 @@ sub _Lexer {
         and return('PERCENT_START',[ undef, $lineno[0] ]);
             $$input=~/\G%(expect)/gc
         and return('PERCENT_EXPECT',[ undef, $lineno[0] ]);
-            $$input=~/\G%{/gc
+            $$input=~/\G%\{/gc
         and do {
             my($code);
 

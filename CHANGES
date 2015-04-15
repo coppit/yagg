@@ -1,3 +1,7 @@
+Version 1.4006:
+- Fix perl 5.21.10 warning about unescaped {. Thanks to srezic@cpan.org for
+  the report. https://rt.cpan.org/Ticket/Display.html?id=103514
+
 Version 1.4005: Sun Apr 12 2015
 - Enable verbose testing for CPAN-testers
 - Consolidate issue tracking at rt.cpan.org

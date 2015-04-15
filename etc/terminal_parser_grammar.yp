@@ -263,7 +263,7 @@ sub _Lexer {
     };
 
 =for comment
-        $$input=~/\G{/gc
+        $$input=~/\G\{/gc
     and do {
         my $code;
 
@@ -330,7 +330,7 @@ sub _Lexer {
           };
         }
 
-            $$input=~/\G%{/gc
+            $$input=~/\G%\{/gc
         and do {
             my($code);
 

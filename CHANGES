@@ -1,6 +1,10 @@
 Version 1.4006:
-- Fix perl 5.21.10 warning about unescaped {. Thanks to srezic@cpan.org for
-  the report. https://rt.cpan.org/Ticket/Display.html?id=103514
+- Fix perl 5.21.10 warning about unescaped {. Thanks to Slaven Rezic
+  <srezic@cpan.org> for the report.
+  https://rt.cpan.org/Ticket/Display.html?id=103514
+- Allow for generic "c++" instead of requiring g++. Thanks to Slaven Rezic
+  <srezic@cpan.org> for the report.
+  https://rt.cpan.org/Ticket/Display.html?id=103515
 
 Version 1.4005: Sun Apr 12 2015
 - Enable verbose testing for CPAN-testers

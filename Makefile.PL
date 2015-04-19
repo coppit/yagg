@@ -76,7 +76,7 @@ WriteAll();
 
 print "\n", '-'x78, "\n\n";
 
-MakeParsers();
+make_parsers($LOCATIONS{'yapp'}{'path'});
 
 foreach my $program (keys %LOCATIONS)
 {
@@ -95,21 +95,6 @@ foreach my $program (keys %LOCATIONS)
 exit;
 
 # -------------------------------------------------------------------------
-
-sub MakeParsers
-{
-  die "No \"yapp\" available to create the parsers\n"
-    unless defined $LOCATIONS{'yapp'}{'path'};
-
-  print "Running yapp to create the parsers\n";
-
-  system("$LOCATIONS{'yapp'}{'path'} -m 'yagg::NonterminalParser' -o 'lib/yagg/NonterminalParser.pm' etc/nonterminal_parser_grammar.yp") == 0
-    or die "Could not run yapp to create the NonterminalParser.pm file: $!";
-  system("$LOCATIONS{'yapp'}{'path'} -m 'yagg::TerminalParser' -o 'lib/yagg/TerminalParser.pm' etc/terminal_parser_grammar.yp") == 0
-    or die "Could not run yapp to create the TerminalParser.pm file: $!";
-}
-
-# --------------------------------------------------------------------------
 
 sub Configure_Programs
 {

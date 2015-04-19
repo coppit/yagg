@@ -80,8 +80,7 @@ make_parsers($LOCATIONS{'yapp'}{'path'});
 
 foreach my $program (keys %LOCATIONS)
 {
-  warn "Warning: prerequisite program \"$program\" not found\n"
-    unless defined $LOCATIONS{$program};
+  warn "prerequisite program \"$program\" not found\n" unless defined $LOCATIONS{$program};
 }
 
 fix_sort_versions('inc/Sort/Versions.pm');

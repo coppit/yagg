@@ -302,5 +302,9 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Scalar/Util.pm
 inc/Sort/Versions.pm
+inc/Module/Install/PRIVATE/Enable_Verbose_CPAN_Testing.pm
+
+# Private Module::Install extensions
+private-lib/Module/Install/PRIVATE/Enable_Verbose_CPAN_Testing.pm
 
 META.yml

@@ -6,6 +6,8 @@ Version 1.4006:
   <srezic@cpan.org> for the report.
   https://rt.cpan.org/Ticket/Display.html?id=103515
 - Clarify licensing terms
+- Move verbose testing to a private module, and implement it in a way that
+  doesn't require editing the Makefile after it is generated.
 
 Version 1.4005: Sun Apr 12 2015
 - Enable verbose testing for CPAN-testers

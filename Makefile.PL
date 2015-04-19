@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 
 use strict;
+
+# For PRIVATE Module::Install extensions
+use lib 'private-lib';
+
 use inc::Module::Install;
 use File::Slurp;
 
@@ -65,13 +69,9 @@ clean_files('lib/yagg/TerminalParser.pm', 'lib/yagg/NonterminalParser.pm');
 license 'gpl2';
 auto_license(holder => 'David Coppit');
 
-WriteAll();
+enable_verbose_cpan_testing();
 
-if (auto_tester) {
-  my $code = read_file('Makefile');
-  $code =~ s/TEST_VERBOSE\s*=\s*0/TEST_VERBOSE=1/ or die "Couldn't enable verbose mode in Makefile";
-  write_file('Makefile', $code);
-}
+WriteAll();
 
 print "\n", '-'x78, "\n\n";
 

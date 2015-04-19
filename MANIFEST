@@ -5,9 +5,8 @@ README
 yagg
 random_generator
 
- => Manifest files
+ => Manifest file
 MANIFEST
-MANIFEST.SKIP
 
  => A change history
 CHANGES

@@ -22,7 +22,7 @@ all_from('yagg');
 auto_set_bugtracker;
 githubmeta;
 
-include(
+configure_requires(
   'File::Slurp' => 0,
 );
 
@@ -52,6 +52,7 @@ requires(
 );
 
 test_requires(
+  'File::Slurp' => 0,
   'Test::More' => 0,
   'File::Find' => 0,
   'File::Spec::Functions' => 0,

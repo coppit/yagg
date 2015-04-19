@@ -84,13 +84,7 @@ foreach my $program (keys %LOCATIONS)
     unless defined $LOCATIONS{$program};
 }
 
-{
-  print "Fixing POD in inc/Sort/Versions.pm\n";
-
-  my $code = read_file('inc/Sort/Versions.pm');
-  $code =~ s|^=encoding.*||m;
-  write_file('inc/Sort/Versions.pm', $code);
-}
+fix_sort_versions('inc/Sort/Versions.pm');
 
 exit;
 

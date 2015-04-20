@@ -301,9 +301,15 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Scalar/Util.pm
 inc/Sort/Versions.pm
+inc/Module/Install/PRIVATE/Configure_Programs.pm
+inc/Module/Install/PRIVATE/Fix_Sort_Versions.pm
+inc/Module/Install/PRIVATE/Make_Parsers.pm
 inc/Module/Install/PRIVATE/Enable_Verbose_CPAN_Testing.pm
 
 # Private Module::Install extensions
+private-lib/Module/Install/PRIVATE/Configure_Programs.pm
+private-lib/Module/Install/PRIVATE/Fix_Sort_Versions.pm
+private-lib/Module/Install/PRIVATE/Make_Parsers.pm
 private-lib/Module/Install/PRIVATE/Enable_Verbose_CPAN_Testing.pm
 
 META.yml

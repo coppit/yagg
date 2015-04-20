@@ -3,6 +3,8 @@ General TODOs:
   Suggested by Paul Howarth <paul@city-fan.org>
 - After Module::Install support CPAN::Meta 2.0, add info for repository URL
   and bug tracker. Suggested by Paul Howarth <paul@city-fan.org>
+- In t/compile.t, copy t/logical_expressions_simple to a tempdir, chdir there,
+  then compile.
 
 -----------------------------------------------------------------------------
 

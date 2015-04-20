@@ -7,6 +7,7 @@ use Test::Utils;
 use Test::More;
 use File::Find;
 use File::Spec::Functions qw( :ALL );
+use File::Slurp;
 
 my @tests = (
   "yagg -f -o $TEMPDIR/output examples/logical_expressions_simple/logical_expression.yg examples/logical_expressions_simple/logical_expression.lg",

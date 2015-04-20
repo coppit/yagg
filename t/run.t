@@ -8,6 +8,7 @@ use Test::Utils;
 use File::Find;
 use File::Path;
 use File::Spec::Functions qw( :ALL );
+use File::Slurp;
 
 my %tests = (
   "yagg -r 2 -o $TEMPDIR/output t/grammars/infinite_loop.yg" =>

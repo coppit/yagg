@@ -11,6 +11,9 @@ Version 1.4006:
 - Require File::Slurp instead of including it, to avoid potential problems 
   like this: 
   http://www.cpantesters.org/cpan/report/86a0145a-e52b-11e4-a1d1-8536eb4f9f07 
+- Dump stdout and stderr in case of test failure, to help debug CPAN testers
+  failures such as this:
+  http://www.cpantesters.org/cpan/report/c8809414-e60f-11e4-8481-e1dcdfbfc7aa
 
 Version 1.4005: Sun Apr 12 2015
 - Enable verbose testing for CPAN-testers

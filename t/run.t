@@ -83,8 +83,11 @@ sub TestIt
 
   if ($? && !defined $error_expected)
   {
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
     ok(0, "Encountered an error executing the test when one was not expected.\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+      "STDOUT:\n$stdout\nSTDERR:\n$stderr\n");
 
     SKIP: skip("Error running previous test",1);
 

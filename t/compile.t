@@ -6,6 +6,7 @@ use lib 't';
 use Test::Utils;
 use Test::More;
 use yagg::Config;
+use File::Slurp;
 use File::Spec::Functions qw( :ALL );
 
 plan tests => 3;
@@ -27,8 +28,10 @@ my $test_stderr = catfile($TEMPDIR,"${testname}.stderr");
 
   if ($?)
   {
-    ok(0, "Encountered an error cleaning up.\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
+    ok(0, "Encountered an error cleaning up.\nSTDOUT:\n$stdout\nSTDERR:\n$stderr\n");
   }
   else
   {
@@ -46,13 +49,17 @@ SKIP:
 
   if ($?)
   {
-    ok(0, "Encountered an error building the sample code.\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
+    ok(0, "Encountered an error building the sample code.\nSTDOUT:\n$stdout\nSTDERR:\n$stderr\n");
   }
   elsif (!-e 'progs/generate')
   {
-    ok(0, "Build succeeded, but there is no \"progs/generate\".\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
+    ok(0, "Build succeeded, but there is no \"progs/generate\".\nSTDOUT:\n$stdout\nSTDERR:\n$stderr\n");
   }
   else
   {
@@ -70,8 +77,10 @@ SKIP:
 
   if ($?)
   {
-    ok(0, "Encountered an error cleaning up.\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
+    ok(0, "Encountered an error cleaning up.\nSTDOUT:\n$stdout\nSTDERR:\n$stderr\n");
   }
   else
   {

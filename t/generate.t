@@ -59,8 +59,10 @@ sub TestIt
 
   if ($?)
   {
-    ok(0, "Encountered an error executing the test.\n" .
-      "See $test_stdout and\n$test_stderr.\n\n");
+    my $stdout = read_file($test_stdout);
+    my $stderr = read_file($test_stderr);
+
+    ok(0, "Encountered an error executing the test.\nSTDOUT:\n$stdout\nSTDERR:\n$stderr\n");
   }
   else
   {
@@ -89,6 +91,5 @@ sub TestIt
     is_deeply(\@generated, \@actual,
       "Comparing files generated for logical_expressions_simple,\n" .
       " in $TEMPDIR/output/ and t/logical_expressions_simple\n");
-
   }
 }

@@ -50,7 +50,7 @@ EOF
       'perl'      => { default => $^X, argname => 'PERL' },
       'dirname'   => { default => 'dirname', argname => 'DIRNAME' },
       'expr'      => { default => 'expr', argname => 'EXPR' },
-      'make'      => { default => 'make', argname => 'MAKE',
+      'make'      => { default => ($^O eq 'freebsd' ? 'gmake' : 'make'), argname => 'MAKE',
                        types    => {
                           'GNU' => { fetch => \&get_gnu_version,
                                      numbers => '[1.0,)', },

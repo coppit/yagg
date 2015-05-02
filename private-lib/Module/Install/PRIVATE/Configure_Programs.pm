@@ -27,9 +27,9 @@ yagg uses a number of external programs. For security reasons, it is best if
 you provide their full path. In the following prompts, we will try to guess
 these paths from your Perl configuration and your \$PATH.
 
-You MUST specify GNU make. ssh is only necessary if you plan to use the remote
-execution capabilities of the -o flag. yapp is part of the Parse::Yapp Perl
-module distribution.
+You MUST specify *GNU* make and yapp. ssh is only necessary if you plan to use
+the remote execution capabilities of the -o flag. yapp is part of the
+Parse::Yapp Perl module distribution.
 
 EOF
 

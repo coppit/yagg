@@ -66,6 +66,8 @@ clean_files('lib/yagg/TerminalParser.pm', 'lib/yagg/NonterminalParser.pm');
 license 'gpl2';
 auto_license(holder => 'David Coppit');
 
+no_index 'directory' => 'private-lib';
+
 enable_verbose_cpan_testing();
 
 WriteAll();

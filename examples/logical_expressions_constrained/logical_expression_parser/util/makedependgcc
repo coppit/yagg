@@ -70,7 +70,10 @@ sub Get_Dependencies
 
   my $dependencies = `@commands`;
 
-  exit 1 if $?;
+  if ($?) {
+    warn "$0: compiler command failed";
+    exit 1;
+  }
 
   # New versions of g++ are buggy. They write the output to the file
   # specified by the -o flag instead of dumping to the screen. Plus the -o

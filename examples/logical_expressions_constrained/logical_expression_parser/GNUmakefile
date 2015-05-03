@@ -1,6 +1,6 @@
 PROJECTNAME = logical_expression_parser
 
-VERSION = 0.01
+VERSION = 0.20
 
 # Installation prefix
 PREFIX = /usr
@@ -19,9 +19,18 @@ YACCFILEEXT = y
 LEXFILEEXT = lex
 SCRIPTFILEEXT = sh
 
-# Typical flags for GNU compilers: -g (debugging information), -p (profiling),
-# -O2 (optimization), -Idir (extra include directory), -DDEBUG,
-# -Wall (all warnings)
+# Typical flags for GNU compilers:
+#  -g, -DDEBUG (debugging information), -pg (profiling), -Wall (all warnings)
+#  -O2 (optimization), -Idir (extra include directory)
+
+#CFLAGS		= -Wall -g -DRULE_LIST_DEBUG \
+#                  -DTERMINAL_RULE_DEBUG -DNONTERMINAL_RULE_DEBUG -DRULE_DEBUG \
+#                  -DSHORT_RULE_TRACE -DACTION_TRACE \
+#                  -DDEBUG_FAULT_TREE_CONSTRAINTS \
+#                  -DDISABLE_PRODUCTION_LENGTH_OPTIMIZATION \
+#                  -DDISABLE_ALLOCATION_CACHING_OPTIMIZATION \
+#                  -DDISABLE_GENERATED_STRING_CACHING_OPTIMIZATION \
+#                  -DDISABLE_INCREMENT_TO_TOUCHED_VARIABLE_OPTIMIZATION
 CFLAGS		= -Wall -pedantic -O3
 FFLAGS		= -g -C
 
@@ -34,6 +43,11 @@ LIB_FLAGS :=
 # You should really leave this as GNUmakefile since this makefile uses GNU
 # extensions
 MAKEFILE_NAME := GNUmakefile
+
+# Add additional -d <module name> <source dir> <object dir> <build dir> for
+# any libraries that have also been instrumented that you wish to include in
+# coverage reporting.
+COVERAGE_DIRECTORIES = -d $(PROJECTNAME) $(SRCDIR) $(BUILDDIR) .
 
 # -----------------------------------------------------------------------------
 
@@ -86,6 +100,15 @@ ERROR_BACKGROUND = red
 
 # -----------------------------------------------------------------------------
 
+# Sometimes a compiled test will go into an infinite loop. Set these values to
+# limit the amount of time or output that a compiled test can generate before
+# it is killed. Use 0 for no limit.
+
+COMPILED_TESTS_TIME_LIMIT = 10
+COMPILED_TESTS_BYTE_LIMIT = 0
+
+# -----------------------------------------------------------------------------
+
 # Set to true to store files in another location and create symbolic links to
 # the current directory. This is useful for systems with slow NFS performance,
 # or systems with limited user disk space. (i.e. we can store things in /tmp
@@ -98,7 +121,7 @@ STORAGE_DIRECTORY = /tmp/$(USER)/$(PROJECTNAME)
 
 ###############################################################################
 
-default : progs
+all : progs compiled_tests noncompiled_tests
 
 # Custom dependencies, if any, go here
 
@@ -108,6 +131,7 @@ default : progs
 # Directories
 SRCDIR = src
 TESTDIR = tests
+COVERAGEDIR = coverage
 PROGDIR = progs
 BUILDDIR = build
 LIBDIR = lib
@@ -160,19 +184,19 @@ SRC_DIRS_PATTERN = $(call make_pattern,$(call compute_subdirs_with_sources))
 # Some subroutines to find source files and compute their corresponding object
 # files
 find_source_files = \
-  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
 
 find_shell_scripts = \
-  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
 
 # In case we need this later
 #find_nonsource_files = \
 #  $(filter-out \
-#    $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
-#    $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
+#    $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
+#    $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
 
 find_gen_source_files = \
-  $(shell $(FIND)                                                       -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
 
 compute_subdirs_with_sources = $(filter-out progs tests progs/% tests/%, \
   $(sort $(subst $(SRCDIR)/,, \
@@ -201,6 +225,18 @@ NONCOMPILED_TESTS = $(patsubst $(SRCDIR)/tests/%,$(TESTDIR)/%, \
   $(call find_shell_scripts,tests))
 
 TESTS = $(COMPILED_TESTS) $(NONCOMPILED_TESTS)
+
+ifneq ($(filter coverage%, $(MAKECMDGOALS)),)
+ifeq ($(filter -fprofile-arcs, $(CFLAGS)),)
+$(warning Be sure to compile with -fprofile-arcs for coverage measurements)
+endif
+ifeq ($(filter -ftest-coverage, $(CFLAGS)),)
+$(warning Be sure to compile with -ftest-coverage for coverage measurements)
+endif
+ifneq ($(filter -O%, $(CFLAGS) $(FFLAGS)),)
+$(warning Be sure to compile with -g rather than -O for coverage measurements)
+endif
+endif
 
 # Programs
 PROGS = $(patsubst $(SRCDIR)/progs/%,$(PROGDIR)/%, \
@@ -231,7 +267,7 @@ lib : lib_message $(LIBDIR)/lib$(LIBRARY_NAME).a
 check : check_message check_programs check_colors
 
 # Run tests
-test : compiled_tests noncompiled_tests
+test : run_compiled_tests run_noncompiled_tests
 	@$(call main_step_msg,Tests completed)
 	@echo '   Compiled' tests: `cat $(TESTDIR)/COMPILED_TESTS_PASS` passed, `cat $(TESTDIR)/COMPILED_TESTS_FAIL` failed
 	@echo Noncompiled tests: `cat $(TESTDIR)/NONCOMPILED_TESTS_PASS` passed, `cat $(TESTDIR)/NONCOMPILED_TESTS_FAIL` failed
@@ -266,6 +302,15 @@ windist : windist_message windistdir
 	$(ZIP) $(DISTFILE)-win.zip $(DISTFILE)/*
 	$(RM) -rf $(DISTFILE)
 
+coverage : coverage_message $(COVERAGEDIR)/all
+	@$(call main_step_msg,Coverage completed)
+
+coverage_individual : coverage_message $(addprefix $(COVERAGEDIR)/individual/,$(subst /,\#,$(TESTS)))
+	@$(call main_step_msg,Coverage completed)
+
+coverage_manual : coverage_message $(COVERAGEDIR)/manual
+	@$(call main_step_msg,Coverage completed)
+
 ################################### MESSAGES ##################################
 ###############################################################################
 
@@ -286,6 +331,9 @@ check_message :
 
 progs_message :
 	@$(call main_step_msg,Making programs)
+
+coverage_message :
+	@$(call main_step_msg,Computing coverage)
 
 clean_message :
 	@$(call main_step_msg,Making clean)
@@ -364,9 +412,14 @@ error_msg = \
 
 check_programs : check_programs_message $(patsubst %,%.checkprogram,$(PROGRAMS))
 
+expr.checkprogram:
+	@if (expr 0 '&' 1 2>&1 > /dev/null); then \
+	  $(call warning_msg,Could not execute program expr. You may not need it--check the makefile.); \
+	fi
+
 %.checkprogram:
-	@if !($* --help 2>&1 | grep -i '\(usage\|option\|invalid\)' > /dev/null); then \
-	  $(call warning_msg,Could not find program $*. You may not need it--check the makefile.); \
+	@if !($* --help 2>&1 | $(GREP) -i '\(usage\|option\|invalid\)' > /dev/null); then \
+	  $(call warning_msg,Could not execute program $*. You may not need it--check the makefile.); \
 	fi
 
 # -----------------------------------------------------------------------------
@@ -450,7 +503,7 @@ $(BUILDDIR)/%.$(CCFILEEXT).d : $(SRCDIR)/%.$(YACCFILEEXT)
 # so that you can always run "make clean" without having to worry about
 # generating dependencies
 
-ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
 -include $(addsuffix .d,$(GENERATED_SRC_FILES)) \
         $(BUILDDIR)/$(LIBDIR)/lib$(LIBRARY_NAME).a.d \
         $(addsuffix .d,$(OBJFILES))
@@ -484,15 +537,15 @@ windistdir: $(patsubst $(SRCDIR)/%.$(YACCFILEEXT),$(BUILDDIR)/%.$(CCFILEEXT),$(w
 ############################## TESTING TARGETS ################################
 ###############################################################################
 
-# -----------------------------------------------------------------------------
-
 compiled_tests : lib compiled_tests_message $(COMPILED_TESTS) 
+
+run_compiled_tests : compiled_tests
 	@$(call main_step_msg,Running compiled tests)
 	@export COMPILED_TESTS_PASS="0"; \
 	 export COMPILED_TESTS_FAIL="0"; \
 	 for test in $(COMPILED_TESTS); do \
 	   echo -n $(BACKGROUND); echo -n $(FOREGROUND); echo -n $(CYAN)'> Running test '"$$test... "$(TEXTCOLOR); \
-	   if $$test 1> $$test.stdout 2>$$test.stderr ; then \
+	   if ./util/ensure_progress $(COMPILED_TESTS_TIME_LIMIT) $(COMPILED_TESTS_BYTE_LIMIT) $$test 1> $$test.stdout 2>$$test.stderr ; then \
 	     COMPILED_TESTS_PASS=`$(EXPR) $$COMPILED_TESTS_PASS + 1`; \
 	     echo PASS; \
 	     $(RM) $$test.stdout $$test.stderr; \
@@ -504,7 +557,9 @@ compiled_tests : lib compiled_tests_message $(COMPILED_TESTS)
          echo $$COMPILED_TESTS_PASS > $(TESTDIR)/COMPILED_TESTS_PASS; \
          echo $$COMPILED_TESTS_FAIL > $(TESTDIR)/COMPILED_TESTS_FAIL
 
-noncompiled_tests : $(PROGS) noncompiled_tests_message $(NONCOMPILED_TESTS)
+noncompiled_tests : progs noncompiled_tests_message $(NONCOMPILED_TESTS)
+
+run_noncompiled_tests : noncompiled_tests
 	@$(call main_step_msg,Running noncompiled tests)
 	@export NONCOMPILED_TESTS_PASS="0"; \
 	 export NONCOMPILED_TESTS_FAIL="0"; \
@@ -575,6 +630,20 @@ $(TESTDIR)/%.$(SCRIPTFILEEXT) : $(PROGS) $(SRCDIR)/$(TESTDIR)/%.$(SCRIPTFILEEXT)
 	$(CP) $(SRCDIR)/$(TESTDIR)/$*.$(SCRIPTFILEEXT) $@
 	@$(CHMOD) a+x $@
 
+# Rule to run all coverage tests
+$(COVERAGEDIR)/all : $(TESTS)
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@ $(TESTS)
+
+# Rule to run manual coverage tests
+$(COVERAGEDIR)/manual :
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@
+
+# Rule to run individual coverage tests. Really this should depend on
+# $(subst #,/,%) but make doesn't allow functions in the dependency list.
+# Instead I depend on all $(TESTS)
+$(COVERAGEDIR)/individual/% : $(TESTS)
+	@$(PERL) util/compute_coverage.pl -C $(COVERAGE_DIRECTORIES) -o $@ $(subst #,/,$(subst $(COVERAGEDIR)/individual/,,$@))
+
 # Rule to compile non-test binaries
 $(PROGDIR)/% : $(LIBDIR)/lib$(LIBRARY_NAME).a $(BUILDDIR)/progs/%.o
 	$(call make_directory,$(shell $(DIRNAME) $@))
@@ -585,8 +654,10 @@ $(PROGDIR)/% : $(LIBDIR)/lib$(LIBRARY_NAME).a $(BUILDDIR)/progs/%.o
 $(LIBDIR)/lib$(LIBRARY_NAME).a : $(call compute_ofiles,$(SRC_DIRS_PATTERN))
 	@$(call sub_step_msg,Making library $@)
 	@$(call make_directory,$(shell $(DIRNAME) $@))
-	@$(AR) rv $@ $^
-	@ranlib $@
+	@if test '$^' != ''; then \
+	   $(AR) rv $@ $^ 2>&1; \
+	   ranlib $@; \
+	 fi
 
 # Rule to generate parser .$(CCFILEEXT) files from .$(YACCFILEEXT) files
 $(BUILDDIR)/%.$(CCFILEEXT) $(BUILDDIR)/%.h : $(SRCDIR)/%.$(YACCFILEEXT)
@@ -595,4 +666,5 @@ $(BUILDDIR)/%.$(CCFILEEXT) $(BUILDDIR)/%.h : $(SRCDIR)/%.$(YACCFILEEXT)
 	if test -e $(basename $@).$(CCFILEEXT).h ; then \
 	  $(MV) $(basename $@).$(CCFILEEXT).h $(basename $@).h; \
 	else if test -e $(basename $@).hpp ; then \
-	  $(MV) $(make_pattern = \($(subst $(SPACE),\|,$(1))\)
+	  $(MV) $(basename $@).hpp $(basename $@).h; \
+	fi; fi

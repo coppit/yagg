@@ -159,6 +159,8 @@ examples/ab/ab_parser/src/ab_parser/ab_scanner.lex
 examples/ab/ab_parser/src/progs/ab_parser.cc
 examples/ab/ab_parser/src/progs/ab_scanner.cc
 examples/ab/ab_parser/util/colors
+examples/ab/ab_parser/util/compute_coverage.pl
+examples/ab/ab_parser/util/ensure_progress
 examples/ab/ab_parser/util/makedependgcc
 examples/ab/ab_parser/util/mkdirhier.pl
 
@@ -238,6 +240,8 @@ examples/logical_expressions_constrained/logical_expression_parser/src/logical_e
 examples/logical_expressions_constrained/logical_expression_parser/src/progs/logical_expression_parser.cc
 examples/logical_expressions_constrained/logical_expression_parser/src/progs/logical_expression_scanner.cc
 examples/logical_expressions_constrained/logical_expression_parser/util/colors
+examples/logical_expressions_constrained/logical_expression_parser/util/compute_coverage.pl
+examples/logical_expressions_constrained/logical_expression_parser/util/ensure_progress
 examples/logical_expressions_constrained/logical_expression_parser/util/makedependgcc
 examples/logical_expressions_constrained/logical_expression_parser/util/mkdirhier.pl
 

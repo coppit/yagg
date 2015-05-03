@@ -35,7 +35,7 @@ CFLAGS		= -Wall -pedantic -O3
 FFLAGS		= -g -C
 
 # Linker flags. Use -lg2c if you're calling Fortran from C/C++
-LDFLAGS		= 
+LDFLAGS		=
 
 # Appear on the end of the link line
 LIB_FLAGS :=
@@ -184,19 +184,19 @@ SRC_DIRS_PATTERN = $(call make_pattern,$(call compute_subdirs_with_sources))
 # Some subroutines to find source files and compute their corresponding object
 # files
 find_source_files = \
-  $(shell $(FIND)                  -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)')
 
 find_shell_scripts = \
-  $(shell $(FIND)                  -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SCRIPTFILEEXT)')
 
 # In case we need this later
 #find_nonsource_files = \
 #  $(filter-out \
-#    $(shell $(FIND)                  -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
-#    $(shell $(FIND)                  -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
+#    $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(SRC_FILE_EXTS_PATTERN)'), \
+#    $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*'))
 
 find_gen_source_files = \
-  $(shell $(FIND)                  -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
+  $(shell $(FIND) -E $(SRCDIR) -regex '$(SRCDIR)/$(1)/.*\.$(GENERATED_SRC_FILE_EXTS_PATTERN)')
 
 compute_subdirs_with_sources = $(filter-out progs tests progs/% tests/%, \
   $(sort $(subst $(SRCDIR)/,, \
@@ -412,9 +412,14 @@ error_msg = \
 
 check_programs : check_programs_message $(patsubst %,%.checkprogram,$(PROGRAMS))
 
+expr.checkprogram:
+	@if (expr 0 '&' 1 2>&1 > /dev/null); then \
+	  $(call warning_msg,Could not execute program expr. You may not need it--check the makefile.); \
+	fi
+
 %.checkprogram:
 	@if !($* --help 2>&1 | $(GREP) -i '\(usage\|option\|invalid\)' > /dev/null); then \
-	  $(call warning_msg,Could not find program $*. You may not need it--check the makefile.); \
+	  $(call warning_msg,Could not execute program $*. You may not need it--check the makefile.); \
 	fi
 
 # -----------------------------------------------------------------------------

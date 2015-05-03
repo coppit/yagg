@@ -38,3 +38,13 @@ $yagg::Config{'template_path'} =~ s/\/Grammar.pm//;
 $yagg::Config{'template_path'} .= '/input_generator_code';
 
 1;
+
+__END__
+
+# --------------------------------------------------------------------------
+
+=head1 NAME
+
+yagg::Config - An internal configuration class
+
+=cut

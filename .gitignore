@@ -10,3 +10,4 @@ inc/
 **/*.swp
 /lib/yagg/NonterminalParser.pm
 /lib/yagg/TerminalParser.pm
+t/000_standard__*

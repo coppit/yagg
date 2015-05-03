@@ -15,8 +15,7 @@ unless (@ARGV)
 
 my ($progress_timeout, $max_bytes, @command_and_args) = @ARGV;
 
-
-my $process_pid = open COMMAND, "@command_and_args |";
+my $process_pid = open(my $command, '-|', "@command_and_args");
 die "Can't run command: $!" unless $process_pid;
 
 $SIG{KILL} = sub { kill 9, $process_pid; exit 1 };
@@ -41,7 +40,7 @@ do
   {
     local $SIG{ALRM} = sub { die "alarm" };
     alarm $progress_timeout;
-    $bytes_read = sysread(COMMAND, $buffer, 100000);
+    $bytes_read = sysread($command, $buffer, 100000);
     alarm 0;
   };
 
@@ -58,7 +57,7 @@ do
 }
 while ($stop eq 'no');
 
-my $command_succeeded = close COMMAND;
+my $command_succeeded = close $command;
 
 # Kill it if it timed out.
 if ($stop eq 'alarm')

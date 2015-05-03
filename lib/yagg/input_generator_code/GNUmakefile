@@ -78,7 +78,6 @@ DATE        = '/usr/local/opt/coreutils/libexec/gnubin/date'
 PERL        = '/usr/bin/perl'
 MAKEDEPEND  = $(PERL) $(UTILSDIR)/makedependgcc
 COLORS      = $(PERL) $(UTILSDIR)/colors
-BASEDIR     = $(PERL) $(UTILSDIR)/basedir
 DIRNAME     = '/usr/local/opt/coreutils/libexec/gnubin/dirname'
 EXPR        = '/usr/local/opt/coreutils/libexec/gnubin/expr'
 
@@ -149,7 +148,7 @@ LDFLAGS         := -L$(LIBDIR) $(LDFLAGS)
 PROGRAMS    = $(CP) $(RM) $(MV) $(FIND) $(GREP) $(CXX) $(LD) $(FC) \
               $(AR) $(LEX) $(UNIX2DOS) $(YACC) $(MKDIR) $(TAR) $(GZIP) \
               $(ZIP) $(DIFF) $(MKDIRHIER) $(DATE) $(PERL) $(MAKEDEPEND) \
-              $(CHMOD) $(BASH) $(LN) $(DIRNAME) $(BASEDIR) $(EXPR)
+              $(CHMOD) $(BASH) $(LN) $(DIRNAME) $(EXPR)
 
 # -----------------------------------------------------------------------------
 
@@ -355,10 +354,10 @@ make_directory = @ \
 	    echo '--' Creating directory $(STORAGE_DIRECTORY)/$(1)...; \
 	    echo $(MKDIRHIER) $(STORAGE_DIRECTORY)/$(1); \
 	    $(MKDIRHIER) $(STORAGE_DIRECTORY)/$(1); \
-	    if test ! -e `$(BASEDIR) $(1)`; then \
-	      echo '--' Making symbolic link from $(STORAGE_DIRECTORY)/`$(BASEDIR) $(1)` to `$(BASEDIR) $(1)`...; \
-	      echo $(LN) -s $(STORAGE_DIRECTORY)/`$(BASEDIR) $(1)` `$(BASEDIR) $(1)`; \
-	      $(LN) -s $(STORAGE_DIRECTORY)/`$(BASEDIR) $(1)` `$(BASEDIR) $(1)`; \
+	    if test ! -e `$(DIRNAME) $(1)`; then \
+	      echo '--' Making symbolic link from $(STORAGE_DIRECTORY)/`$(DIRNAME) $(1)` to `$(DIRNAME) $(1)`...; \
+	      echo $(LN) -s $(STORAGE_DIRECTORY)/`$(DIRNAME) $(1)` `$(DIRNAME) $(1)`; \
+	      $(LN) -s $(STORAGE_DIRECTORY)/`$(DIRNAME) $(1)` `$(DIRNAME) $(1)`; \
 	    fi; \
 	  else \
 	    echo '--' Creating directory $(1)...; \

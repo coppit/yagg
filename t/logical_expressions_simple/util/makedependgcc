@@ -6,11 +6,11 @@
 # versions of gcc/g++. Call it like:
 # makedependgcc g++ -M -Idir1 -Idir2 input.cc -o input.o
 
-my $VERSION = 0.20;
-
 use strict;
 use Getopt::Std;
 use File::Slurp;
+
+my $VERSION = 0.20;
 
 die usage() if !@ARGV || $ARGV[0] =~ /--help/;
 

@@ -23,6 +23,8 @@ githubmeta;
 
 configure_requires(
   'File::Slurp' => 0,
+  # Module::Install::Bugtracker needs this
+  'URI::Escape' => 0,
 );
 
 provides(

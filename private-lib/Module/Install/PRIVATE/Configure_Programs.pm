@@ -50,14 +50,14 @@ EOF
       'perl'      => { default => $^X, argname => 'PERL' },
       'dirname'   => { default => 'dirname', argname => 'DIRNAME' },
       'expr'      => { default => 'expr', argname => 'EXPR' },
-      'make'      => { default => ($^O eq 'freebsd' ? 'gmake' : 'make'), argname => 'MAKE',
+      'make'      => { default => (($^O eq 'freebsd' || $^O eq 'openbsd') ? 'gmake' : 'make'), argname => 'MAKE',
                        types    => {
                           'GNU' => { fetch => \&get_gnu_version,
                                      numbers => '[1.0,)', },
                        },
                      },
       'rm'        => { default => 'rm', argname => 'RM' },
-      'find'      => { default => 'find', argname => 'FIND',
+      'find'      => { default => (($^O eq 'freebsd' || $^O eq 'openbsd') ? 'gfind' : 'find'), argname => 'FIND',
                        types    => {
                           'Non-GNU' => { fetch => \&Get_NonGNU_Find_Version,
                                      numbers => '[0,)', },
@@ -81,7 +81,7 @@ EOF
         unless defined $locations{$program}{'path'};
     }
 
-    warn "You won't be able to use yapp to generate code without:\n" .
+    die "You won't be able to use yapp to generate code without:\n" .
       "@missing_programs\n"
       if @missing_programs;
   }
@@ -94,7 +94,7 @@ EOF
         unless defined $locations{$program}{'path'};
     }
 
-    warn "You won't be able to build the generated code without:\n" .
+    die "You won't be able to build the generated code without:\n" .
       "@missing_programs\n"
       if @missing_programs;
   }

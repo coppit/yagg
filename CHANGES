@@ -3,6 +3,8 @@ Version 1.4008:
 - Fix compatibility issue with newer versions of perl, which remove "." from
   @INC.
 - Check in standard tests, including one that skips the compile check on Windows
+- Strengthen the programs check, forcing Makefile.PL to fail if they are missing.
+  Hopefully this will address false failures from CPAN testers.
 
 Version 1.4007: May 2 2015
 - Prevent CPAN from indexing private-lib

@@ -26,9 +26,11 @@ Checklist for a release:
     http://pause.perl.org/pause/authenquery
   or
     cpan-upload yagg-X.XX.tar.gz
+- Make sure there are no uncommitted changes:
+  git status
 - Tag the release for easy retrieval later
-  $ git tag -a v1.4002 -m 'Version 1.4002'
+  git tag -a v1.4002 -m 'Version 1.4002'
 - Push changes to github:
-  $ git push
+  git push
 - Make a backup in old
-  $ rm -rf old; rsync -r --cvs-exclude --exclude=.git * old
+  rm -rf old; rsync -r --cvs-exclude --exclude=.git * old

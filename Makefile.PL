@@ -7,7 +7,6 @@ use lib 'private-lib';
 
 use lib '.';
 use inc::Module::Install;
-use File::Slurp;
 
 BEGIN { makemaker_args( NORECURS => 1 ) }
 
@@ -67,7 +66,7 @@ print "\n", '-'x78, "\n\n";
 
 clean_files('lib/yagg/TerminalParser.pm', 'lib/yagg/NonterminalParser.pm');
 
-license 'gpl2';
+license 'gpl';
 auto_license(holder => 'David Coppit');
 
 no_index 'directory' => 'private-lib';

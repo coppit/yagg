@@ -1,10 +1,17 @@
+#line 1
 package Module::Install::PRIVATE::Enable_Verbose_CPAN_Testing;
 
 use strict;
 use warnings;
 
 use lib 'inc';
-use Module::Install::AutomatedTester();
+
+BEGIN{
+  # Avoid subroutine redefined errors
+  if (!defined(&Module::Install::AutomatedTester::auto_tester)) {
+    require Module::Install::AutomatedTester;
+  }
+}
 
 use vars qw( @ISA $VERSION );
 

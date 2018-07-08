@@ -21,7 +21,7 @@ auto_set_bugtracker;
 githubmeta;
 
 configure_requires(
-  'File::Slurp' => 0,
+  'File::Slurper' => 0,
   # Module::Install::Bugtracker needs this
   'URI::Escape' => 0,
 );
@@ -53,7 +53,7 @@ requires(
 
 test_requires(
   'Test::Compile' => 0,
-  'File::Slurp' => 0,
+  'File::Slurper' => 0,
   'Test::More' => 0,
   'File::Find' => 0,
   'File::Spec::Functions' => 0,

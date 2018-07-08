@@ -22,7 +22,7 @@ use File::Temp;
 use File::Find;
 use File::Path qw( rmtree mkpath );
 use Cwd qw( realpath getcwd);
-use File::Slurp;
+use File::Slurper qw(write_text);
 
 my $CWD;
 
@@ -225,7 +225,7 @@ sub make_merged_format_file {
 
 	close $in_gcov;
 
-  write_file($gcov_file, $output);
+  write_text($gcov_file, $output, undef, 1);
 }
 
 #-------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ sub merge_into_existing_file {
 
 	close $in_gcov;
 
-  write_file($target_gcov_file, $output);
+  write_text($target_gcov_file, $output, undef, 1);
 }
 
 #-------------------------------------------------------------------------------

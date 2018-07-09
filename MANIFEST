@@ -270,17 +270,6 @@ examples/reliability_block_diagrams/user_code/src/model/rbd/rbd.h
 examples/reliability_block_diagrams/user_code/src/model/rbd_textual_parser/rbd_textual_parser_includes.h
 
 # Module::Install extensions
-inc/File/HomeDir.pm
-inc/File/HomeDir/Darwin.pm
-inc/File/HomeDir/Darwin/Carbon.pm
-inc/File/HomeDir/Darwin/Cocoa.pm
-inc/File/HomeDir/Driver.pm
-inc/File/HomeDir/FreeDesktop.pm
-inc/File/HomeDir/MacOS9.pm
-inc/File/HomeDir/Test.pm
-inc/File/HomeDir/Unix.pm
-inc/File/HomeDir/Windows.pm
-inc/File/Temp.pm
 inc/File/Which.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoLicense.pm
@@ -299,7 +288,6 @@ inc/Module/Install/Scripts.pm
 inc/Module/Install/StandardTests.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
-inc/Scalar/Util.pm
 inc/Sort/Versions.pm
 inc/Module/Install/PRIVATE/Configure_Programs.pm
 inc/Module/Install/PRIVATE/Fix_Sort_Versions.pm
